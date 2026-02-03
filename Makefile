@@ -5,13 +5,16 @@ down: docker-down
 restart: down up
 
 docker-up:
-	docker-compose up -d
+	docker compose up -d
 
 docker-down:
-	docker-compose down --remove-orphans
+	docker compose down --remove-orphans
 
 docker-build:
-	docker-compose build
+	docker compose build
 
 create-env:
 	cp .env.example .env
+
+logs:
+	docker compose logs -f
