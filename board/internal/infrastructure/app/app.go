@@ -3,11 +3,14 @@ package app
 import (
 	"context"
 	"errors"
+	"fmt"
 	"net"
 
+	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/poymanov/codemania-task-board/board/internal/config"
 	transportBoardV1 "github.com/poymanov/codemania-task-board/board/internal/transport/grpc/board/v1"
-	"github.com/poymanov/codemania-task-board/platform/logger"
+	"github.com/poymanov/codemania-task-board/platform/pkg/logger"
+	"github.com/poymanov/codemania-task-board/platform/pkg/migrator"
 	boardV1 "github.com/poymanov/codemania-task-board/shared/pkg/proto/board/v1"
 	"github.com/rs/zerolog/log"
 	"google.golang.org/grpc"
@@ -15,8 +18,9 @@ import (
 )
 
 type App struct {
-	closer   []func() error
-	listener net.Listener
+	closer           []func() error
+	listener         net.Listener
+	dbConnectionPool *pgxpool.Pool
 }
 
 func NewApp(ctx context.Context) (*App, error) {
@@ -33,12 +37,19 @@ func NewApp(ctx context.Context) (*App, error) {
 }
 
 func (a *App) Run() error {
+	migration := migrator.NewMigrator(a.dbConnectionPool, config.AppConfig().Db.MigrationDirectory())
+
+	if err := migration.Up(); err != nil {
+		return err
+	}
+
 	return a.runGrpcServer()
 }
 
 func (a *App) InitDeps(ctx context.Context) error {
 	inits := []func(ctx context.Context) error{
 		a.InitLogger,
+		a.InitDB,
 		a.initListener,
 	}
 
@@ -48,6 +59,28 @@ func (a *App) InitDeps(ctx context.Context) error {
 			return err
 		}
 	}
+
+	return nil
+}
+
+func (a *App) InitDB(ctx context.Context) error {
+	pool, err := pgxpool.New(ctx, config.AppConfig().Db.Uri())
+	if err != nil {
+		panic(fmt.Errorf("db failed connect: %w", err))
+	}
+
+	err = pool.Ping(ctx)
+	if err != nil {
+		panic(fmt.Errorf("db not available: %w", err))
+	}
+
+	a.dbConnectionPool = pool
+
+	a.closer = append(a.closer, func() error {
+		pool.Close()
+
+		return nil
+	})
 
 	return nil
 }

@@ -7,3 +7,8 @@ type GrpcConfig interface {
 type LoggerConfig interface {
 	Level() string
 }
+
+type DbConfig interface {
+	Uri() string
+	MigrationDirectory() string
+}
