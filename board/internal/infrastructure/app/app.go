@@ -11,6 +11,7 @@ import (
 	boardRepository "github.com/poymanov/codemania-task-board/board/internal/infrastructure/persistance/repository/board"
 	transportBoardV1 "github.com/poymanov/codemania-task-board/board/internal/transport/grpc/board/v1"
 	boardUseCase "github.com/poymanov/codemania-task-board/board/internal/usecase/board"
+	"github.com/poymanov/codemania-task-board/platform/pkg/grpc/health"
 	"github.com/poymanov/codemania-task-board/platform/pkg/logger"
 	"github.com/poymanov/codemania-task-board/platform/pkg/migrator"
 	boardV1 "github.com/poymanov/codemania-task-board/shared/pkg/proto/board/v1"
@@ -125,6 +126,7 @@ func (a *App) runGrpcServer() error {
 	s := grpc.NewServer()
 
 	boardV1.RegisterBoardServiceServer(s, boardService)
+	health.RegisterService(s)
 
 	reflection.Register(s)
 
