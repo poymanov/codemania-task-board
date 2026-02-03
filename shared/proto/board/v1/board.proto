@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package board.v1;
+
+import "validate/validate.proto";
+
+option go_package = "github.com/poymanov/codemania-task-board/pkg/proto/board/v1;board_v1";
+
+service BoardService {
+  rpc Create(BoardServiceCreateRequest) returns (BoardServiceCreateResponse);
+}
+
+// Запрос на создание доски
+message BoardServiceCreateRequest {
+  // Название доски
+  string name = 1  [(validate.rules).string = {min_len: 1}];
+
+  // Описание доски
+  string description = 2  [(validate.rules).string = {min_len: 1}];
+
+  // ID владельца доски
+  int64 owner_id = 3 [(validate.rules).int64.gte = 1];
+}
+
+// Ответ на создание доски
+message BoardServiceCreateResponse {
+  int64 board_id = 3;
+}

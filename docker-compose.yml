@@ -1,0 +1,14 @@
+services:
+  board:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    ports:
+      - ${BOARD_GRPC_EXTERNAL_PORT}:${BOARD_GRPC_PORT}
+    volumes:
+      - '.:/app'
+    command: ["go", "run", "board/cmd/main.go"]
+networks:
+  default:
+    name: docker
+    external: true
