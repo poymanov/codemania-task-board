@@ -7,10 +7,10 @@ ENV TZ=Europe/Moscow
 
 WORKDIR /app
 
+COPY platform/go.mod platform/go.sum ./platform/
 COPY board/go.mod board/go.sum ./board/
 COPY shared/go.mod shared/go.sum ./shared/
 
-# Скачиваем внешние зависимости
 WORKDIR /app/board
 RUN go mod download
 

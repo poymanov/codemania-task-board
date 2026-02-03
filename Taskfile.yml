@@ -20,7 +20,7 @@ vars:
   GCI: '{{.BIN_DIR}}/gci'
   GOFUMPT: '{{.BIN_DIR}}/gofumpt'
 
-  MODULES: board shared
+  MODULES: board platform
 
 tasks:
   install-formatters:

@@ -10,7 +10,8 @@ import (
 var appConfig *Config
 
 type Config struct {
-	Grpc GrpcConfig
+	Grpc   GrpcConfig
+	Logger LoggerConfig
 }
 
 func Load(path ...string) error {
@@ -25,8 +26,14 @@ func Load(path ...string) error {
 		return err
 	}
 
+	loggerCfg, err := env.NewLoggerConfig()
+	if err != nil {
+		return err
+	}
+
 	appConfig = &Config{
-		Grpc: grpcCfg,
+		Grpc:   grpcCfg,
+		Logger: loggerCfg,
 	}
 
 	return nil

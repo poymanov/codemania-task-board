@@ -1,14 +1,15 @@
 package main
 
 import (
+	"context"
 	"fmt"
-	"log"
 	"os"
 	"os/signal"
 	"syscall"
 
 	"github.com/poymanov/codemania-task-board/board/internal/config"
 	"github.com/poymanov/codemania-task-board/board/internal/infrastructure/app"
+	"github.com/rs/zerolog/log"
 )
 
 const (
@@ -21,10 +22,13 @@ func main() {
 		panic(fmt.Errorf("failed to load config: %w", err))
 	}
 
-	a := app.NewApp()
+	a, err := app.NewApp(context.Background())
+	if err != nil {
+		log.Fatal().Err(err).Msg("failed to initialize app")
+	}
 
 	if err := a.Run(); err != nil {
-		log.Fatal(err)
+		log.Fatal().Err(err).Msg("failed to run app")
 		return
 	}
 
@@ -32,7 +36,10 @@ func main() {
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	<-quit
 
-	if err := a.Close(); err != nil {
-		log.Fatal(err)
-	}
+	defer func() {
+		err := a.Close()
+		if err != nil {
+			log.Fatal().Err(err).Msg("failed to close app")
+		}
+	}()
 }
