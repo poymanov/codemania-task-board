@@ -10,6 +10,7 @@ vars:
   PROTOC_GEN_GO_VERSION: 'v1.36.11'
   PROTOC_GEN_GO_GRPC_VERSION: 'v1.6.0'
   PROTOC_GEN_VALIDATE_VERSION: 'v1.3.0'
+  MOCKERY_VERSION: 'v3.6.3'
 
   BIN_DIR: '{{.ROOT_DIR}}/bin'
   BUF: '{{.BIN_DIR}}/buf'
@@ -19,8 +20,9 @@ vars:
   GOLANGCI_LINT: '{{.BIN_DIR}}/golangci-lint'
   GCI: '{{.BIN_DIR}}/gci'
   GOFUMPT: '{{.BIN_DIR}}/gofumpt'
+  MOCKERY: "{{.BIN_DIR}}/mockery"
 
-  MODULES: board platform
+  MODULES: board platform shared
 
 tasks:
   install-formatters:
@@ -137,7 +139,7 @@ tasks:
 
   proto:update-deps:
     deps: [ install-buf ]
-    desc: Обновляет зависимости protobuf из удаленных репозиториев (googleapis и т.д.)
+    desc: "Обновляет зависимости protobuf из удаленных репозиториев (googleapis и т.д.)"
     dir: shared/proto
     cmds:
       - |
@@ -146,7 +148,7 @@ tasks:
 
   proto:gen:
     deps: [ install-buf, proto:install-plugins, proto:lint ]
-    desc: Генерация Go-кода из .proto
+    desc: "Генерация Go-кода из .proto"
     dir: shared/proto
     cmds:
       - '{{.BUF}} generate'
@@ -159,27 +161,59 @@ tasks:
       - '{{.BUF}} lint'
 
   up:
-    desc: Запуск всех сервисов
+    desc: "Запуск всех сервисов"
     cmds:
       - docker compose up --build -d
 
   down:
-    desc: Остановка всех сервисов
+    desc: "Остановка всех сервисов"
     cmds:
       - docker compose down
 
   restart:
-    desc: Перезагрузка всех сервисов
+    desc: "Перезагрузка всех сервисов"
     cmds:
       - task down
       - task up
 
   logs:
-    desc: Общие логи сервисов
+    desc: "Общие логи сервисов"
     cmds:
       - docker compose logs -f
 
   create-env:
-    desc: Создание .env
+    desc: "Создание .env"
     cmds:
       - cp .env.example .env
+
+  mockery:install:
+    desc: "Устанавливает mockery в ./bin"
+    cmds:
+      - |
+        [ -f {{.MOCKERY}} ] || {
+          echo '📦 Installing mockery...'
+          GOBIN={{.BIN_DIR}} go install github.com/vektra/mockery/v3@{{.MOCKERY_VERSION}}
+        }
+    status:
+      - test -x {{.MOCKERY}}
+
+  mockery:gen:
+    desc: "Генерирует моки интерфейсов с помощью mockery"
+    deps: [ mockery:install ]
+    cmds:
+      - |
+        echo '🧪 Генерация моков...'
+        {{.MOCKERY}}        
+
+  test:
+    desc: "Запускает юнит-тесты для всех модулей"
+    cmds:
+      - |
+        ERR=0
+        for mod in {{.MODULES}}; do
+          if [ -d "$mod" ]; then
+            echo "🧪 Тестируем модуль $mod"
+            go test -v ./$mod/... || ERR=1
+          fi
+        done
+        exit $ERR        
