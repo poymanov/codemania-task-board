@@ -7,7 +7,7 @@ import (
 	domainBoard "github.com/poymanov/codemania-task-board/board/internal/domain/board"
 )
 
-func (r *Repository) create(ctx context.Context, newBoard domainBoard.NewBoard) (int, error) {
+func (r *Repository) Create(ctx context.Context, newBoard domainBoard.NewBoard) (int, error) {
 	var id int
 
 	err := r.pool.QueryRow(

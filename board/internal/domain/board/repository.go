@@ -1,0 +1,7 @@
+package board
+
+import "context"
+
+type BoardRepository interface {
+	Create(ctx context.Context, newBoard NewBoard) (int, error)
+}

@@ -8,7 +8,9 @@ import (
 
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/poymanov/codemania-task-board/board/internal/config"
+	boardRepository "github.com/poymanov/codemania-task-board/board/internal/infrastructure/persistance/repository/board"
 	transportBoardV1 "github.com/poymanov/codemania-task-board/board/internal/transport/grpc/board/v1"
+	boardUseCase "github.com/poymanov/codemania-task-board/board/internal/usecase/board"
 	"github.com/poymanov/codemania-task-board/platform/pkg/logger"
 	"github.com/poymanov/codemania-task-board/platform/pkg/migrator"
 	boardV1 "github.com/poymanov/codemania-task-board/shared/pkg/proto/board/v1"
@@ -116,7 +118,9 @@ func (a *App) InitLogger(_ context.Context) error {
 }
 
 func (a *App) runGrpcServer() error {
-	boardService := transportBoardV1.NewBoardService()
+	br := boardRepository.NewRepository(a.dbConnectionPool)
+	bus := boardUseCase.NewUseCase(br)
+	boardService := transportBoardV1.NewBoardService(bus)
 
 	s := grpc.NewServer()
 
