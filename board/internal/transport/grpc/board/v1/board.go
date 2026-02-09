@@ -1,7 +1,7 @@
 package v1
 
 import (
-	boardUseCase "github.com/poymanov/codemania-task-board/board/internal/usecase/board"
+	boardUseCase "github.com/poymanov/codemania-task-board/board/internal/usecase/board/create"
 	boardV1 "github.com/poymanov/codemania-task-board/shared/pkg/proto/board/v1"
 )
 

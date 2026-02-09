@@ -13,7 +13,7 @@ import (
 	"github.com/poymanov/codemania-task-board/board/internal/config"
 	boardRepository "github.com/poymanov/codemania-task-board/board/internal/infrastructure/persistance/repository/board"
 	transportBoardV1 "github.com/poymanov/codemania-task-board/board/internal/transport/grpc/board/v1"
-	boardUseCase "github.com/poymanov/codemania-task-board/board/internal/usecase/board"
+	boardUseCase "github.com/poymanov/codemania-task-board/board/internal/usecase/board/create"
 	"github.com/poymanov/codemania-task-board/platform/pkg/grpc/health"
 	"github.com/poymanov/codemania-task-board/platform/pkg/logger"
 	"github.com/poymanov/codemania-task-board/platform/pkg/migrator"
