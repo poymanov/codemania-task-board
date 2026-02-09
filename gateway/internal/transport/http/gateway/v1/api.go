@@ -4,13 +4,18 @@ import (
 	"context"
 	"net/http"
 
+	createBoardUseCase "github.com/poymanov/codemania-task-board/gateway/internal/usecase/board/create"
 	gatewayV1 "github.com/poymanov/codemania-task-board/shared/pkg/openapi/gateway/v1"
 )
 
-type Api struct{}
+type Api struct {
+	createBoardUseCase *createBoardUseCase.UseCase
+}
 
-func NewApi() *Api {
-	return &Api{}
+func NewApi(createBoardUseCase *createBoardUseCase.UseCase) *Api {
+	return &Api{
+		createBoardUseCase: createBoardUseCase,
+	}
 }
 
 func (a *Api) NewError(_ context.Context, err error) *gatewayV1.GenericErrorStatusCode {

@@ -13,11 +13,13 @@ require (
 	github.com/poymanov/codemania-task-board/platform v0.0.0-00010101000000-000000000000
 	github.com/poymanov/codemania-task-board/shared v0.0.0-00010101000000-000000000000
 	github.com/rs/zerolog v1.34.0
+	google.golang.org/grpc v1.78.0
 )
 
 require (
 	github.com/andybalholm/brotli v1.2.0 // indirect
 	github.com/dlclark/regexp2 v1.11.5 // indirect
+	github.com/envoyproxy/protoc-gen-validate v1.3.0 // indirect
 	github.com/fatih/color v1.18.0 // indirect
 	github.com/ghodss/yaml v1.0.0 // indirect
 	github.com/go-faster/errors v0.7.1 // indirect
@@ -50,5 +52,7 @@ require (
 	golang.org/x/sync v0.19.0 // indirect
 	golang.org/x/sys v0.40.0 // indirect
 	golang.org/x/text v0.33.0 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20251029180050-ab9386a59fda // indirect
+	google.golang.org/protobuf v1.36.11 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )

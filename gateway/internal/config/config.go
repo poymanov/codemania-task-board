@@ -8,8 +8,9 @@ import (
 )
 
 type Config struct {
-	Logger LoggerConfig
-	Http   HttpConfig
+	Logger     LoggerConfig
+	Http       HttpConfig
+	GrpcClient GrpcClientConfig
 }
 
 func Load(path ...string) (*Config, error) {
@@ -29,8 +30,14 @@ func Load(path ...string) (*Config, error) {
 		return nil, err
 	}
 
+	grpcClient, err := env.NewGrpcClient()
+	if err != nil {
+		return nil, err
+	}
+
 	return &Config{
-		Logger: loggerCfg,
-		Http:   httpCfg,
+		Logger:     loggerCfg,
+		Http:       httpCfg,
+		GrpcClient: grpcClient,
 	}, nil
 }

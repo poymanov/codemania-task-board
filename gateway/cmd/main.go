@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/poymanov/codemania-task-board/gateway/app"
+	"github.com/poymanov/codemania-task-board/gateway/internal/app"
 	"github.com/rs/zerolog/log"
 )
 

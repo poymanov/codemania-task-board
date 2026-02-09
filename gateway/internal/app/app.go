@@ -11,15 +11,21 @@ import (
 	"github.com/gofiber/fiber/v3/middleware/adaptor"
 	loggerMiddleware "github.com/gofiber/fiber/v3/middleware/logger"
 	"github.com/poymanov/codemania-task-board/gateway/internal/config"
+	boardGrpcClientV1 "github.com/poymanov/codemania-task-board/gateway/internal/transport/grpc/client/board/v1"
 	apiV1 "github.com/poymanov/codemania-task-board/gateway/internal/transport/http/gateway/v1"
+	createBoardUseCase "github.com/poymanov/codemania-task-board/gateway/internal/usecase/board/create"
 	"github.com/poymanov/codemania-task-board/platform/pkg/logger"
 	gatewayV1 "github.com/poymanov/codemania-task-board/shared/pkg/openapi/gateway/v1"
+	boardV1 "github.com/poymanov/codemania-task-board/shared/pkg/proto/board/v1"
 	"github.com/rs/zerolog/log"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 type App struct {
-	closer []func() error
-	config *config.Config
+	closer      []func() error
+	config      *config.Config
+	boardClient *boardGrpcClientV1.BoardClient
 }
 
 const (
@@ -77,10 +83,35 @@ func (a *App) InitConfig(_ context.Context) error {
 	return nil
 }
 
+func (a *App) InitBoardClient(_ context.Context) error {
+	conn, err := grpc.NewClient(
+		a.config.GrpcClient.BoardAddress(),
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+	)
+	if err != nil {
+		return fmt.Errorf("failed to connect board grpc: %w", err)
+	}
+
+	boardServiceClient := boardV1.NewBoardServiceClient(conn)
+
+	a.boardClient = boardGrpcClientV1.NewClient(boardServiceClient)
+
+	a.closer = append(a.closer, func() error {
+		if cerr := conn.Close(); cerr != nil {
+			return cerr
+		}
+
+		return nil
+	})
+
+	return nil
+}
+
 func (a *App) InitDeps(ctx context.Context) error {
 	inits := []func(ctx context.Context) error{
 		a.InitConfig,
 		a.InitLogger,
+		a.InitBoardClient,
 	}
 
 	for _, f := range inits {
@@ -100,7 +131,8 @@ func (a *App) InitLogger(_ context.Context) error {
 }
 
 func (a *App) runHttpServer() error {
-	api := apiV1.NewApi()
+	cbUseCase := createBoardUseCase.NewUseCase(a.boardClient)
+	api := apiV1.NewApi(cbUseCase)
 
 	gatewayServer, err := gatewayV1.NewServer(api)
 	if err != nil {
