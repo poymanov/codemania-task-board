@@ -7,45 +7,37 @@ import (
 	"github.com/poymanov/codemania-task-board/board/internal/config/env"
 )
 
-var appConfig *Config
-
 type Config struct {
 	Grpc   GrpcConfig
 	Logger LoggerConfig
 	Db     DbConfig
 }
 
-func Load(path ...string) error {
+func Load(path ...string) (*Config, error) {
 	err := godotenv.Load(path...)
 
 	if err != nil && !os.IsNotExist(err) {
-		return err
+		return nil, err
 	}
 
 	grpcCfg, err := env.NewGrpcConfig()
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	loggerCfg, err := env.NewLoggerConfig()
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	db, err := env.NewDbConfig()
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	appConfig = &Config{
+	return &Config{
 		Grpc:   grpcCfg,
 		Logger: loggerCfg,
 		Db:     db,
-	}
-
-	return nil
-}
-
-func AppConfig() *Config {
-	return appConfig
+	}, nil
 }

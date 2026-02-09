@@ -5,6 +5,9 @@ import (
 	"errors"
 	"fmt"
 	"net"
+	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/poymanov/codemania-task-board/board/internal/config"
@@ -24,12 +27,15 @@ type App struct {
 	closer           []func() error
 	listener         net.Listener
 	dbConnectionPool *pgxpool.Pool
+	config           *config.Config
 }
 
-func NewApp(ctx context.Context) (*App, error) {
-	a := &App{
-		closer: make([]func() error, 0),
-	}
+const (
+	configPath = ".env"
+)
+
+func newApp(ctx context.Context) (*App, error) {
+	a := &App{}
 
 	err := a.InitDeps(ctx)
 	if err != nil {
@@ -39,18 +45,51 @@ func NewApp(ctx context.Context) (*App, error) {
 	return a, nil
 }
 
-func (a *App) Run() error {
-	migration := migrator.NewMigrator(a.dbConnectionPool, config.AppConfig().Db.MigrationDirectory())
+func Run() error {
+	ctx := context.Background()
 
-	if err := migration.Up(); err != nil {
+	a, err := newApp(ctx)
+
+	defer func() {
+		ec := a.Close()
+		if ec != nil {
+			log.Error().Err(ec).Msg("failed to close app")
+			return
+		}
+	}()
+
+	if err != nil {
 		return err
 	}
 
-	return a.runGrpcServer()
+	err = a.runMigrator()
+	if err != nil {
+		return err
+	}
+
+	a.runGrpcServer()
+
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	<-quit
+
+	return nil
+}
+
+func (a *App) InitConfig(_ context.Context) error {
+	cfg, err := config.Load(configPath)
+	if err != nil {
+		return fmt.Errorf("failed to load config: %w", err)
+	}
+
+	a.config = cfg
+
+	return nil
 }
 
 func (a *App) InitDeps(ctx context.Context) error {
 	inits := []func(ctx context.Context) error{
+		a.InitConfig,
 		a.InitLogger,
 		a.InitDB,
 		a.initListener,
@@ -67,14 +106,17 @@ func (a *App) InitDeps(ctx context.Context) error {
 }
 
 func (a *App) InitDB(ctx context.Context) error {
-	pool, err := pgxpool.New(ctx, config.AppConfig().Db.Uri())
+	pool, err := pgxpool.New(ctx, a.config.Db.Uri())
 	if err != nil {
-		panic(fmt.Errorf("db failed connect: %w", err))
+		log.Fatal().Err(err).Msg("db failed connect")
+		return err
 	}
 
 	err = pool.Ping(ctx)
 	if err != nil {
-		panic(fmt.Errorf("db not available: %w", err))
+		log.Fatal().Err(err).Msg("db not available")
+		return err
+
 	}
 
 	a.dbConnectionPool = pool
@@ -89,7 +131,7 @@ func (a *App) InitDB(ctx context.Context) error {
 }
 
 func (a *App) initListener(_ context.Context) error {
-	list, err := net.Listen("tcp", config.AppConfig().Grpc.Address())
+	list, err := net.Listen("tcp", a.config.Grpc.Address())
 	if err != nil {
 		log.Fatal().Err(err).Msg("failed to start listener")
 		return err
@@ -113,12 +155,22 @@ func (a *App) initListener(_ context.Context) error {
 }
 
 func (a *App) InitLogger(_ context.Context) error {
-	logger.InitLogger(config.AppConfig().Logger.Level())
+	logger.InitLogger(a.config.Logger.Level())
 
 	return nil
 }
 
-func (a *App) runGrpcServer() error {
+func (a *App) runMigrator() error {
+	migration := migrator.NewMigrator(a.dbConnectionPool, a.config.Db.MigrationDirectory())
+
+	if err := migration.Up(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (a *App) runGrpcServer() {
 	br := boardRepository.NewRepository(a.dbConnectionPool)
 	bus := boardUseCase.NewUseCase(br)
 	boardService := transportBoardV1.NewBoardService(bus)
@@ -131,7 +183,7 @@ func (a *App) runGrpcServer() error {
 	reflection.Register(s)
 
 	go func() {
-		log.Printf("🚀 gRPC server listening on %s\n", config.AppConfig().Grpc.Address())
+		log.Info().Msg(fmt.Sprintf("🚀 gRPC server listening on %s\n", a.config.Grpc.Address()))
 		err := s.Serve(a.listener)
 		if err != nil {
 			log.Fatal().Err(err).Msg("failed to serve grpc server")
@@ -144,8 +196,6 @@ func (a *App) runGrpcServer() error {
 
 		return nil
 	})
-
-	return nil
 }
 
 func (a *App) Close() error {
