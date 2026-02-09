@@ -11,7 +11,7 @@ import (
 )
 
 func encodeBoardCreateRequest(
-	req CreateBoard,
+	req *CreateBoardRequestBody,
 	r *http.Request,
 ) error {
 	const contentType = "application/json"

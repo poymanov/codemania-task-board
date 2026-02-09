@@ -20,7 +20,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/requestBodies/CreateBoard"
+              $ref: "#/components/schemas/CreateBoardRequestBody"
       summary: "Создание доски"
       operationId: BoardCreate
       tags:
@@ -51,13 +51,6 @@ paths:
               schema:
                 $ref: "#/components/schemas/GenericError"
 components:
-  requestBodies:
-    CreateBoard:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/CreateBoardRequestBody'
-
   schemas:
     CreateBoardRequestBody:
       type: object
@@ -80,6 +73,8 @@ components:
           example: 1
     CreateBoardResponse:
       type: object
+      required:
+        - board_id
       properties:
         board_id:
           type: integer

@@ -13,7 +13,7 @@ type Handler interface {
 	// Создание доски.
 	//
 	// POST /api/v1/boards
-	BoardCreate(ctx context.Context, req CreateBoard) (BoardCreateRes, error)
+	BoardCreate(ctx context.Context, req *CreateBoardRequestBody) (BoardCreateRes, error)
 	// NewError creates *GenericErrorStatusCode from error returned by handler.
 	//
 	// Used for common default response.

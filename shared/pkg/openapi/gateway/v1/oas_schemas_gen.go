@@ -4,8 +4,6 @@ package gateway_v1
 
 import (
 	"fmt"
-
-	"github.com/go-faster/jx"
 )
 
 func (s *GenericErrorStatusCode) Error() string {
@@ -42,21 +40,59 @@ func (s *BadRequestError) SetMessage(val string) {
 
 func (*BadRequestError) boardCreateRes() {}
 
-type CreateBoard jx.Raw
+// Ref: #/components/schemas/CreateBoardRequestBody
+type CreateBoardRequestBody struct {
+	// Название доски.
+	Name string `json:"name"`
+	// Описание доски.
+	Description string `json:"description"`
+	// ID автора доски.
+	OwnerID int `json:"owner_id"`
+}
+
+// GetName returns the value of Name.
+func (s *CreateBoardRequestBody) GetName() string {
+	return s.Name
+}
+
+// GetDescription returns the value of Description.
+func (s *CreateBoardRequestBody) GetDescription() string {
+	return s.Description
+}
+
+// GetOwnerID returns the value of OwnerID.
+func (s *CreateBoardRequestBody) GetOwnerID() int {
+	return s.OwnerID
+}
+
+// SetName sets the value of Name.
+func (s *CreateBoardRequestBody) SetName(val string) {
+	s.Name = val
+}
+
+// SetDescription sets the value of Description.
+func (s *CreateBoardRequestBody) SetDescription(val string) {
+	s.Description = val
+}
+
+// SetOwnerID sets the value of OwnerID.
+func (s *CreateBoardRequestBody) SetOwnerID(val int) {
+	s.OwnerID = val
+}
 
 // Ref: #/components/schemas/CreateBoardResponse
 type CreateBoardResponse struct {
 	// ID созданной доски.
-	BoardID OptInt `json:"board_id"`
+	BoardID int `json:"board_id"`
 }
 
 // GetBoardID returns the value of BoardID.
-func (s *CreateBoardResponse) GetBoardID() OptInt {
+func (s *CreateBoardResponse) GetBoardID() int {
 	return s.BoardID
 }
 
 // SetBoardID sets the value of BoardID.
-func (s *CreateBoardResponse) SetBoardID(val OptInt) {
+func (s *CreateBoardResponse) SetBoardID(val int) {
 	s.BoardID = val
 }
 

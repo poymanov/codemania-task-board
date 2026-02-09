@@ -139,7 +139,7 @@ func (s *Server) handleBoardCreateRequest(args [0]string, argsEscaped bool, w ht
 		}
 
 		type (
-			Request  = CreateBoard
+			Request  = *CreateBoardRequestBody
 			Params   = struct{}
 			Response = BoardCreateRes
 		)

@@ -18,7 +18,7 @@ var _ Handler = UnimplementedHandler{}
 // Создание доски.
 //
 // POST /api/v1/boards
-func (UnimplementedHandler) BoardCreate(ctx context.Context, req CreateBoard) (r BoardCreateRes, _ error) {
+func (UnimplementedHandler) BoardCreate(ctx context.Context, req *CreateBoardRequestBody) (r BoardCreateRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

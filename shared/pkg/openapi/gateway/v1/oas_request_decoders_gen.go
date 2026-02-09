@@ -15,7 +15,7 @@ import (
 )
 
 func (s *Server) decodeBoardCreateRequest(r *http.Request) (
-	req CreateBoard,
+	req *CreateBoardRequestBody,
 	rawBody []byte,
 	close func() error,
 	rerr error,
@@ -62,7 +62,7 @@ func (s *Server) decodeBoardCreateRequest(r *http.Request) (
 		rawBody = append(rawBody, buf...)
 		d := jx.DecodeBytes(buf)
 
-		var request CreateBoard
+		var request CreateBoardRequestBody
 		if err := func() error {
 			if err := request.Decode(d); err != nil {
 				return err
@@ -79,7 +79,7 @@ func (s *Server) decodeBoardCreateRequest(r *http.Request) (
 			}
 			return req, rawBody, close, err
 		}
-		return request, rawBody, close, nil
+		return &request, rawBody, close, nil
 	default:
 		return req, rawBody, close, validate.InvalidContentType(ct)
 	}

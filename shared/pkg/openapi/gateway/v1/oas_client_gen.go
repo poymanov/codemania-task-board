@@ -31,7 +31,7 @@ type Invoker interface {
 	// Создание доски.
 	//
 	// POST /api/v1/boards
-	BoardCreate(ctx context.Context, request CreateBoard) (BoardCreateRes, error)
+	BoardCreate(ctx context.Context, request *CreateBoardRequestBody) (BoardCreateRes, error)
 }
 
 // Client implements OAS client.
@@ -86,12 +86,12 @@ func (c *Client) requestURL(ctx context.Context) *url.URL {
 // Создание доски.
 //
 // POST /api/v1/boards
-func (c *Client) BoardCreate(ctx context.Context, request CreateBoard) (BoardCreateRes, error) {
+func (c *Client) BoardCreate(ctx context.Context, request *CreateBoardRequestBody) (BoardCreateRes, error) {
 	res, err := c.sendBoardCreate(ctx, request)
 	return res, err
 }
 
-func (c *Client) sendBoardCreate(ctx context.Context, request CreateBoard) (res BoardCreateRes, err error) {
+func (c *Client) sendBoardCreate(ctx context.Context, request *CreateBoardRequestBody) (res BoardCreateRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("BoardCreate"),
 		semconv.HTTPRequestMethodKey.String("POST"),

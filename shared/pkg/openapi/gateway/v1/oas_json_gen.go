@@ -124,44 +124,132 @@ func (s *BadRequestError) UnmarshalJSON(data []byte) error {
 	return s.Decode(d)
 }
 
-// Encode encodes CreateBoard as json.
-func (s CreateBoard) Encode(e *jx.Encoder) {
-	unwrapped := jx.Raw(s)
+// Encode implements json.Marshaler.
+func (s *CreateBoardRequestBody) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
 
-	if len(unwrapped) != 0 {
-		e.Raw(unwrapped)
+// encodeFields encodes fields.
+func (s *CreateBoardRequestBody) encodeFields(e *jx.Encoder) {
+	{
+		e.FieldStart("name")
+		e.Str(s.Name)
+	}
+	{
+		e.FieldStart("description")
+		e.Str(s.Description)
+	}
+	{
+		e.FieldStart("owner_id")
+		e.Int(s.OwnerID)
 	}
 }
 
-// Decode decodes CreateBoard from json.
-func (s *CreateBoard) Decode(d *jx.Decoder) error {
+var jsonFieldsNameOfCreateBoardRequestBody = [3]string{
+	0: "name",
+	1: "description",
+	2: "owner_id",
+}
+
+// Decode decodes CreateBoardRequestBody from json.
+func (s *CreateBoardRequestBody) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode CreateBoard to nil")
+		return errors.New("invalid: unable to decode CreateBoardRequestBody to nil")
 	}
-	var unwrapped jx.Raw
-	if err := func() error {
-		v, err := d.RawAppend(nil)
-		unwrapped = jx.Raw(v)
-		if err != nil {
-			return err
+	var requiredBitSet [1]uint8
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "name":
+			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				v, err := d.Str()
+				s.Name = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"name\"")
+			}
+		case "description":
+			requiredBitSet[0] |= 1 << 1
+			if err := func() error {
+				v, err := d.Str()
+				s.Description = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"description\"")
+			}
+		case "owner_id":
+			requiredBitSet[0] |= 1 << 2
+			if err := func() error {
+				v, err := d.Int()
+				s.OwnerID = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"owner_id\"")
+			}
+		default:
+			return d.Skip()
 		}
 		return nil
-	}(); err != nil {
-		return errors.Wrap(err, "alias")
+	}); err != nil {
+		return errors.Wrap(err, "decode CreateBoardRequestBody")
 	}
-	*s = CreateBoard(unwrapped)
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [1]uint8{
+		0b00000111,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfCreateBoardRequestBody) {
+					name = jsonFieldsNameOfCreateBoardRequestBody[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+
 	return nil
 }
 
 // MarshalJSON implements stdjson.Marshaler.
-func (s CreateBoard) MarshalJSON() ([]byte, error) {
+func (s *CreateBoardRequestBody) MarshalJSON() ([]byte, error) {
 	e := jx.Encoder{}
 	s.Encode(&e)
 	return e.Bytes(), nil
 }
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *CreateBoard) UnmarshalJSON(data []byte) error {
+func (s *CreateBoardRequestBody) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -176,10 +264,8 @@ func (s *CreateBoardResponse) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *CreateBoardResponse) encodeFields(e *jx.Encoder) {
 	{
-		if s.BoardID.Set {
-			e.FieldStart("board_id")
-			s.BoardID.Encode(e)
-		}
+		e.FieldStart("board_id")
+		e.Int(s.BoardID)
 	}
 }
 
@@ -192,13 +278,16 @@ func (s *CreateBoardResponse) Decode(d *jx.Decoder) error {
 	if s == nil {
 		return errors.New("invalid: unable to decode CreateBoardResponse to nil")
 	}
+	var requiredBitSet [1]uint8
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
 		case "board_id":
+			requiredBitSet[0] |= 1 << 0
 			if err := func() error {
-				s.BoardID.Reset()
-				if err := s.BoardID.Decode(d); err != nil {
+				v, err := d.Int()
+				s.BoardID = int(v)
+				if err != nil {
 					return err
 				}
 				return nil
@@ -211,6 +300,38 @@ func (s *CreateBoardResponse) Decode(d *jx.Decoder) error {
 		return nil
 	}); err != nil {
 		return errors.Wrap(err, "decode CreateBoardResponse")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [1]uint8{
+		0b00000001,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfCreateBoardResponse) {
+					name = jsonFieldsNameOfCreateBoardResponse[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
 	}
 
 	return nil

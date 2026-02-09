@@ -2,7 +2,7 @@ services:
   board:
     build:
       context: .
-      dockerfile: docker/Dockerfile
+      dockerfile: docker/board/Dockerfile
     ports:
       - ${BOARD_GRPC_EXTERNAL_PORT}:${BOARD_GRPC_PORT}
     volumes:
@@ -26,6 +26,15 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+  gateway:
+    build:
+      context: .
+      dockerfile: docker/gateway/Dockerfile
+    ports:
+      - ${GATEWAY_HTTP_EXTERNAL_PORT}:${GATEWAY_HTTP_PORT}
+    volumes:
+      - '.:/app'
+    command: ["go", "run", "gateway/cmd/main.go"]
 volumes:
   postgres_board_data:
 networks:

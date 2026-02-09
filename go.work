@@ -4,4 +4,5 @@ use (
 	./board
 	./platform
 	./shared
+	gateway
 )
