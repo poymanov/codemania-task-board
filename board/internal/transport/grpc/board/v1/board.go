@@ -6,13 +6,13 @@ import (
 )
 
 type BoardService struct {
-	boardUserCase *boardUseCase.UseCase
+	boardUseCase *boardUseCase.UseCase
 
 	boardV1.UnimplementedBoardServiceServer
 }
 
-func NewBoardService(boardUserCase *boardUseCase.UseCase) *BoardService {
+func NewBoardService(boardUseCase *boardUseCase.UseCase) *BoardService {
 	return &BoardService{
-		boardUserCase: boardUserCase,
+		boardUseCase: boardUseCase,
 	}
 }
