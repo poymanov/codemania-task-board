@@ -47,6 +47,9 @@ func Run() error {
 	ctx := context.Background()
 
 	a, err := newApp(ctx)
+	if err != nil {
+		return err
+	}
 
 	defer func() {
 		ec := a.Close()
@@ -55,10 +58,6 @@ func Run() error {
 			return
 		}
 	}()
-
-	if err != nil {
-		return err
-	}
 
 	err = a.runHttpServer()
 	if err != nil {
