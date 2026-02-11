@@ -38,5 +38,5 @@ func (cfg *HttpConfig) ReadTimeout() time.Duration {
 		panic(fmt.Errorf("failed to to parse http timeout config: %w", err))
 	}
 
-	return timeDuration * time.Second
+	return timeDuration
 }
