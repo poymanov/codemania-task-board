@@ -3,6 +3,7 @@ package app
 import (
 	"context"
 	"errors"
+	"flag"
 	"fmt"
 	"net"
 	"os"
@@ -29,10 +30,6 @@ type App struct {
 	dbConnectionPool *pgxpool.Pool
 	config           *config.Config
 }
-
-const (
-	configPath = ".env"
-)
 
 func newApp(ctx context.Context) (*App, error) {
 	a := &App{}
@@ -76,9 +73,13 @@ func Run() error {
 }
 
 func (a *App) InitConfig(_ context.Context) error {
-	cfg, err := config.Load(configPath)
+	configPath := flag.String("env", ".env", "path to .env file")
+
+	flag.Parse()
+
+	cfg, err := config.Load(*configPath)
 	if err != nil {
-		return fmt.Errorf("failed to load config: %w", err)
+		return fmt.Errorf("failed to load config: %w, config path: %s", err, *configPath)
 	}
 
 	a.config = cfg
