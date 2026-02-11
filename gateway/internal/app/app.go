@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 
 	"github.com/gofiber/fiber/v3"
 	"github.com/gofiber/fiber/v3/middleware/adaptor"
@@ -22,6 +23,8 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
+
+const defaultInitializationTimeout = time.Second * 10
 
 type App struct {
 	closer      []func() error
@@ -68,17 +71,41 @@ func Run() error {
 	return nil
 }
 
-func (a *App) InitConfig(_ context.Context) error {
-	configPath := flag.String("env", ".env", "path to .env file")
-
-	flag.Parse()
-
-	cfg, err := config.Load(*configPath)
-	if err != nil {
-		return fmt.Errorf("failed to load config: %w, config path: %s", err, *configPath)
+func (a *App) InitConfig(ctx context.Context) error {
+	if _, ok := ctx.Deadline(); !ok {
+		var cancel context.CancelFunc
+		ctx, cancel = context.WithTimeout(ctx, defaultInitializationTimeout)
+		defer cancel()
 	}
 
-	a.config = cfg
+	chDone := make(chan struct{})
+
+	var err error
+
+	go func(err error) {
+		configPath := flag.String("env", ".env", "path to .env file")
+		flag.Parse()
+
+		cfg, err := config.Load(*configPath)
+
+		if err != nil {
+			err = fmt.Errorf("failed to load config: %w, config path: %s", err, *configPath)
+		} else {
+			a.config = cfg
+		}
+
+		chDone <- struct{}{}
+	}(err)
+
+	select {
+	case <-ctx.Done():
+		err = fmt.Errorf("config initialization timed out")
+	case <-chDone:
+	}
+
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
