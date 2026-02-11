@@ -201,7 +201,7 @@ func (a *App) runGrpcServer() {
 func (a *App) Close() error {
 	for _, closer := range a.closer {
 		if err := closer(); err != nil {
-			return err
+			log.Fatal().Err(err).Msg("failed to close application component")
 		}
 	}
 
