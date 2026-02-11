@@ -3,8 +3,6 @@ FROM golang:1.25.5
 ARG GROUP=1000
 ARG USER=1000
 
-ENV TZ=Europe/Moscow
-
 WORKDIR /app
 
 COPY platform/go.mod platform/go.sum ./platform/
