@@ -35,7 +35,7 @@ type App struct {
 func newApp(ctx context.Context) (*App, error) {
 	a := &App{}
 
-	err := a.InitDeps(ctx)
+	err := a.initDeps(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -71,7 +71,7 @@ func Run() error {
 	return nil
 }
 
-func (a *App) InitConfig(ctx context.Context) error {
+func (a *App) initConfig(ctx context.Context) error {
 	if _, ok := ctx.Deadline(); !ok {
 		var cancel context.CancelFunc
 		ctx, cancel = context.WithTimeout(ctx, defaultInitializationTimeout)
@@ -80,65 +80,95 @@ func (a *App) InitConfig(ctx context.Context) error {
 
 	chDone := make(chan struct{})
 
-	var err error
+	var configErr error
 
-	go func(err error) {
+	go func() {
 		configPath := flag.String("env", ".env", "path to .env file")
 		flag.Parse()
 
 		cfg, err := config.Load(*configPath)
 
 		if err != nil {
-			err = fmt.Errorf("failed to load config: %w, config path: %s", err, *configPath)
+			configErr = fmt.Errorf("failed to load config: %w, config path: %s", err, *configPath)
 		} else {
 			a.config = cfg
 		}
 
 		chDone <- struct{}{}
-	}(err)
+	}()
 
 	select {
 	case <-ctx.Done():
-		err = fmt.Errorf("config initialization timed out")
+		configErr = fmt.Errorf("config initialization timed out")
 	case <-chDone:
 	}
 
-	if err != nil {
-		return err
+	if configErr != nil {
+		return configErr
 	}
 
 	return nil
 }
 
-func (a *App) InitBoardClient(_ context.Context) error {
-	conn, err := grpc.NewClient(
-		a.config.GrpcClient.BoardAddress(),
-		grpc.WithTransportCredentials(insecure.NewCredentials()),
-	)
-	if err != nil {
-		return fmt.Errorf("failed to connect board grpc: %w", err)
+func (a *App) initBoardClient(ctx context.Context) error {
+	if _, ok := ctx.Deadline(); !ok {
+		var cancel context.CancelFunc
+		ctx, cancel = context.WithTimeout(ctx, defaultInitializationTimeout)
+		defer cancel()
 	}
 
-	boardServiceClient := boardV1.NewBoardServiceClient(conn)
+	chDone := make(chan struct{})
 
-	a.boardClient = boardGrpcClientV1.NewClient(boardServiceClient)
+	var clientErr error
 
-	a.closer = append(a.closer, func() error {
-		if cerr := conn.Close(); cerr != nil {
-			return cerr
+	go func() {
+		conn, err := grpc.NewClient(
+			a.config.GrpcClient.BoardAddress(),
+			grpc.WithTransportCredentials(insecure.NewCredentials()),
+		)
+		if err != nil {
+			clientErr = fmt.Errorf("failed to connect board grpc: %w", err)
 		}
 
-		return nil
-	})
+		boardServiceClient := boardV1.NewBoardServiceClient(conn)
+
+		a.boardClient = boardGrpcClientV1.NewClient(boardServiceClient)
+
+		a.closer = append(a.closer, func() error {
+			if cerr := conn.Close(); cerr != nil {
+				return cerr
+			}
+
+			return nil
+		})
+
+		chDone <- struct{}{}
+	}()
+
+	select {
+	case <-ctx.Done():
+		clientErr = fmt.Errorf("board gRPC client initialization timed out")
+	case <-chDone:
+	}
+
+	if clientErr != nil {
+		return clientErr
+	}
 
 	return nil
 }
 
-func (a *App) InitDeps(ctx context.Context) error {
+func (a *App) initDeps(ctx context.Context) error {
+	if _, ok := ctx.Deadline(); !ok {
+		var cancel context.CancelFunc
+		ctx, cancel = context.WithTimeout(ctx, defaultInitializationTimeout)
+		defer cancel()
+	}
+
 	inits := []func(ctx context.Context) error{
-		a.InitConfig,
-		a.InitLogger,
-		a.InitBoardClient,
+		a.initConfig,
+		a.initLogger,
+		a.initBoardClient,
 	}
 
 	for _, f := range inits {
@@ -151,7 +181,7 @@ func (a *App) InitDeps(ctx context.Context) error {
 	return nil
 }
 
-func (a *App) InitLogger(_ context.Context) error {
+func (a *App) initLogger(_ context.Context) error {
 	logger.InitLogger(a.config.Logger.Level())
 
 	return nil
