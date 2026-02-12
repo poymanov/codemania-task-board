@@ -104,55 +104,55 @@ func (_c *BoardRepository_Create_Call) RunAndReturn(run func(ctx context.Context
 	return _c
 }
 
-// GetAllByOwnerId provides a mock function for the type BoardRepository
-func (_mock *BoardRepository) GetAllByOwnerId(ctx context.Context, ownerId int) ([]board.Board, error) {
-	ret := _mock.Called(ctx, ownerId)
+// GetAll provides a mock function for the type BoardRepository
+func (_mock *BoardRepository) GetAll(ctx context.Context, filter board.GetAllFilter) ([]board.Board, error) {
+	ret := _mock.Called(ctx, filter)
 
 	if len(ret) == 0 {
-		panic("no return value specified for GetAllByOwnerId")
+		panic("no return value specified for GetAll")
 	}
 
 	var r0 []board.Board
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context, int) ([]board.Board, error)); ok {
-		return returnFunc(ctx, ownerId)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, board.GetAllFilter) ([]board.Board, error)); ok {
+		return returnFunc(ctx, filter)
 	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context, int) []board.Board); ok {
-		r0 = returnFunc(ctx, ownerId)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, board.GetAllFilter) []board.Board); ok {
+		r0 = returnFunc(ctx, filter)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).([]board.Board)
 		}
 	}
-	if returnFunc, ok := ret.Get(1).(func(context.Context, int) error); ok {
-		r1 = returnFunc(ctx, ownerId)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, board.GetAllFilter) error); ok {
+		r1 = returnFunc(ctx, filter)
 	} else {
 		r1 = ret.Error(1)
 	}
 	return r0, r1
 }
 
-// BoardRepository_GetAllByOwnerId_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetAllByOwnerId'
-type BoardRepository_GetAllByOwnerId_Call struct {
+// BoardRepository_GetAll_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetAll'
+type BoardRepository_GetAll_Call struct {
 	*mock.Call
 }
 
-// GetAllByOwnerId is a helper method to define mock.On call
+// GetAll is a helper method to define mock.On call
 //   - ctx context.Context
-//   - ownerId int
-func (_e *BoardRepository_Expecter) GetAllByOwnerId(ctx interface{}, ownerId interface{}) *BoardRepository_GetAllByOwnerId_Call {
-	return &BoardRepository_GetAllByOwnerId_Call{Call: _e.mock.On("GetAllByOwnerId", ctx, ownerId)}
+//   - filter board.GetAllFilter
+func (_e *BoardRepository_Expecter) GetAll(ctx interface{}, filter interface{}) *BoardRepository_GetAll_Call {
+	return &BoardRepository_GetAll_Call{Call: _e.mock.On("GetAll", ctx, filter)}
 }
 
-func (_c *BoardRepository_GetAllByOwnerId_Call) Run(run func(ctx context.Context, ownerId int)) *BoardRepository_GetAllByOwnerId_Call {
+func (_c *BoardRepository_GetAll_Call) Run(run func(ctx context.Context, filter board.GetAllFilter)) *BoardRepository_GetAll_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 context.Context
 		if args[0] != nil {
 			arg0 = args[0].(context.Context)
 		}
-		var arg1 int
+		var arg1 board.GetAllFilter
 		if args[1] != nil {
-			arg1 = args[1].(int)
+			arg1 = args[1].(board.GetAllFilter)
 		}
 		run(
 			arg0,
@@ -162,12 +162,12 @@ func (_c *BoardRepository_GetAllByOwnerId_Call) Run(run func(ctx context.Context
 	return _c
 }
 
-func (_c *BoardRepository_GetAllByOwnerId_Call) Return(boards []board.Board, err error) *BoardRepository_GetAllByOwnerId_Call {
+func (_c *BoardRepository_GetAll_Call) Return(boards []board.Board, err error) *BoardRepository_GetAll_Call {
 	_c.Call.Return(boards, err)
 	return _c
 }
 
-func (_c *BoardRepository_GetAllByOwnerId_Call) RunAndReturn(run func(ctx context.Context, ownerId int) ([]board.Board, error)) *BoardRepository_GetAllByOwnerId_Call {
+func (_c *BoardRepository_GetAll_Call) RunAndReturn(run func(ctx context.Context, filter board.GetAllFilter) ([]board.Board, error)) *BoardRepository_GetAll_Call {
 	_c.Call.Return(run)
 	return _c
 }

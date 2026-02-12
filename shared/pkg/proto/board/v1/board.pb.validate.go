@@ -170,55 +170,71 @@ var _ interface {
 	ErrorName() string
 } = BoardServiceCreateRequestValidationError{}
 
-// Validate checks the field values on BoardServiceGetAllByOwnerIdRequest with
-// the rules defined in the proto definition for this message. If any rules
-// are violated, the first error encountered is returned, or nil if there are
-// no violations.
-func (m *BoardServiceGetAllByOwnerIdRequest) Validate() error {
+// Validate checks the field values on BoardServiceGetAllRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *BoardServiceGetAllRequest) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on BoardServiceGetAllByOwnerIdRequest
-// with the rules defined in the proto definition for this message. If any
-// rules are violated, the result is a list of violation errors wrapped in
-// BoardServiceGetAllByOwnerIdRequestMultiError, or nil if none found.
-func (m *BoardServiceGetAllByOwnerIdRequest) ValidateAll() error {
+// ValidateAll checks the field values on BoardServiceGetAllRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// BoardServiceGetAllRequestMultiError, or nil if none found.
+func (m *BoardServiceGetAllRequest) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *BoardServiceGetAllByOwnerIdRequest) validate(all bool) error {
+func (m *BoardServiceGetAllRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
 	var errors []error
 
-	if m.GetOwnerId() < 1 {
-		err := BoardServiceGetAllByOwnerIdRequestValidationError{
-			field:  "OwnerId",
-			reason: "value must be greater than or equal to 1",
+	if all {
+		switch v := interface{}(m.GetFilter()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, BoardServiceGetAllRequestValidationError{
+					field:  "Filter",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, BoardServiceGetAllRequestValidationError{
+					field:  "Filter",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
 		}
-		if !all {
-			return err
+	} else if v, ok := interface{}(m.GetFilter()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return BoardServiceGetAllRequestValidationError{
+				field:  "Filter",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
 		}
-		errors = append(errors, err)
 	}
 
 	if len(errors) > 0 {
-		return BoardServiceGetAllByOwnerIdRequestMultiError(errors)
+		return BoardServiceGetAllRequestMultiError(errors)
 	}
 
 	return nil
 }
 
-// BoardServiceGetAllByOwnerIdRequestMultiError is an error wrapping multiple
-// validation errors returned by
-// BoardServiceGetAllByOwnerIdRequest.ValidateAll() if the designated
-// constraints aren't met.
-type BoardServiceGetAllByOwnerIdRequestMultiError []error
+// BoardServiceGetAllRequestMultiError is an error wrapping multiple validation
+// errors returned by BoardServiceGetAllRequest.ValidateAll() if the
+// designated constraints aren't met.
+type BoardServiceGetAllRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m BoardServiceGetAllByOwnerIdRequestMultiError) Error() string {
+func (m BoardServiceGetAllRequestMultiError) Error() string {
 	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -227,12 +243,11 @@ func (m BoardServiceGetAllByOwnerIdRequestMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m BoardServiceGetAllByOwnerIdRequestMultiError) AllErrors() []error { return m }
+func (m BoardServiceGetAllRequestMultiError) AllErrors() []error { return m }
 
-// BoardServiceGetAllByOwnerIdRequestValidationError is the validation error
-// returned by BoardServiceGetAllByOwnerIdRequest.Validate if the designated
-// constraints aren't met.
-type BoardServiceGetAllByOwnerIdRequestValidationError struct {
+// BoardServiceGetAllRequestValidationError is the validation error returned by
+// BoardServiceGetAllRequest.Validate if the designated constraints aren't met.
+type BoardServiceGetAllRequestValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -240,24 +255,24 @@ type BoardServiceGetAllByOwnerIdRequestValidationError struct {
 }
 
 // Field function returns field value.
-func (e BoardServiceGetAllByOwnerIdRequestValidationError) Field() string { return e.field }
+func (e BoardServiceGetAllRequestValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e BoardServiceGetAllByOwnerIdRequestValidationError) Reason() string { return e.reason }
+func (e BoardServiceGetAllRequestValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e BoardServiceGetAllByOwnerIdRequestValidationError) Cause() error { return e.cause }
+func (e BoardServiceGetAllRequestValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e BoardServiceGetAllByOwnerIdRequestValidationError) Key() bool { return e.key }
+func (e BoardServiceGetAllRequestValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e BoardServiceGetAllByOwnerIdRequestValidationError) ErrorName() string {
-	return "BoardServiceGetAllByOwnerIdRequestValidationError"
+func (e BoardServiceGetAllRequestValidationError) ErrorName() string {
+	return "BoardServiceGetAllRequestValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e BoardServiceGetAllByOwnerIdRequestValidationError) Error() string {
+func (e BoardServiceGetAllRequestValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -269,14 +284,14 @@ func (e BoardServiceGetAllByOwnerIdRequestValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sBoardServiceGetAllByOwnerIdRequest.%s: %s%s",
+		"invalid %sBoardServiceGetAllRequest.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = BoardServiceGetAllByOwnerIdRequestValidationError{}
+var _ error = BoardServiceGetAllRequestValidationError{}
 
 var _ interface {
 	Field() string
@@ -284,25 +299,24 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = BoardServiceGetAllByOwnerIdRequestValidationError{}
+} = BoardServiceGetAllRequestValidationError{}
 
-// Validate checks the field values on BoardServiceGetAllByOwnerIdResponse with
-// the rules defined in the proto definition for this message. If any rules
-// are violated, the first error encountered is returned, or nil if there are
-// no violations.
-func (m *BoardServiceGetAllByOwnerIdResponse) Validate() error {
+// Validate checks the field values on BoardServiceGetAllResponse with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *BoardServiceGetAllResponse) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on BoardServiceGetAllByOwnerIdResponse
-// with the rules defined in the proto definition for this message. If any
-// rules are violated, the result is a list of violation errors wrapped in
-// BoardServiceGetAllByOwnerIdResponseMultiError, or nil if none found.
-func (m *BoardServiceGetAllByOwnerIdResponse) ValidateAll() error {
+// ValidateAll checks the field values on BoardServiceGetAllResponse with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// BoardServiceGetAllResponseMultiError, or nil if none found.
+func (m *BoardServiceGetAllResponse) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *BoardServiceGetAllByOwnerIdResponse) validate(all bool) error {
+func (m *BoardServiceGetAllResponse) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -316,7 +330,7 @@ func (m *BoardServiceGetAllByOwnerIdResponse) validate(all bool) error {
 			switch v := interface{}(item).(type) {
 			case interface{ ValidateAll() error }:
 				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, BoardServiceGetAllByOwnerIdResponseValidationError{
+					errors = append(errors, BoardServiceGetAllResponseValidationError{
 						field:  fmt.Sprintf("Boards[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
@@ -324,7 +338,7 @@ func (m *BoardServiceGetAllByOwnerIdResponse) validate(all bool) error {
 				}
 			case interface{ Validate() error }:
 				if err := v.Validate(); err != nil {
-					errors = append(errors, BoardServiceGetAllByOwnerIdResponseValidationError{
+					errors = append(errors, BoardServiceGetAllResponseValidationError{
 						field:  fmt.Sprintf("Boards[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
@@ -333,7 +347,7 @@ func (m *BoardServiceGetAllByOwnerIdResponse) validate(all bool) error {
 			}
 		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				return BoardServiceGetAllByOwnerIdResponseValidationError{
+				return BoardServiceGetAllResponseValidationError{
 					field:  fmt.Sprintf("Boards[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -344,20 +358,19 @@ func (m *BoardServiceGetAllByOwnerIdResponse) validate(all bool) error {
 	}
 
 	if len(errors) > 0 {
-		return BoardServiceGetAllByOwnerIdResponseMultiError(errors)
+		return BoardServiceGetAllResponseMultiError(errors)
 	}
 
 	return nil
 }
 
-// BoardServiceGetAllByOwnerIdResponseMultiError is an error wrapping multiple
-// validation errors returned by
-// BoardServiceGetAllByOwnerIdResponse.ValidateAll() if the designated
-// constraints aren't met.
-type BoardServiceGetAllByOwnerIdResponseMultiError []error
+// BoardServiceGetAllResponseMultiError is an error wrapping multiple
+// validation errors returned by BoardServiceGetAllResponse.ValidateAll() if
+// the designated constraints aren't met.
+type BoardServiceGetAllResponseMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m BoardServiceGetAllByOwnerIdResponseMultiError) Error() string {
+func (m BoardServiceGetAllResponseMultiError) Error() string {
 	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -366,12 +379,11 @@ func (m BoardServiceGetAllByOwnerIdResponseMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m BoardServiceGetAllByOwnerIdResponseMultiError) AllErrors() []error { return m }
+func (m BoardServiceGetAllResponseMultiError) AllErrors() []error { return m }
 
-// BoardServiceGetAllByOwnerIdResponseValidationError is the validation error
-// returned by BoardServiceGetAllByOwnerIdResponse.Validate if the designated
-// constraints aren't met.
-type BoardServiceGetAllByOwnerIdResponseValidationError struct {
+// BoardServiceGetAllResponseValidationError is the validation error returned
+// by BoardServiceGetAllResponse.Validate if the designated constraints aren't met.
+type BoardServiceGetAllResponseValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -379,24 +391,24 @@ type BoardServiceGetAllByOwnerIdResponseValidationError struct {
 }
 
 // Field function returns field value.
-func (e BoardServiceGetAllByOwnerIdResponseValidationError) Field() string { return e.field }
+func (e BoardServiceGetAllResponseValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e BoardServiceGetAllByOwnerIdResponseValidationError) Reason() string { return e.reason }
+func (e BoardServiceGetAllResponseValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e BoardServiceGetAllByOwnerIdResponseValidationError) Cause() error { return e.cause }
+func (e BoardServiceGetAllResponseValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e BoardServiceGetAllByOwnerIdResponseValidationError) Key() bool { return e.key }
+func (e BoardServiceGetAllResponseValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e BoardServiceGetAllByOwnerIdResponseValidationError) ErrorName() string {
-	return "BoardServiceGetAllByOwnerIdResponseValidationError"
+func (e BoardServiceGetAllResponseValidationError) ErrorName() string {
+	return "BoardServiceGetAllResponseValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e BoardServiceGetAllByOwnerIdResponseValidationError) Error() string {
+func (e BoardServiceGetAllResponseValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -408,14 +420,14 @@ func (e BoardServiceGetAllByOwnerIdResponseValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sBoardServiceGetAllByOwnerIdResponse.%s: %s%s",
+		"invalid %sBoardServiceGetAllResponse.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = BoardServiceGetAllByOwnerIdResponseValidationError{}
+var _ error = BoardServiceGetAllResponseValidationError{}
 
 var _ interface {
 	Field() string
@@ -423,7 +435,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = BoardServiceGetAllByOwnerIdResponseValidationError{}
+} = BoardServiceGetAllResponseValidationError{}
 
 // Validate checks the field values on BoardServiceCreateResponse with the
 // rules defined in the proto definition for this message. If any rules are
@@ -634,3 +646,115 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = BoardValidationError{}
+
+// Validate checks the field values on GetAllFilter with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *GetAllFilter) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetAllFilter with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in GetAllFilterMultiError, or
+// nil if none found.
+func (m *GetAllFilter) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetAllFilter) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if m.OwnerId != nil {
+		if m.GetOwnerId() < 1 {
+			err := GetAllFilterValidationError{
+				field:  "OwnerId",
+				reason: "value must be greater than or equal to 1",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+	}
+
+	if len(errors) > 0 {
+		return GetAllFilterMultiError(errors)
+	}
+
+	return nil
+}
+
+// GetAllFilterMultiError is an error wrapping multiple validation errors
+// returned by GetAllFilter.ValidateAll() if the designated constraints aren't met.
+type GetAllFilterMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetAllFilterMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetAllFilterMultiError) AllErrors() []error { return m }
+
+// GetAllFilterValidationError is the validation error returned by
+// GetAllFilter.Validate if the designated constraints aren't met.
+type GetAllFilterValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetAllFilterValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetAllFilterValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetAllFilterValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetAllFilterValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetAllFilterValidationError) ErrorName() string { return "GetAllFilterValidationError" }
+
+// Error satisfies the builtin error interface
+func (e GetAllFilterValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetAllFilter.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetAllFilterValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetAllFilterValidationError{}

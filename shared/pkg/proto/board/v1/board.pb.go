@@ -88,28 +88,27 @@ func (x *BoardServiceCreateRequest) GetOwnerId() int64 {
 }
 
 // Запрос на получение всех досок по ID владельца
-type BoardServiceGetAllByOwnerIdRequest struct {
-	state protoimpl.MessageState `protogen:"open.v1"`
-	// ID владельца доски
-	OwnerId       int64 `protobuf:"varint,1,opt,name=owner_id,json=ownerId,proto3" json:"owner_id,omitempty"`
+type BoardServiceGetAllRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Filter        *GetAllFilter          `protobuf:"bytes,1,opt,name=filter,proto3" json:"filter,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *BoardServiceGetAllByOwnerIdRequest) Reset() {
-	*x = BoardServiceGetAllByOwnerIdRequest{}
+func (x *BoardServiceGetAllRequest) Reset() {
+	*x = BoardServiceGetAllRequest{}
 	mi := &file_board_v1_board_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *BoardServiceGetAllByOwnerIdRequest) String() string {
+func (x *BoardServiceGetAllRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*BoardServiceGetAllByOwnerIdRequest) ProtoMessage() {}
+func (*BoardServiceGetAllRequest) ProtoMessage() {}
 
-func (x *BoardServiceGetAllByOwnerIdRequest) ProtoReflect() protoreflect.Message {
+func (x *BoardServiceGetAllRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_board_v1_board_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -121,20 +120,20 @@ func (x *BoardServiceGetAllByOwnerIdRequest) ProtoReflect() protoreflect.Message
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use BoardServiceGetAllByOwnerIdRequest.ProtoReflect.Descriptor instead.
-func (*BoardServiceGetAllByOwnerIdRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use BoardServiceGetAllRequest.ProtoReflect.Descriptor instead.
+func (*BoardServiceGetAllRequest) Descriptor() ([]byte, []int) {
 	return file_board_v1_board_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *BoardServiceGetAllByOwnerIdRequest) GetOwnerId() int64 {
+func (x *BoardServiceGetAllRequest) GetFilter() *GetAllFilter {
 	if x != nil {
-		return x.OwnerId
+		return x.Filter
 	}
-	return 0
+	return nil
 }
 
 // Ответ со списком всех досок владельца
-type BoardServiceGetAllByOwnerIdResponse struct {
+type BoardServiceGetAllResponse struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Список досок
 	Boards        []*Board `protobuf:"bytes,1,rep,name=boards,proto3" json:"boards,omitempty"`
@@ -142,20 +141,20 @@ type BoardServiceGetAllByOwnerIdResponse struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *BoardServiceGetAllByOwnerIdResponse) Reset() {
-	*x = BoardServiceGetAllByOwnerIdResponse{}
+func (x *BoardServiceGetAllResponse) Reset() {
+	*x = BoardServiceGetAllResponse{}
 	mi := &file_board_v1_board_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *BoardServiceGetAllByOwnerIdResponse) String() string {
+func (x *BoardServiceGetAllResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*BoardServiceGetAllByOwnerIdResponse) ProtoMessage() {}
+func (*BoardServiceGetAllResponse) ProtoMessage() {}
 
-func (x *BoardServiceGetAllByOwnerIdResponse) ProtoReflect() protoreflect.Message {
+func (x *BoardServiceGetAllResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_board_v1_board_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -167,12 +166,12 @@ func (x *BoardServiceGetAllByOwnerIdResponse) ProtoReflect() protoreflect.Messag
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use BoardServiceGetAllByOwnerIdResponse.ProtoReflect.Descriptor instead.
-func (*BoardServiceGetAllByOwnerIdResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use BoardServiceGetAllResponse.ProtoReflect.Descriptor instead.
+func (*BoardServiceGetAllResponse) Descriptor() ([]byte, []int) {
 	return file_board_v1_board_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *BoardServiceGetAllByOwnerIdResponse) GetBoards() []*Board {
+func (x *BoardServiceGetAllResponse) GetBoards() []*Board {
 	if x != nil {
 		return x.Boards
 	}
@@ -297,6 +296,52 @@ func (x *Board) GetOwnerId() int64 {
 	return 0
 }
 
+// Фильтр для запроса по всем доскам
+type GetAllFilter struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// ID владельца доски
+	OwnerId       *int64 `protobuf:"varint,1,opt,name=owner_id,json=ownerId,proto3,oneof" json:"owner_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetAllFilter) Reset() {
+	*x = GetAllFilter{}
+	mi := &file_board_v1_board_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetAllFilter) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetAllFilter) ProtoMessage() {}
+
+func (x *GetAllFilter) ProtoReflect() protoreflect.Message {
+	mi := &file_board_v1_board_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetAllFilter.ProtoReflect.Descriptor instead.
+func (*GetAllFilter) Descriptor() ([]byte, []int) {
+	return file_board_v1_board_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *GetAllFilter) GetOwnerId() int64 {
+	if x != nil && x.OwnerId != nil {
+		return *x.OwnerId
+	}
+	return 0
+}
+
 var File_board_v1_board_proto protoreflect.FileDescriptor
 
 const file_board_v1_board_proto_rawDesc = "" +
@@ -305,10 +350,10 @@ const file_board_v1_board_proto_rawDesc = "" +
 	"\x19BoardServiceCreateRequest\x12\x1b\n" +
 	"\x04name\x18\x01 \x01(\tB\a\xfaB\x04r\x02\x10\x01R\x04name\x12)\n" +
 	"\vdescription\x18\x02 \x01(\tB\a\xfaB\x04r\x02\x10\x01R\vdescription\x12\"\n" +
-	"\bowner_id\x18\x03 \x01(\x03B\a\xfaB\x04\"\x02(\x01R\aownerId\"H\n" +
-	"\"BoardServiceGetAllByOwnerIdRequest\x12\"\n" +
-	"\bowner_id\x18\x01 \x01(\x03B\a\xfaB\x04\"\x02(\x01R\aownerId\"N\n" +
-	"#BoardServiceGetAllByOwnerIdResponse\x12'\n" +
+	"\bowner_id\x18\x03 \x01(\x03B\a\xfaB\x04\"\x02(\x01R\aownerId\"K\n" +
+	"\x19BoardServiceGetAllRequest\x12.\n" +
+	"\x06filter\x18\x01 \x01(\v2\x16.board.v1.GetAllFilterR\x06filter\"E\n" +
+	"\x1aBoardServiceGetAllResponse\x12'\n" +
 	"\x06boards\x18\x01 \x03(\v2\x0f.board.v1.BoardR\x06boards\"7\n" +
 	"\x1aBoardServiceCreateResponse\x12\x19\n" +
 	"\bboard_id\x18\x03 \x01(\x03R\aboardId\"h\n" +
@@ -316,10 +361,13 @@ const file_board_v1_board_proto_rawDesc = "" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12 \n" +
 	"\vdescription\x18\x03 \x01(\tR\vdescription\x12\x19\n" +
-	"\bowner_id\x18\x04 \x01(\x03R\aownerId2\xd3\x01\n" +
+	"\bowner_id\x18\x04 \x01(\x03R\aownerId\"D\n" +
+	"\fGetAllFilter\x12'\n" +
+	"\bowner_id\x18\x01 \x01(\x03B\a\xfaB\x04\"\x02(\x01H\x00R\aownerId\x88\x01\x01B\v\n" +
+	"\t_owner_id2\xb8\x01\n" +
 	"\fBoardService\x12S\n" +
-	"\x06Create\x12#.board.v1.BoardServiceCreateRequest\x1a$.board.v1.BoardServiceCreateResponse\x12n\n" +
-	"\x0fGetAllByOwnerId\x12,.board.v1.BoardServiceGetAllByOwnerIdRequest\x1a-.board.v1.BoardServiceGetAllByOwnerIdResponseBFZDgithub.com/poymanov/codemania-task-board/pkg/proto/board/v1;board_v1b\x06proto3"
+	"\x06Create\x12#.board.v1.BoardServiceCreateRequest\x1a$.board.v1.BoardServiceCreateResponse\x12S\n" +
+	"\x06GetAll\x12#.board.v1.BoardServiceGetAllRequest\x1a$.board.v1.BoardServiceGetAllResponseBFZDgithub.com/poymanov/codemania-task-board/pkg/proto/board/v1;board_v1b\x06proto3"
 
 var (
 	file_board_v1_board_proto_rawDescOnce sync.Once
@@ -334,27 +382,28 @@ func file_board_v1_board_proto_rawDescGZIP() []byte {
 }
 
 var (
-	file_board_v1_board_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
+	file_board_v1_board_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 	file_board_v1_board_proto_goTypes  = []any{
-		(*BoardServiceCreateRequest)(nil),           // 0: board.v1.BoardServiceCreateRequest
-		(*BoardServiceGetAllByOwnerIdRequest)(nil),  // 1: board.v1.BoardServiceGetAllByOwnerIdRequest
-		(*BoardServiceGetAllByOwnerIdResponse)(nil), // 2: board.v1.BoardServiceGetAllByOwnerIdResponse
-		(*BoardServiceCreateResponse)(nil),          // 3: board.v1.BoardServiceCreateResponse
-		(*Board)(nil),                               // 4: board.v1.Board
+		(*BoardServiceCreateRequest)(nil),  // 0: board.v1.BoardServiceCreateRequest
+		(*BoardServiceGetAllRequest)(nil),  // 1: board.v1.BoardServiceGetAllRequest
+		(*BoardServiceGetAllResponse)(nil), // 2: board.v1.BoardServiceGetAllResponse
+		(*BoardServiceCreateResponse)(nil), // 3: board.v1.BoardServiceCreateResponse
+		(*Board)(nil),                      // 4: board.v1.Board
+		(*GetAllFilter)(nil),               // 5: board.v1.GetAllFilter
 	}
 )
-
 var file_board_v1_board_proto_depIdxs = []int32{
-	4, // 0: board.v1.BoardServiceGetAllByOwnerIdResponse.boards:type_name -> board.v1.Board
-	0, // 1: board.v1.BoardService.Create:input_type -> board.v1.BoardServiceCreateRequest
-	1, // 2: board.v1.BoardService.GetAllByOwnerId:input_type -> board.v1.BoardServiceGetAllByOwnerIdRequest
-	3, // 3: board.v1.BoardService.Create:output_type -> board.v1.BoardServiceCreateResponse
-	2, // 4: board.v1.BoardService.GetAllByOwnerId:output_type -> board.v1.BoardServiceGetAllByOwnerIdResponse
-	3, // [3:5] is the sub-list for method output_type
-	1, // [1:3] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+	5, // 0: board.v1.BoardServiceGetAllRequest.filter:type_name -> board.v1.GetAllFilter
+	4, // 1: board.v1.BoardServiceGetAllResponse.boards:type_name -> board.v1.Board
+	0, // 2: board.v1.BoardService.Create:input_type -> board.v1.BoardServiceCreateRequest
+	1, // 3: board.v1.BoardService.GetAll:input_type -> board.v1.BoardServiceGetAllRequest
+	3, // 4: board.v1.BoardService.Create:output_type -> board.v1.BoardServiceCreateResponse
+	2, // 5: board.v1.BoardService.GetAll:output_type -> board.v1.BoardServiceGetAllResponse
+	4, // [4:6] is the sub-list for method output_type
+	2, // [2:4] is the sub-list for method input_type
+	2, // [2:2] is the sub-list for extension type_name
+	2, // [2:2] is the sub-list for extension extendee
+	0, // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_board_v1_board_proto_init() }
@@ -362,13 +411,14 @@ func file_board_v1_board_proto_init() {
 	if File_board_v1_board_proto != nil {
 		return
 	}
+	file_board_v1_board_proto_msgTypes[5].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_board_v1_board_proto_rawDesc), len(file_board_v1_board_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   5,
+			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

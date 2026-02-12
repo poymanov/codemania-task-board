@@ -16,6 +16,6 @@ func NewUseCase(boardRepository domainBoard.BoardRepository) *UseCase {
 	}
 }
 
-func (u *UseCase) GetAllByOwnerId(ctx context.Context, ownerId int) ([]domainBoard.Board, error) {
-	return u.boardRepository.GetAllByOwnerId(ctx, ownerId)
+func (u *UseCase) GetAll(ctx context.Context, filter domainBoard.GetAllFilter) ([]domainBoard.Board, error) {
+	return u.boardRepository.GetAll(ctx, filter)
 }

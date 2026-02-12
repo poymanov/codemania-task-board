@@ -9,20 +9,22 @@ import (
 )
 
 func (s *UseCaseSuite) TestGetAllByOwnerError() {
+	ownerId := int(gofakeit.Int64())
+
 	s.boardRepository.
-		On("GetAllByOwnerId", s.ctx, mock.Anything).
+		On("GetAll", s.ctx, mock.Anything).
 		Return([]domainBoard.Board{}, errors.New(gofakeit.Word())).Once()
 
-	res, err := s.useCase.GetAllByOwnerId(s.ctx, int(gofakeit.Int64()))
+	res, err := s.useCase.GetAll(s.ctx, domainBoard.GetAllFilter{OwnerId: ownerId})
 	s.Require().Error(err)
 	s.Require().Empty(res)
 }
 
 func (s *UseCaseSuite) TestGetAllByOwnerSuccess() {
 	ownerId := int(gofakeit.Int64())
-	s.boardRepository.On("GetAllByOwnerId", s.ctx, mock.Anything).Return([]domainBoard.Board{{OwnerId: ownerId}}, nil).Once()
+	s.boardRepository.On("GetAll", s.ctx, mock.Anything).Return([]domainBoard.Board{{OwnerId: ownerId}}, nil).Once()
 
-	res, err := s.useCase.GetAllByOwnerId(s.ctx, ownerId)
+	res, err := s.useCase.GetAll(s.ctx, domainBoard.GetAllFilter{OwnerId: ownerId})
 	s.Require().NoError(err)
 	s.Require().NotEmpty(res)
 }

@@ -2,13 +2,17 @@ package board
 
 import (
 	"context"
+	"fmt"
+	"strings"
 
 	"github.com/jackc/pgx/v5"
 	domainBoard "github.com/poymanov/codemania-task-board/board/internal/domain/board"
 )
 
-func (r *Repository) GetAllByOwnerId(ctx context.Context, ownerId int) ([]domainBoard.Board, error) {
-	rows, err := r.pool.Query(ctx, "SELECT * FROM boards WHERE owner_id = $1", ownerId)
+func (r *Repository) GetAll(ctx context.Context, filter domainBoard.GetAllFilter) ([]domainBoard.Board, error) {
+	query, args := getQuery(filter)
+
+	rows, err := r.pool.Query(ctx, query, args...)
 	if err != nil {
 		return []domainBoard.Board{}, err
 	}
@@ -27,11 +31,30 @@ func (r *Repository) GetAllByOwnerId(ctx context.Context, ownerId int) ([]domain
 			Id:          model.Id,
 			Name:        model.Name,
 			Description: model.Description,
-			OwnerId:     ownerId,
+			OwnerId:     model.OwnerId,
 		}
 
 		boards = append(boards, board)
 	}
 
 	return boards, nil
+}
+
+func getQuery(filter domainBoard.GetAllFilter) (string, []any) {
+	var conditions []string
+	var args []any
+	argsPos := 1
+
+	query := "SELECT * FROM boards"
+
+	if filter.OwnerId != 0 {
+		conditions = append(conditions, fmt.Sprintf("owner_id = $%d", argsPos))
+		args = append(args, filter.OwnerId)
+	}
+
+	if len(conditions) > 0 {
+		query += " WHERE " + strings.Join(conditions, " AND ")
+	}
+
+	return query, args
 }
