@@ -1,0 +1,119 @@
+openapi: 3.0.3
+info:
+  title: "Gateway API"
+  version: 1.0.0
+  description: "API для работы с менеджером задач"
+x-ogen:
+  target: ./shared/pkg/openapi/gateway/v1
+  package: gateway_v1
+  clean: true
+
+tags:
+  - name: Board
+    description: "Операции с досками"
+
+paths:
+  /api/v1/boards:
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateBoardRequestBody"
+      summary: "Создание доски"
+      operationId: BoardCreate
+      tags:
+        - Board
+      responses:
+        '200':
+          description: "Доска успешно создана"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateBoardResponse"
+        '400':
+          description: "Ошибка запроса"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        '500':
+          description: "Ошибка сервера"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+        default:
+          description: "Прочие ошибки"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericError"
+components:
+  schemas:
+    CreateBoardRequestBody:
+      type: object
+      required:
+        - name
+        - description
+        - owner_id
+      properties:
+        name:
+          type: string
+          description: "Название доски"
+          example: "TODO"
+        description:
+          type: string
+          description: "Описание доски"
+          example: "Запланированное"
+        owner_id:
+          type: integer
+          description: "ID автора доски"
+          example: 1
+    CreateBoardResponse:
+      type: object
+      required:
+        - board_id
+      properties:
+        board_id:
+          type: integer
+          description: "ID созданной доски"
+          example: 1
+    BadRequestError:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          description: "HTTP-код ошибки"
+          example: 400
+        message:
+          type: string
+          description: "Описание ошибки"
+          example: "Ошибка запроса"
+    InternalServerError:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          description: "HTTP-код ошибки"
+          example: 500
+        message:
+          type: string
+          description: "Описание ошибки"
+          example: "Ошибка сервера"
+    GenericError:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: "HTTP-код ошибки"
+        message:
+          type: string
+          description: "Описание ошибки"

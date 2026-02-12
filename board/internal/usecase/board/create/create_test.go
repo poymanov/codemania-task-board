@@ -1,4 +1,4 @@
-package board
+package create
 
 import (
 	"errors"

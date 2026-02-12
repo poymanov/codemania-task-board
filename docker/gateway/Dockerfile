@@ -3,15 +3,13 @@ FROM golang:1.25.5
 ARG GROUP=1000
 ARG USER=1000
 
-ENV TZ=Europe/Moscow
-
 WORKDIR /app
 
+COPY gateway/go.mod gateway/go.sum ./gateway/
 COPY platform/go.mod platform/go.sum ./platform/
-COPY board/go.mod board/go.sum ./board/
 COPY shared/go.mod shared/go.sum ./shared/
 
-WORKDIR /app/board
+WORKDIR /app/gateway
 RUN go mod download
 
 WORKDIR /app

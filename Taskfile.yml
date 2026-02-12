@@ -11,6 +11,8 @@ vars:
   PROTOC_GEN_GO_GRPC_VERSION: 'v1.6.0'
   PROTOC_GEN_VALIDATE_VERSION: 'v1.3.0'
   MOCKERY_VERSION: 'v3.6.3'
+  OGEN_VERSION: 'v1.18.0'
+  YQ_VERSION: 'v4.50.1'
 
   BIN_DIR: '{{.ROOT_DIR}}/bin'
   BUF: '{{.BIN_DIR}}/buf'
@@ -21,8 +23,12 @@ vars:
   GCI: '{{.BIN_DIR}}/gci'
   GOFUMPT: '{{.BIN_DIR}}/gofumpt'
   MOCKERY: "{{.BIN_DIR}}/mockery"
+  OGEN: '{{.BIN_DIR}}/ogen'
+  YQ: '{{.BIN_DIR}}/yq'
 
-  MODULES: board platform shared
+  OPEN_API_FILES: '{{.ROOT_DIR}}/shared/api/'
+
+  MODULES: board platform shared gateway
 
 tasks:
   install-formatters:
@@ -216,4 +222,48 @@ tasks:
             go test -v ./$mod/... || ERR=1
           fi
         done
-        exit $ERR        
+        exit $ERR  
+
+  yq:install:
+    desc: "Устанавливает yq в bin/ при необходимости"
+    cmds:
+      - |
+        [ -f {{.YQ}} ] || {
+          echo '📦 Installing yq...'
+          GOBIN={{.BIN_DIR}} go install github.com/mikefarah/yq/v4@{{.YQ_VERSION}}
+        }
+
+  ogen:install:
+    desc: "Скачивает ogen в папку bin"
+    cmds:
+      - |
+        [ -f {{.OGEN}} ] || {
+          mkdir -p {{.BIN_DIR}}
+          GOBIN={{.BIN_DIR}} go install github.com/ogen-go/ogen/cmd/ogen@{{.OGEN_VERSION}}
+        }
+
+  ogen:gen:
+    desc: "Генерация Go-кода из всех OpenAPI-деклараций с x-ogen"
+    deps: [ ogen:install, yq:install]
+    cmds:
+      - |
+        find {{.OPEN_API_FILES}} -name '*.yaml' -o -name '*.yml' | while read -r file; do
+          if [ -f "$file" ] && grep -q 'x-ogen:' "$file"; then
+            echo "🚀 Generating from: $file"
+            target=$({{.YQ}} e '."x-ogen".target' "$file")
+            package=$({{.YQ}} e '."x-ogen".package' "$file")
+            echo "📁 Target: $target"
+            echo "📦 Package: $package"
+            {{.OGEN}} \
+              --target "$target" \
+              --package "$package" \
+              --clean \
+              "$file" || exit 1
+          fi
+        done        
+
+  gen:
+    desc: "Генерация всех proto и OpenAPI деклараций"
+    cmds:
+      - task: proto:gen
+      - task: ogen:gen

@@ -3,17 +3,19 @@ package app
 import (
 	"context"
 	"errors"
+	"flag"
 	"fmt"
 	"net"
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/poymanov/codemania-task-board/board/internal/config"
 	boardRepository "github.com/poymanov/codemania-task-board/board/internal/infrastructure/persistance/repository/board"
 	transportBoardV1 "github.com/poymanov/codemania-task-board/board/internal/transport/grpc/board/v1"
-	boardUseCase "github.com/poymanov/codemania-task-board/board/internal/usecase/board"
+	boardUseCase "github.com/poymanov/codemania-task-board/board/internal/usecase/board/create"
 	"github.com/poymanov/codemania-task-board/platform/pkg/grpc/health"
 	"github.com/poymanov/codemania-task-board/platform/pkg/logger"
 	"github.com/poymanov/codemania-task-board/platform/pkg/migrator"
@@ -23,16 +25,14 @@ import (
 	"google.golang.org/grpc/reflection"
 )
 
+const defaultInitializationTimeout = time.Second * 10
+
 type App struct {
 	closer           []func() error
 	listener         net.Listener
 	dbConnectionPool *pgxpool.Pool
 	config           *config.Config
 }
-
-const (
-	configPath = ".env"
-)
 
 func newApp(ctx context.Context) (*App, error) {
 	a := &App{}
@@ -49,6 +49,9 @@ func Run() error {
 	ctx := context.Background()
 
 	a, err := newApp(ctx)
+	if err != nil {
+		return err
+	}
 
 	defer func() {
 		ec := a.Close()
@@ -57,10 +60,6 @@ func Run() error {
 			return
 		}
 	}()
-
-	if err != nil {
-		return err
-	}
 
 	err = a.runMigrator()
 	if err != nil {
@@ -76,13 +75,41 @@ func Run() error {
 	return nil
 }
 
-func (a *App) InitConfig(_ context.Context) error {
-	cfg, err := config.Load(configPath)
-	if err != nil {
-		return fmt.Errorf("failed to load config: %w", err)
+func (a *App) InitConfig(ctx context.Context) error {
+	if _, ok := ctx.Deadline(); !ok {
+		var cancel context.CancelFunc
+		ctx, cancel = context.WithTimeout(ctx, defaultInitializationTimeout)
+		defer cancel()
 	}
 
-	a.config = cfg
+	chDone := make(chan struct{})
+
+	var configErr error
+
+	go func() {
+		configPath := flag.String("env", ".env", "path to .env file")
+		flag.Parse()
+
+		cfg, err := config.Load(*configPath)
+
+		if err != nil {
+			configErr = fmt.Errorf("failed to load config: %w, config path: %s", err, *configPath)
+		} else {
+			a.config = cfg
+		}
+
+		chDone <- struct{}{}
+	}()
+
+	select {
+	case <-ctx.Done():
+		configErr = fmt.Errorf("config initialization timed out")
+	case <-chDone:
+	}
+
+	if configErr != nil {
+		return configErr
+	}
 
 	return nil
 }
@@ -201,7 +228,7 @@ func (a *App) runGrpcServer() {
 func (a *App) Close() error {
 	for _, closer := range a.closer {
 		if err := closer(); err != nil {
-			return err
+			log.Fatal().Err(err).Msg("failed to close application component")
 		}
 	}
 
