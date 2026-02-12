@@ -20,7 +20,8 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	BoardService_Create_FullMethodName = "/board.v1.BoardService/Create"
+	BoardService_Create_FullMethodName          = "/board.v1.BoardService/Create"
+	BoardService_GetAllByOwnerId_FullMethodName = "/board.v1.BoardService/GetAllByOwnerId"
 )
 
 // BoardServiceClient is the client API for BoardService service.
@@ -28,6 +29,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type BoardServiceClient interface {
 	Create(ctx context.Context, in *BoardServiceCreateRequest, opts ...grpc.CallOption) (*BoardServiceCreateResponse, error)
+	GetAllByOwnerId(ctx context.Context, in *BoardServiceGetAllByOwnerIdRequest, opts ...grpc.CallOption) (*BoardServiceGetAllByOwnerIdResponse, error)
 }
 
 type boardServiceClient struct {
@@ -48,11 +50,22 @@ func (c *boardServiceClient) Create(ctx context.Context, in *BoardServiceCreateR
 	return out, nil
 }
 
+func (c *boardServiceClient) GetAllByOwnerId(ctx context.Context, in *BoardServiceGetAllByOwnerIdRequest, opts ...grpc.CallOption) (*BoardServiceGetAllByOwnerIdResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(BoardServiceGetAllByOwnerIdResponse)
+	err := c.cc.Invoke(ctx, BoardService_GetAllByOwnerId_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // BoardServiceServer is the server API for BoardService service.
 // All implementations must embed UnimplementedBoardServiceServer
 // for forward compatibility.
 type BoardServiceServer interface {
 	Create(context.Context, *BoardServiceCreateRequest) (*BoardServiceCreateResponse, error)
+	GetAllByOwnerId(context.Context, *BoardServiceGetAllByOwnerIdRequest) (*BoardServiceGetAllByOwnerIdResponse, error)
 	mustEmbedUnimplementedBoardServiceServer()
 }
 
@@ -65,6 +78,10 @@ type UnimplementedBoardServiceServer struct{}
 
 func (UnimplementedBoardServiceServer) Create(context.Context, *BoardServiceCreateRequest) (*BoardServiceCreateResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method Create not implemented")
+}
+
+func (UnimplementedBoardServiceServer) GetAllByOwnerId(context.Context, *BoardServiceGetAllByOwnerIdRequest) (*BoardServiceGetAllByOwnerIdResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetAllByOwnerId not implemented")
 }
 func (UnimplementedBoardServiceServer) mustEmbedUnimplementedBoardServiceServer() {}
 func (UnimplementedBoardServiceServer) testEmbeddedByValue()                      {}
@@ -105,6 +122,24 @@ func _BoardService_Create_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _BoardService_GetAllByOwnerId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BoardServiceGetAllByOwnerIdRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BoardServiceServer).GetAllByOwnerId(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: BoardService_GetAllByOwnerId_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BoardServiceServer).GetAllByOwnerId(ctx, req.(*BoardServiceGetAllByOwnerIdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // BoardService_ServiceDesc is the grpc.ServiceDesc for BoardService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -115,6 +150,10 @@ var BoardService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Create",
 			Handler:    _BoardService_Create_Handler,
+		},
+		{
+			MethodName: "GetAllByOwnerId",
+			Handler:    _BoardService_GetAllByOwnerId_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

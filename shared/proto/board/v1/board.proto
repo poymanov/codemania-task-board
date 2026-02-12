@@ -8,6 +8,7 @@ option go_package = "github.com/poymanov/codemania-task-board/pkg/proto/board/v1
 
 service BoardService {
   rpc Create(BoardServiceCreateRequest) returns (BoardServiceCreateResponse);
+  rpc GetAllByOwnerId(BoardServiceGetAllByOwnerIdRequest) returns (BoardServiceGetAllByOwnerIdResponse);
 }
 
 // Запрос на создание доски
@@ -22,7 +23,35 @@ message BoardServiceCreateRequest {
   int64 owner_id = 3 [(validate.rules).int64.gte = 1];
 }
 
+// Запрос на получение всех досок по ID владельца
+message BoardServiceGetAllByOwnerIdRequest {
+  // ID владельца доски
+  int64 owner_id = 1 [(validate.rules).int64.gte = 1];
+}
+
+// Ответ со списком всех досок владельца
+message BoardServiceGetAllByOwnerIdResponse {
+  // Список досок
+  repeated Board boards = 1;
+}
+
 // Ответ на создание доски
 message BoardServiceCreateResponse {
   int64 board_id = 3;
+}
+
+// Доска
+message Board {
+  // ID доски
+  int64 id = 1;
+
+  // Название доски
+  string name = 2;
+
+  // Описание доски
+  string description = 3;
+
+  // ID владельца доски
+  int64 owner_id = 4;
+
 }

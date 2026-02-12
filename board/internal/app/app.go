@@ -15,7 +15,8 @@ import (
 	"github.com/poymanov/codemania-task-board/board/internal/config"
 	boardRepository "github.com/poymanov/codemania-task-board/board/internal/infrastructure/persistance/repository/board"
 	transportBoardV1 "github.com/poymanov/codemania-task-board/board/internal/transport/grpc/board/v1"
-	boardUseCase "github.com/poymanov/codemania-task-board/board/internal/usecase/board/create"
+	boardCreateUseCase "github.com/poymanov/codemania-task-board/board/internal/usecase/board/create"
+	boardGetAllUseCase "github.com/poymanov/codemania-task-board/board/internal/usecase/board/get_all"
 	"github.com/poymanov/codemania-task-board/platform/pkg/grpc/health"
 	"github.com/poymanov/codemania-task-board/platform/pkg/logger"
 	"github.com/poymanov/codemania-task-board/platform/pkg/migrator"
@@ -199,8 +200,10 @@ func (a *App) runMigrator() error {
 
 func (a *App) runGrpcServer() {
 	br := boardRepository.NewRepository(a.dbConnectionPool)
-	bus := boardUseCase.NewUseCase(br)
-	boardService := transportBoardV1.NewBoardService(bus)
+	bcus := boardCreateUseCase.NewUseCase(br)
+	bgauc := boardGetAllUseCase.NewUseCase(br)
+
+	boardService := transportBoardV1.NewBoardService(bcus, bgauc)
 
 	s := grpc.NewServer()
 

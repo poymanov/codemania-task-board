@@ -1,18 +1,21 @@
 package v1
 
 import (
-	boardUseCase "github.com/poymanov/codemania-task-board/board/internal/usecase/board/create"
+	boardCreateUseCase "github.com/poymanov/codemania-task-board/board/internal/usecase/board/create"
+	boardGetAllUseCase "github.com/poymanov/codemania-task-board/board/internal/usecase/board/get_all"
 	boardV1 "github.com/poymanov/codemania-task-board/shared/pkg/proto/board/v1"
 )
 
 type BoardService struct {
-	boardUseCase *boardUseCase.UseCase
+	boardCreateUseCase *boardCreateUseCase.UseCase
+	boardGetAllUseCase *boardGetAllUseCase.UseCase
 
 	boardV1.UnimplementedBoardServiceServer
 }
 
-func NewBoardService(boardUseCase *boardUseCase.UseCase) *BoardService {
+func NewBoardService(boardCreateUseCase *boardCreateUseCase.UseCase, boardGetAllUseCase *boardGetAllUseCase.UseCase) *BoardService {
 	return &BoardService{
-		boardUseCase: boardUseCase,
+		boardCreateUseCase: boardCreateUseCase,
+		boardGetAllUseCase: boardGetAllUseCase,
 	}
 }

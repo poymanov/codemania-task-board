@@ -103,3 +103,71 @@ func (_c *BoardRepository_Create_Call) RunAndReturn(run func(ctx context.Context
 	_c.Call.Return(run)
 	return _c
 }
+
+// GetAllByOwnerId provides a mock function for the type BoardRepository
+func (_mock *BoardRepository) GetAllByOwnerId(ctx context.Context, ownerId int) ([]board.Board, error) {
+	ret := _mock.Called(ctx, ownerId)
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetAllByOwnerId")
+	}
+
+	var r0 []board.Board
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, int) ([]board.Board, error)); ok {
+		return returnFunc(ctx, ownerId)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, int) []board.Board); ok {
+		r0 = returnFunc(ctx, ownerId)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]board.Board)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, int) error); ok {
+		r1 = returnFunc(ctx, ownerId)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// BoardRepository_GetAllByOwnerId_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetAllByOwnerId'
+type BoardRepository_GetAllByOwnerId_Call struct {
+	*mock.Call
+}
+
+// GetAllByOwnerId is a helper method to define mock.On call
+//   - ctx context.Context
+//   - ownerId int
+func (_e *BoardRepository_Expecter) GetAllByOwnerId(ctx interface{}, ownerId interface{}) *BoardRepository_GetAllByOwnerId_Call {
+	return &BoardRepository_GetAllByOwnerId_Call{Call: _e.mock.On("GetAllByOwnerId", ctx, ownerId)}
+}
+
+func (_c *BoardRepository_GetAllByOwnerId_Call) Run(run func(ctx context.Context, ownerId int)) *BoardRepository_GetAllByOwnerId_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 int
+		if args[1] != nil {
+			arg1 = args[1].(int)
+		}
+		run(
+			arg0,
+			arg1,
+		)
+	})
+	return _c
+}
+
+func (_c *BoardRepository_GetAllByOwnerId_Call) Return(boards []board.Board, err error) *BoardRepository_GetAllByOwnerId_Call {
+	_c.Call.Return(boards, err)
+	return _c
+}
+
+func (_c *BoardRepository_GetAllByOwnerId_Call) RunAndReturn(run func(ctx context.Context, ownerId int) ([]board.Board, error)) *BoardRepository_GetAllByOwnerId_Call {
+	_c.Call.Return(run)
+	return _c
+}
