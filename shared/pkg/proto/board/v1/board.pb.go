@@ -132,7 +132,53 @@ func (x *BoardServiceGetAllRequest) GetFilter() *GetAllFilter {
 	return nil
 }
 
-// Ответ со списком всех досок владельца
+// Запрос на удаление доски
+type BoardServiceDeleteRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// ID доски
+	Id            int64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *BoardServiceDeleteRequest) Reset() {
+	*x = BoardServiceDeleteRequest{}
+	mi := &file_board_v1_board_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BoardServiceDeleteRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BoardServiceDeleteRequest) ProtoMessage() {}
+
+func (x *BoardServiceDeleteRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_board_v1_board_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BoardServiceDeleteRequest.ProtoReflect.Descriptor instead.
+func (*BoardServiceDeleteRequest) Descriptor() ([]byte, []int) {
+	return file_board_v1_board_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *BoardServiceDeleteRequest) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+// Ответ со списком всех досок
 type BoardServiceGetAllResponse struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Список досок
@@ -143,7 +189,7 @@ type BoardServiceGetAllResponse struct {
 
 func (x *BoardServiceGetAllResponse) Reset() {
 	*x = BoardServiceGetAllResponse{}
-	mi := &file_board_v1_board_proto_msgTypes[2]
+	mi := &file_board_v1_board_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -155,7 +201,7 @@ func (x *BoardServiceGetAllResponse) String() string {
 func (*BoardServiceGetAllResponse) ProtoMessage() {}
 
 func (x *BoardServiceGetAllResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_board_v1_board_proto_msgTypes[2]
+	mi := &file_board_v1_board_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -168,7 +214,7 @@ func (x *BoardServiceGetAllResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BoardServiceGetAllResponse.ProtoReflect.Descriptor instead.
 func (*BoardServiceGetAllResponse) Descriptor() ([]byte, []int) {
-	return file_board_v1_board_proto_rawDescGZIP(), []int{2}
+	return file_board_v1_board_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *BoardServiceGetAllResponse) GetBoards() []*Board {
@@ -188,7 +234,7 @@ type BoardServiceCreateResponse struct {
 
 func (x *BoardServiceCreateResponse) Reset() {
 	*x = BoardServiceCreateResponse{}
-	mi := &file_board_v1_board_proto_msgTypes[3]
+	mi := &file_board_v1_board_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -200,7 +246,7 @@ func (x *BoardServiceCreateResponse) String() string {
 func (*BoardServiceCreateResponse) ProtoMessage() {}
 
 func (x *BoardServiceCreateResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_board_v1_board_proto_msgTypes[3]
+	mi := &file_board_v1_board_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -213,7 +259,7 @@ func (x *BoardServiceCreateResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BoardServiceCreateResponse.ProtoReflect.Descriptor instead.
 func (*BoardServiceCreateResponse) Descriptor() ([]byte, []int) {
-	return file_board_v1_board_proto_rawDescGZIP(), []int{3}
+	return file_board_v1_board_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *BoardServiceCreateResponse) GetBoardId() int64 {
@@ -221,6 +267,43 @@ func (x *BoardServiceCreateResponse) GetBoardId() int64 {
 		return x.BoardId
 	}
 	return 0
+}
+
+// Ответ на удаление доски
+type BoardServiceDeleteResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *BoardServiceDeleteResponse) Reset() {
+	*x = BoardServiceDeleteResponse{}
+	mi := &file_board_v1_board_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BoardServiceDeleteResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BoardServiceDeleteResponse) ProtoMessage() {}
+
+func (x *BoardServiceDeleteResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_board_v1_board_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BoardServiceDeleteResponse.ProtoReflect.Descriptor instead.
+func (*BoardServiceDeleteResponse) Descriptor() ([]byte, []int) {
+	return file_board_v1_board_proto_rawDescGZIP(), []int{5}
 }
 
 // Доска
@@ -240,7 +323,7 @@ type Board struct {
 
 func (x *Board) Reset() {
 	*x = Board{}
-	mi := &file_board_v1_board_proto_msgTypes[4]
+	mi := &file_board_v1_board_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -252,7 +335,7 @@ func (x *Board) String() string {
 func (*Board) ProtoMessage() {}
 
 func (x *Board) ProtoReflect() protoreflect.Message {
-	mi := &file_board_v1_board_proto_msgTypes[4]
+	mi := &file_board_v1_board_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -265,7 +348,7 @@ func (x *Board) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Board.ProtoReflect.Descriptor instead.
 func (*Board) Descriptor() ([]byte, []int) {
-	return file_board_v1_board_proto_rawDescGZIP(), []int{4}
+	return file_board_v1_board_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *Board) GetId() int64 {
@@ -307,7 +390,7 @@ type GetAllFilter struct {
 
 func (x *GetAllFilter) Reset() {
 	*x = GetAllFilter{}
-	mi := &file_board_v1_board_proto_msgTypes[5]
+	mi := &file_board_v1_board_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -319,7 +402,7 @@ func (x *GetAllFilter) String() string {
 func (*GetAllFilter) ProtoMessage() {}
 
 func (x *GetAllFilter) ProtoReflect() protoreflect.Message {
-	mi := &file_board_v1_board_proto_msgTypes[5]
+	mi := &file_board_v1_board_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -332,7 +415,7 @@ func (x *GetAllFilter) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetAllFilter.ProtoReflect.Descriptor instead.
 func (*GetAllFilter) Descriptor() ([]byte, []int) {
-	return file_board_v1_board_proto_rawDescGZIP(), []int{5}
+	return file_board_v1_board_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *GetAllFilter) GetOwnerId() int64 {
@@ -352,11 +435,14 @@ const file_board_v1_board_proto_rawDesc = "" +
 	"\vdescription\x18\x02 \x01(\tB\a\xfaB\x04r\x02\x10\x01R\vdescription\x12\"\n" +
 	"\bowner_id\x18\x03 \x01(\x03B\a\xfaB\x04\"\x02(\x01R\aownerId\"K\n" +
 	"\x19BoardServiceGetAllRequest\x12.\n" +
-	"\x06filter\x18\x01 \x01(\v2\x16.board.v1.GetAllFilterR\x06filter\"E\n" +
+	"\x06filter\x18\x01 \x01(\v2\x16.board.v1.GetAllFilterR\x06filter\"4\n" +
+	"\x19BoardServiceDeleteRequest\x12\x17\n" +
+	"\x02id\x18\x01 \x01(\x03B\a\xfaB\x04\"\x02(\x01R\x02id\"E\n" +
 	"\x1aBoardServiceGetAllResponse\x12'\n" +
 	"\x06boards\x18\x01 \x03(\v2\x0f.board.v1.BoardR\x06boards\"7\n" +
 	"\x1aBoardServiceCreateResponse\x12\x19\n" +
-	"\bboard_id\x18\x03 \x01(\x03R\aboardId\"h\n" +
+	"\bboard_id\x18\x03 \x01(\x03R\aboardId\"\x1c\n" +
+	"\x1aBoardServiceDeleteResponse\"h\n" +
 	"\x05Board\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12 \n" +
@@ -364,10 +450,11 @@ const file_board_v1_board_proto_rawDesc = "" +
 	"\bowner_id\x18\x04 \x01(\x03R\aownerId\"D\n" +
 	"\fGetAllFilter\x12'\n" +
 	"\bowner_id\x18\x01 \x01(\x03B\a\xfaB\x04\"\x02(\x01H\x00R\aownerId\x88\x01\x01B\v\n" +
-	"\t_owner_id2\xb8\x01\n" +
+	"\t_owner_id2\x8d\x02\n" +
 	"\fBoardService\x12S\n" +
 	"\x06Create\x12#.board.v1.BoardServiceCreateRequest\x1a$.board.v1.BoardServiceCreateResponse\x12S\n" +
-	"\x06GetAll\x12#.board.v1.BoardServiceGetAllRequest\x1a$.board.v1.BoardServiceGetAllResponseBFZDgithub.com/poymanov/codemania-task-board/pkg/proto/board/v1;board_v1b\x06proto3"
+	"\x06GetAll\x12#.board.v1.BoardServiceGetAllRequest\x1a$.board.v1.BoardServiceGetAllResponse\x12S\n" +
+	"\x06Delete\x12#.board.v1.BoardServiceDeleteRequest\x1a$.board.v1.BoardServiceDeleteResponseBFZDgithub.com/poymanov/codemania-task-board/pkg/proto/board/v1;board_v1b\x06proto3"
 
 var (
 	file_board_v1_board_proto_rawDescOnce sync.Once
@@ -382,25 +469,29 @@ func file_board_v1_board_proto_rawDescGZIP() []byte {
 }
 
 var (
-	file_board_v1_board_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
+	file_board_v1_board_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 	file_board_v1_board_proto_goTypes  = []any{
 		(*BoardServiceCreateRequest)(nil),  // 0: board.v1.BoardServiceCreateRequest
 		(*BoardServiceGetAllRequest)(nil),  // 1: board.v1.BoardServiceGetAllRequest
-		(*BoardServiceGetAllResponse)(nil), // 2: board.v1.BoardServiceGetAllResponse
-		(*BoardServiceCreateResponse)(nil), // 3: board.v1.BoardServiceCreateResponse
-		(*Board)(nil),                      // 4: board.v1.Board
-		(*GetAllFilter)(nil),               // 5: board.v1.GetAllFilter
+		(*BoardServiceDeleteRequest)(nil),  // 2: board.v1.BoardServiceDeleteRequest
+		(*BoardServiceGetAllResponse)(nil), // 3: board.v1.BoardServiceGetAllResponse
+		(*BoardServiceCreateResponse)(nil), // 4: board.v1.BoardServiceCreateResponse
+		(*BoardServiceDeleteResponse)(nil), // 5: board.v1.BoardServiceDeleteResponse
+		(*Board)(nil),                      // 6: board.v1.Board
+		(*GetAllFilter)(nil),               // 7: board.v1.GetAllFilter
 	}
 )
 var file_board_v1_board_proto_depIdxs = []int32{
-	5, // 0: board.v1.BoardServiceGetAllRequest.filter:type_name -> board.v1.GetAllFilter
-	4, // 1: board.v1.BoardServiceGetAllResponse.boards:type_name -> board.v1.Board
+	7, // 0: board.v1.BoardServiceGetAllRequest.filter:type_name -> board.v1.GetAllFilter
+	6, // 1: board.v1.BoardServiceGetAllResponse.boards:type_name -> board.v1.Board
 	0, // 2: board.v1.BoardService.Create:input_type -> board.v1.BoardServiceCreateRequest
 	1, // 3: board.v1.BoardService.GetAll:input_type -> board.v1.BoardServiceGetAllRequest
-	3, // 4: board.v1.BoardService.Create:output_type -> board.v1.BoardServiceCreateResponse
-	2, // 5: board.v1.BoardService.GetAll:output_type -> board.v1.BoardServiceGetAllResponse
-	4, // [4:6] is the sub-list for method output_type
-	2, // [2:4] is the sub-list for method input_type
+	2, // 4: board.v1.BoardService.Delete:input_type -> board.v1.BoardServiceDeleteRequest
+	4, // 5: board.v1.BoardService.Create:output_type -> board.v1.BoardServiceCreateResponse
+	3, // 6: board.v1.BoardService.GetAll:output_type -> board.v1.BoardServiceGetAllResponse
+	5, // 7: board.v1.BoardService.Delete:output_type -> board.v1.BoardServiceDeleteResponse
+	5, // [5:8] is the sub-list for method output_type
+	2, // [2:5] is the sub-list for method input_type
 	2, // [2:2] is the sub-list for extension type_name
 	2, // [2:2] is the sub-list for extension extendee
 	0, // [0:2] is the sub-list for field type_name
@@ -411,14 +502,14 @@ func file_board_v1_board_proto_init() {
 	if File_board_v1_board_proto != nil {
 		return
 	}
-	file_board_v1_board_proto_msgTypes[5].OneofWrappers = []any{}
+	file_board_v1_board_proto_msgTypes[7].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_board_v1_board_proto_rawDesc), len(file_board_v1_board_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   6,
+			NumMessages:   8,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

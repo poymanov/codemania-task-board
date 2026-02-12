@@ -6,4 +6,6 @@ type BoardRepository interface {
 	Create(ctx context.Context, newBoard NewBoard) (int, error)
 
 	GetAll(ctx context.Context, filter GetAllFilter) ([]Board, error)
+
+	Delete(ctx context.Context, id int) error
 }

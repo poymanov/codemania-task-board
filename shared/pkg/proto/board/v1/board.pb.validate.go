@@ -301,6 +301,119 @@ var _ interface {
 	ErrorName() string
 } = BoardServiceGetAllRequestValidationError{}
 
+// Validate checks the field values on BoardServiceDeleteRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *BoardServiceDeleteRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on BoardServiceDeleteRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// BoardServiceDeleteRequestMultiError, or nil if none found.
+func (m *BoardServiceDeleteRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *BoardServiceDeleteRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if m.GetId() < 1 {
+		err := BoardServiceDeleteRequestValidationError{
+			field:  "Id",
+			reason: "value must be greater than or equal to 1",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(errors) > 0 {
+		return BoardServiceDeleteRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// BoardServiceDeleteRequestMultiError is an error wrapping multiple validation
+// errors returned by BoardServiceDeleteRequest.ValidateAll() if the
+// designated constraints aren't met.
+type BoardServiceDeleteRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m BoardServiceDeleteRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m BoardServiceDeleteRequestMultiError) AllErrors() []error { return m }
+
+// BoardServiceDeleteRequestValidationError is the validation error returned by
+// BoardServiceDeleteRequest.Validate if the designated constraints aren't met.
+type BoardServiceDeleteRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e BoardServiceDeleteRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e BoardServiceDeleteRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e BoardServiceDeleteRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e BoardServiceDeleteRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e BoardServiceDeleteRequestValidationError) ErrorName() string {
+	return "BoardServiceDeleteRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e BoardServiceDeleteRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sBoardServiceDeleteRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = BoardServiceDeleteRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = BoardServiceDeleteRequestValidationError{}
+
 // Validate checks the field values on BoardServiceGetAllResponse with the
 // rules defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
@@ -540,6 +653,108 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = BoardServiceCreateResponseValidationError{}
+
+// Validate checks the field values on BoardServiceDeleteResponse with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *BoardServiceDeleteResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on BoardServiceDeleteResponse with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// BoardServiceDeleteResponseMultiError, or nil if none found.
+func (m *BoardServiceDeleteResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *BoardServiceDeleteResponse) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if len(errors) > 0 {
+		return BoardServiceDeleteResponseMultiError(errors)
+	}
+
+	return nil
+}
+
+// BoardServiceDeleteResponseMultiError is an error wrapping multiple
+// validation errors returned by BoardServiceDeleteResponse.ValidateAll() if
+// the designated constraints aren't met.
+type BoardServiceDeleteResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m BoardServiceDeleteResponseMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m BoardServiceDeleteResponseMultiError) AllErrors() []error { return m }
+
+// BoardServiceDeleteResponseValidationError is the validation error returned
+// by BoardServiceDeleteResponse.Validate if the designated constraints aren't met.
+type BoardServiceDeleteResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e BoardServiceDeleteResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e BoardServiceDeleteResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e BoardServiceDeleteResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e BoardServiceDeleteResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e BoardServiceDeleteResponseValidationError) ErrorName() string {
+	return "BoardServiceDeleteResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e BoardServiceDeleteResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sBoardServiceDeleteResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = BoardServiceDeleteResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = BoardServiceDeleteResponseValidationError{}
 
 // Validate checks the field values on Board with the rules defined in the
 // proto definition for this message. If any rules are violated, the first

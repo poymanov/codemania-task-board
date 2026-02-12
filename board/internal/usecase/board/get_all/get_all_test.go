@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-func (s *UseCaseSuite) TestGetAllByOwnerError() {
+func (s *UseCaseSuite) TestGetAllError() {
 	ownerId := int(gofakeit.Int64())
 
 	s.boardRepository.
@@ -20,7 +20,7 @@ func (s *UseCaseSuite) TestGetAllByOwnerError() {
 	s.Require().Empty(res)
 }
 
-func (s *UseCaseSuite) TestGetAllByOwnerSuccess() {
+func (s *UseCaseSuite) TestGetAllSuccess() {
 	ownerId := int(gofakeit.Int64())
 	s.boardRepository.On("GetAll", s.ctx, mock.Anything).Return([]domainBoard.Board{{OwnerId: ownerId}}, nil).Once()
 

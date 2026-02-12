@@ -22,6 +22,7 @@ const _ = grpc.SupportPackageIsVersion9
 const (
 	BoardService_Create_FullMethodName = "/board.v1.BoardService/Create"
 	BoardService_GetAll_FullMethodName = "/board.v1.BoardService/GetAll"
+	BoardService_Delete_FullMethodName = "/board.v1.BoardService/Delete"
 )
 
 // BoardServiceClient is the client API for BoardService service.
@@ -30,6 +31,7 @@ const (
 type BoardServiceClient interface {
 	Create(ctx context.Context, in *BoardServiceCreateRequest, opts ...grpc.CallOption) (*BoardServiceCreateResponse, error)
 	GetAll(ctx context.Context, in *BoardServiceGetAllRequest, opts ...grpc.CallOption) (*BoardServiceGetAllResponse, error)
+	Delete(ctx context.Context, in *BoardServiceDeleteRequest, opts ...grpc.CallOption) (*BoardServiceDeleteResponse, error)
 }
 
 type boardServiceClient struct {
@@ -60,12 +62,23 @@ func (c *boardServiceClient) GetAll(ctx context.Context, in *BoardServiceGetAllR
 	return out, nil
 }
 
+func (c *boardServiceClient) Delete(ctx context.Context, in *BoardServiceDeleteRequest, opts ...grpc.CallOption) (*BoardServiceDeleteResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(BoardServiceDeleteResponse)
+	err := c.cc.Invoke(ctx, BoardService_Delete_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // BoardServiceServer is the server API for BoardService service.
 // All implementations must embed UnimplementedBoardServiceServer
 // for forward compatibility.
 type BoardServiceServer interface {
 	Create(context.Context, *BoardServiceCreateRequest) (*BoardServiceCreateResponse, error)
 	GetAll(context.Context, *BoardServiceGetAllRequest) (*BoardServiceGetAllResponse, error)
+	Delete(context.Context, *BoardServiceDeleteRequest) (*BoardServiceDeleteResponse, error)
 	mustEmbedUnimplementedBoardServiceServer()
 }
 
@@ -82,6 +95,10 @@ func (UnimplementedBoardServiceServer) Create(context.Context, *BoardServiceCrea
 
 func (UnimplementedBoardServiceServer) GetAll(context.Context, *BoardServiceGetAllRequest) (*BoardServiceGetAllResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetAll not implemented")
+}
+
+func (UnimplementedBoardServiceServer) Delete(context.Context, *BoardServiceDeleteRequest) (*BoardServiceDeleteResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method Delete not implemented")
 }
 func (UnimplementedBoardServiceServer) mustEmbedUnimplementedBoardServiceServer() {}
 func (UnimplementedBoardServiceServer) testEmbeddedByValue()                      {}
@@ -140,6 +157,24 @@ func _BoardService_GetAll_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _BoardService_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BoardServiceDeleteRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BoardServiceServer).Delete(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: BoardService_Delete_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BoardServiceServer).Delete(ctx, req.(*BoardServiceDeleteRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // BoardService_ServiceDesc is the grpc.ServiceDesc for BoardService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -154,6 +189,10 @@ var BoardService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetAll",
 			Handler:    _BoardService_GetAll_Handler,
+		},
+		{
+			MethodName: "Delete",
+			Handler:    _BoardService_Delete_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
