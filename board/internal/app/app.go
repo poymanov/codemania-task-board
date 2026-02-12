@@ -9,6 +9,7 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/poymanov/codemania-task-board/board/internal/config"
@@ -23,6 +24,8 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
+
+const defaultInitializationTimeout = time.Second * 10
 
 type App struct {
 	closer           []func() error
@@ -72,17 +75,41 @@ func Run() error {
 	return nil
 }
 
-func (a *App) InitConfig(_ context.Context) error {
-	configPath := flag.String("env", ".env", "path to .env file")
-
-	flag.Parse()
-
-	cfg, err := config.Load(*configPath)
-	if err != nil {
-		return fmt.Errorf("failed to load config: %w, config path: %s", err, *configPath)
+func (a *App) InitConfig(ctx context.Context) error {
+	if _, ok := ctx.Deadline(); !ok {
+		var cancel context.CancelFunc
+		ctx, cancel = context.WithTimeout(ctx, defaultInitializationTimeout)
+		defer cancel()
 	}
 
-	a.config = cfg
+	chDone := make(chan struct{})
+
+	var configErr error
+
+	go func() {
+		configPath := flag.String("env", ".env", "path to .env file")
+		flag.Parse()
+
+		cfg, err := config.Load(*configPath)
+
+		if err != nil {
+			configErr = fmt.Errorf("failed to load config: %w, config path: %s", err, *configPath)
+		} else {
+			a.config = cfg
+		}
+
+		chDone <- struct{}{}
+	}()
+
+	select {
+	case <-ctx.Done():
+		configErr = fmt.Errorf("config initialization timed out")
+	case <-chDone:
+	}
+
+	if configErr != nil {
+		return configErr
+	}
 
 	return nil
 }
