@@ -198,3 +198,105 @@ var BoardService_ServiceDesc = grpc.ServiceDesc{
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "board/v1/board.proto",
 }
+
+const (
+	ColumnService_Create_FullMethodName = "/board.v1.ColumnService/Create"
+)
+
+// ColumnServiceClient is the client API for ColumnService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type ColumnServiceClient interface {
+	Create(ctx context.Context, in *ColumnServiceCreateRequest, opts ...grpc.CallOption) (*ColumnServiceCreateResponse, error)
+}
+
+type columnServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewColumnServiceClient(cc grpc.ClientConnInterface) ColumnServiceClient {
+	return &columnServiceClient{cc}
+}
+
+func (c *columnServiceClient) Create(ctx context.Context, in *ColumnServiceCreateRequest, opts ...grpc.CallOption) (*ColumnServiceCreateResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ColumnServiceCreateResponse)
+	err := c.cc.Invoke(ctx, ColumnService_Create_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// ColumnServiceServer is the server API for ColumnService service.
+// All implementations must embed UnimplementedColumnServiceServer
+// for forward compatibility.
+type ColumnServiceServer interface {
+	Create(context.Context, *ColumnServiceCreateRequest) (*ColumnServiceCreateResponse, error)
+	mustEmbedUnimplementedColumnServiceServer()
+}
+
+// UnimplementedColumnServiceServer must be embedded to have
+// forward compatible implementations.
+//
+// NOTE: this should be embedded by value instead of pointer to avoid a nil
+// pointer dereference when methods are called.
+type UnimplementedColumnServiceServer struct{}
+
+func (UnimplementedColumnServiceServer) Create(context.Context, *ColumnServiceCreateRequest) (*ColumnServiceCreateResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method Create not implemented")
+}
+func (UnimplementedColumnServiceServer) mustEmbedUnimplementedColumnServiceServer() {}
+func (UnimplementedColumnServiceServer) testEmbeddedByValue()                       {}
+
+// UnsafeColumnServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to ColumnServiceServer will
+// result in compilation errors.
+type UnsafeColumnServiceServer interface {
+	mustEmbedUnimplementedColumnServiceServer()
+}
+
+func RegisterColumnServiceServer(s grpc.ServiceRegistrar, srv ColumnServiceServer) {
+	// If the following call panics, it indicates UnimplementedColumnServiceServer was
+	// embedded by pointer and is nil.  This will cause panics if an
+	// unimplemented method is ever invoked, so we test this at initialization
+	// time to prevent it from happening at runtime later due to I/O.
+	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
+		t.testEmbeddedByValue()
+	}
+	s.RegisterService(&ColumnService_ServiceDesc, srv)
+}
+
+func _ColumnService_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ColumnServiceCreateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ColumnServiceServer).Create(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ColumnService_Create_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ColumnServiceServer).Create(ctx, req.(*ColumnServiceCreateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// ColumnService_ServiceDesc is the grpc.ServiceDesc for ColumnService service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var ColumnService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "board.v1.ColumnService",
+	HandlerType: (*ColumnServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Create",
+			Handler:    _ColumnService_Create_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "board/v1/board.proto",
+}

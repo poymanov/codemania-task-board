@@ -1,4 +1,4 @@
-package v1
+package board
 
 import (
 	boardCreateUseCase "github.com/poymanov/codemania-task-board/board/internal/usecase/board/create"

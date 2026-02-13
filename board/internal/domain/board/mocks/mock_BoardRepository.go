@@ -228,3 +228,69 @@ func (_c *BoardRepository_GetAll_Call) RunAndReturn(run func(ctx context.Context
 	_c.Call.Return(run)
 	return _c
 }
+
+// IsExistsById provides a mock function for the type BoardRepository
+func (_mock *BoardRepository) IsExistsById(ctx context.Context, ID int) (bool, error) {
+	ret := _mock.Called(ctx, ID)
+
+	if len(ret) == 0 {
+		panic("no return value specified for IsExistsById")
+	}
+
+	var r0 bool
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, int) (bool, error)); ok {
+		return returnFunc(ctx, ID)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, int) bool); ok {
+		r0 = returnFunc(ctx, ID)
+	} else {
+		r0 = ret.Get(0).(bool)
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, int) error); ok {
+		r1 = returnFunc(ctx, ID)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// BoardRepository_IsExistsById_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'IsExistsById'
+type BoardRepository_IsExistsById_Call struct {
+	*mock.Call
+}
+
+// IsExistsById is a helper method to define mock.On call
+//   - ctx context.Context
+//   - ID int
+func (_e *BoardRepository_Expecter) IsExistsById(ctx interface{}, ID interface{}) *BoardRepository_IsExistsById_Call {
+	return &BoardRepository_IsExistsById_Call{Call: _e.mock.On("IsExistsById", ctx, ID)}
+}
+
+func (_c *BoardRepository_IsExistsById_Call) Run(run func(ctx context.Context, ID int)) *BoardRepository_IsExistsById_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 int
+		if args[1] != nil {
+			arg1 = args[1].(int)
+		}
+		run(
+			arg0,
+			arg1,
+		)
+	})
+	return _c
+}
+
+func (_c *BoardRepository_IsExistsById_Call) Return(b bool, err error) *BoardRepository_IsExistsById_Call {
+	_c.Call.Return(b, err)
+	return _c
+}
+
+func (_c *BoardRepository_IsExistsById_Call) RunAndReturn(run func(ctx context.Context, ID int) (bool, error)) *BoardRepository_IsExistsById_Call {
+	_c.Call.Return(run)
+	return _c
+}

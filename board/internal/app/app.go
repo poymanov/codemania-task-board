@@ -14,10 +14,13 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/poymanov/codemania-task-board/board/internal/config"
 	boardRepository "github.com/poymanov/codemania-task-board/board/internal/infrastructure/persistance/repository/board"
-	transportBoardV1 "github.com/poymanov/codemania-task-board/board/internal/transport/grpc/board/v1"
+	columnRepository "github.com/poymanov/codemania-task-board/board/internal/infrastructure/persistance/repository/column"
+	transportBoardV1 "github.com/poymanov/codemania-task-board/board/internal/transport/grpc/board/v1/board"
+	transportColumnV1 "github.com/poymanov/codemania-task-board/board/internal/transport/grpc/board/v1/column"
 	boardCreateUseCase "github.com/poymanov/codemania-task-board/board/internal/usecase/board/create"
 	boardDeleteUseCase "github.com/poymanov/codemania-task-board/board/internal/usecase/board/delete"
 	boardGetAllUseCase "github.com/poymanov/codemania-task-board/board/internal/usecase/board/get_all"
+	columnCreateUsecase "github.com/poymanov/codemania-task-board/board/internal/usecase/column/create"
 	"github.com/poymanov/codemania-task-board/platform/pkg/grpc/health"
 	"github.com/poymanov/codemania-task-board/platform/pkg/logger"
 	"github.com/poymanov/codemania-task-board/platform/pkg/migrator"
@@ -207,9 +210,15 @@ func (a *App) runGrpcServer() {
 
 	boardService := transportBoardV1.NewBoardService(bcuc, bgauc, bduc)
 
+	cr := columnRepository.NewRepository(a.dbConnectionPool)
+	ccuc := columnCreateUsecase.NewUseCase(br, cr)
+
+	columnService := transportColumnV1.NewColumnService(ccuc)
+
 	s := grpc.NewServer()
 
 	boardV1.RegisterBoardServiceServer(s, boardService)
+	boardV1.RegisterColumnServiceServer(s, columnService)
 	health.RegisterService(s)
 
 	reflection.Register(s)

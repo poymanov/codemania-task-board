@@ -12,13 +12,17 @@ service BoardService {
   rpc Delete(BoardServiceDeleteRequest) returns (BoardServiceDeleteResponse);
 }
 
+service ColumnService {
+  rpc Create(ColumnServiceCreateRequest) returns (ColumnServiceCreateResponse);
+}
+
 // Запрос на создание доски
 message BoardServiceCreateRequest {
   // Название доски
-  string name = 1  [(validate.rules).string = {min_len: 1}];
+  string name = 1 [(validate.rules).string = {min_len: 1}];
 
   // Описание доски
-  string description = 2  [(validate.rules).string = {min_len: 1}];
+  string description = 2 [(validate.rules).string = {min_len: 1}];
 
   // ID владельца доски
   int64 owner_id = 3 [(validate.rules).int64.gte = 1];
@@ -35,6 +39,15 @@ message BoardServiceDeleteRequest {
   int64 id = 1  [(validate.rules).int64.gte = 1];
 }
 
+// Запрос на создание колонки
+message ColumnServiceCreateRequest {
+  // Название колонки
+  string name = 1 [(validate.rules).string = {min_len: 1}];
+
+  // ID доски
+  int64 board_id = 2 [(validate.rules).int64.gte = 1];
+}
+
 // Ответ со списком всех досок
 message BoardServiceGetAllResponse {
   // Список досок
@@ -49,6 +62,11 @@ message BoardServiceCreateResponse {
 // Ответ на удаление доски
 message BoardServiceDeleteResponse {
 
+}
+
+// Ответ на создание колонки
+message ColumnServiceCreateResponse {
+  int64 column_id = 1;
 }
 
 // Доска
