@@ -21,6 +21,7 @@ import (
 	boardDeleteUseCase "github.com/poymanov/codemania-task-board/board/internal/usecase/board/delete"
 	boardGetAllUseCase "github.com/poymanov/codemania-task-board/board/internal/usecase/board/get_all"
 	columnCreateUsecase "github.com/poymanov/codemania-task-board/board/internal/usecase/column/create"
+	columnGetAllUsecase "github.com/poymanov/codemania-task-board/board/internal/usecase/column/get_all"
 	"github.com/poymanov/codemania-task-board/platform/pkg/grpc/health"
 	"github.com/poymanov/codemania-task-board/platform/pkg/logger"
 	"github.com/poymanov/codemania-task-board/platform/pkg/migrator"
@@ -212,8 +213,9 @@ func (a *App) runGrpcServer() {
 
 	cr := columnRepository.NewRepository(a.dbConnectionPool)
 	ccuc := columnCreateUsecase.NewUseCase(br, cr)
+	cgauc := columnGetAllUsecase.NewUseCase(cr)
 
-	columnService := transportColumnV1.NewColumnService(ccuc)
+	columnService := transportColumnV1.NewColumnService(ccuc, cgauc)
 
 	s := grpc.NewServer()
 

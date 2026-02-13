@@ -103,3 +103,77 @@ func (_c *ColumnRepository_Create_Call) RunAndReturn(run func(ctx context.Contex
 	_c.Call.Return(run)
 	return _c
 }
+
+// GetAll provides a mock function for the type ColumnRepository
+func (_mock *ColumnRepository) GetAll(ctx context.Context, filter column.GetAllFilter, sort column.GetAllSort) ([]column.Column, error) {
+	ret := _mock.Called(ctx, filter, sort)
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetAll")
+	}
+
+	var r0 []column.Column
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, column.GetAllFilter, column.GetAllSort) ([]column.Column, error)); ok {
+		return returnFunc(ctx, filter, sort)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, column.GetAllFilter, column.GetAllSort) []column.Column); ok {
+		r0 = returnFunc(ctx, filter, sort)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]column.Column)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, column.GetAllFilter, column.GetAllSort) error); ok {
+		r1 = returnFunc(ctx, filter, sort)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// ColumnRepository_GetAll_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetAll'
+type ColumnRepository_GetAll_Call struct {
+	*mock.Call
+}
+
+// GetAll is a helper method to define mock.On call
+//   - ctx context.Context
+//   - filter column.GetAllFilter
+//   - sort column.GetAllSort
+func (_e *ColumnRepository_Expecter) GetAll(ctx interface{}, filter interface{}, sort interface{}) *ColumnRepository_GetAll_Call {
+	return &ColumnRepository_GetAll_Call{Call: _e.mock.On("GetAll", ctx, filter, sort)}
+}
+
+func (_c *ColumnRepository_GetAll_Call) Run(run func(ctx context.Context, filter column.GetAllFilter, sort column.GetAllSort)) *ColumnRepository_GetAll_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 column.GetAllFilter
+		if args[1] != nil {
+			arg1 = args[1].(column.GetAllFilter)
+		}
+		var arg2 column.GetAllSort
+		if args[2] != nil {
+			arg2 = args[2].(column.GetAllSort)
+		}
+		run(
+			arg0,
+			arg1,
+			arg2,
+		)
+	})
+	return _c
+}
+
+func (_c *ColumnRepository_GetAll_Call) Return(columns []column.Column, err error) *ColumnRepository_GetAll_Call {
+	_c.Call.Return(columns, err)
+	return _c
+}
+
+func (_c *ColumnRepository_GetAll_Call) RunAndReturn(run func(ctx context.Context, filter column.GetAllFilter, sort column.GetAllSort) ([]column.Column, error)) *ColumnRepository_GetAll_Call {
+	_c.Call.Return(run)
+	return _c
+}

@@ -14,6 +14,7 @@ service BoardService {
 
 service ColumnService {
   rpc Create(ColumnServiceCreateRequest) returns (ColumnServiceCreateResponse);
+  rpc GetAll(ColumnServiceGetAllRequest) returns (ColumnServiceGetAllResponse);
 }
 
 // Запрос на создание доски
@@ -30,7 +31,7 @@ message BoardServiceCreateRequest {
 
 // Запрос на получение всех досок по ID владельца
 message BoardServiceGetAllRequest {
-  GetAllFilter filter = 1;
+  BoardGetAllFilter filter = 1;
 }
 
 // Запрос на удаление доски
@@ -46,6 +47,13 @@ message ColumnServiceCreateRequest {
 
   // ID доски
   int64 board_id = 2 [(validate.rules).int64.gte = 1];
+}
+
+// Запрос на получение списка колонок
+message ColumnServiceGetAllRequest {
+  ColumnGetAllFilter filter = 1;
+
+  ColumnGetAllSort sort = 2;
 }
 
 // Ответ со списком всех досок
@@ -69,6 +77,11 @@ message ColumnServiceCreateResponse {
   int64 column_id = 1;
 }
 
+// Ответ на получение списка колонок
+message ColumnServiceGetAllResponse {
+  repeated Column columns = 1;
+}
+
 // Доска
 message Board {
   // ID доски
@@ -84,8 +97,36 @@ message Board {
   int64 owner_id = 4;
 }
 
+// Колонка
+message Column {
+  // ID колонки
+  int64 id = 1;
+
+  // Название колонки
+  string name = 2;
+
+  // Порядок расположения доски
+  float position = 3;
+
+  // ID доски, к которой принадлежит колонка
+  int64 board_id = 4;
+}
+
+
 // Фильтр для запроса по всем доскам
-message GetAllFilter {
+message BoardGetAllFilter {
   // ID владельца доски
   optional int64 owner_id = 1 [(validate.rules).int64.gte = 1];
+}
+
+// Фильтр для запроса по всем колонкам
+message ColumnGetAllFilter {
+  // ID доски
+  optional int64 board_id = 1 [(validate.rules).int64.gte = 1];
+}
+
+// Опции сортировки для запроса по всем колонкам
+message ColumnGetAllSort {
+  // ID доски
+  optional string position = 1 [(validate.rules).string = {min_len: 1}];
 }

@@ -538,6 +538,166 @@ var _ interface {
 	ErrorName() string
 } = ColumnServiceCreateRequestValidationError{}
 
+// Validate checks the field values on ColumnServiceGetAllRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *ColumnServiceGetAllRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ColumnServiceGetAllRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// ColumnServiceGetAllRequestMultiError, or nil if none found.
+func (m *ColumnServiceGetAllRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ColumnServiceGetAllRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetFilter()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ColumnServiceGetAllRequestValidationError{
+					field:  "Filter",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ColumnServiceGetAllRequestValidationError{
+					field:  "Filter",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetFilter()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ColumnServiceGetAllRequestValidationError{
+				field:  "Filter",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetSort()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ColumnServiceGetAllRequestValidationError{
+					field:  "Sort",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ColumnServiceGetAllRequestValidationError{
+					field:  "Sort",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetSort()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ColumnServiceGetAllRequestValidationError{
+				field:  "Sort",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return ColumnServiceGetAllRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// ColumnServiceGetAllRequestMultiError is an error wrapping multiple
+// validation errors returned by ColumnServiceGetAllRequest.ValidateAll() if
+// the designated constraints aren't met.
+type ColumnServiceGetAllRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ColumnServiceGetAllRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ColumnServiceGetAllRequestMultiError) AllErrors() []error { return m }
+
+// ColumnServiceGetAllRequestValidationError is the validation error returned
+// by ColumnServiceGetAllRequest.Validate if the designated constraints aren't met.
+type ColumnServiceGetAllRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ColumnServiceGetAllRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ColumnServiceGetAllRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ColumnServiceGetAllRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ColumnServiceGetAllRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ColumnServiceGetAllRequestValidationError) ErrorName() string {
+	return "ColumnServiceGetAllRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ColumnServiceGetAllRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sColumnServiceGetAllRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ColumnServiceGetAllRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ColumnServiceGetAllRequestValidationError{}
+
 // Validate checks the field values on BoardServiceGetAllResponse with the
 // rules defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
@@ -985,6 +1145,143 @@ var _ interface {
 	ErrorName() string
 } = ColumnServiceCreateResponseValidationError{}
 
+// Validate checks the field values on ColumnServiceGetAllResponse with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *ColumnServiceGetAllResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ColumnServiceGetAllResponse with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// ColumnServiceGetAllResponseMultiError, or nil if none found.
+func (m *ColumnServiceGetAllResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ColumnServiceGetAllResponse) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	for idx, item := range m.GetColumns() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, ColumnServiceGetAllResponseValidationError{
+						field:  fmt.Sprintf("Columns[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, ColumnServiceGetAllResponseValidationError{
+						field:  fmt.Sprintf("Columns[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ColumnServiceGetAllResponseValidationError{
+					field:  fmt.Sprintf("Columns[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if len(errors) > 0 {
+		return ColumnServiceGetAllResponseMultiError(errors)
+	}
+
+	return nil
+}
+
+// ColumnServiceGetAllResponseMultiError is an error wrapping multiple
+// validation errors returned by ColumnServiceGetAllResponse.ValidateAll() if
+// the designated constraints aren't met.
+type ColumnServiceGetAllResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ColumnServiceGetAllResponseMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ColumnServiceGetAllResponseMultiError) AllErrors() []error { return m }
+
+// ColumnServiceGetAllResponseValidationError is the validation error returned
+// by ColumnServiceGetAllResponse.Validate if the designated constraints
+// aren't met.
+type ColumnServiceGetAllResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ColumnServiceGetAllResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ColumnServiceGetAllResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ColumnServiceGetAllResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ColumnServiceGetAllResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ColumnServiceGetAllResponseValidationError) ErrorName() string {
+	return "ColumnServiceGetAllResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ColumnServiceGetAllResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sColumnServiceGetAllResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ColumnServiceGetAllResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ColumnServiceGetAllResponseValidationError{}
+
 // Validate checks the field values on Board with the rules defined in the
 // proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
@@ -1091,54 +1388,48 @@ var _ interface {
 	ErrorName() string
 } = BoardValidationError{}
 
-// Validate checks the field values on GetAllFilter with the rules defined in
-// the proto definition for this message. If any rules are violated, the first
+// Validate checks the field values on Column with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
-func (m *GetAllFilter) Validate() error {
+func (m *Column) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on GetAllFilter with the rules defined
-// in the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in GetAllFilterMultiError, or
-// nil if none found.
-func (m *GetAllFilter) ValidateAll() error {
+// ValidateAll checks the field values on Column with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in ColumnMultiError, or nil if none found.
+func (m *Column) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *GetAllFilter) validate(all bool) error {
+func (m *Column) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
 	var errors []error
 
-	if m.OwnerId != nil {
-		if m.GetOwnerId() < 1 {
-			err := GetAllFilterValidationError{
-				field:  "OwnerId",
-				reason: "value must be greater than or equal to 1",
-			}
-			if !all {
-				return err
-			}
-			errors = append(errors, err)
-		}
-	}
+	// no validation rules for Id
+
+	// no validation rules for Name
+
+	// no validation rules for Position
+
+	// no validation rules for BoardId
 
 	if len(errors) > 0 {
-		return GetAllFilterMultiError(errors)
+		return ColumnMultiError(errors)
 	}
 
 	return nil
 }
 
-// GetAllFilterMultiError is an error wrapping multiple validation errors
-// returned by GetAllFilter.ValidateAll() if the designated constraints aren't met.
-type GetAllFilterMultiError []error
+// ColumnMultiError is an error wrapping multiple validation errors returned by
+// Column.ValidateAll() if the designated constraints aren't met.
+type ColumnMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m GetAllFilterMultiError) Error() string {
+func (m ColumnMultiError) Error() string {
 	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -1147,11 +1438,11 @@ func (m GetAllFilterMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m GetAllFilterMultiError) AllErrors() []error { return m }
+func (m ColumnMultiError) AllErrors() []error { return m }
 
-// GetAllFilterValidationError is the validation error returned by
-// GetAllFilter.Validate if the designated constraints aren't met.
-type GetAllFilterValidationError struct {
+// ColumnValidationError is the validation error returned by Column.Validate if
+// the designated constraints aren't met.
+type ColumnValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -1159,22 +1450,22 @@ type GetAllFilterValidationError struct {
 }
 
 // Field function returns field value.
-func (e GetAllFilterValidationError) Field() string { return e.field }
+func (e ColumnValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e GetAllFilterValidationError) Reason() string { return e.reason }
+func (e ColumnValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e GetAllFilterValidationError) Cause() error { return e.cause }
+func (e ColumnValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e GetAllFilterValidationError) Key() bool { return e.key }
+func (e ColumnValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e GetAllFilterValidationError) ErrorName() string { return "GetAllFilterValidationError" }
+func (e ColumnValidationError) ErrorName() string { return "ColumnValidationError" }
 
 // Error satisfies the builtin error interface
-func (e GetAllFilterValidationError) Error() string {
+func (e ColumnValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -1186,14 +1477,14 @@ func (e GetAllFilterValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sGetAllFilter.%s: %s%s",
+		"invalid %sColumn.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = GetAllFilterValidationError{}
+var _ error = ColumnValidationError{}
 
 var _ interface {
 	Field() string
@@ -1201,4 +1492,347 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = GetAllFilterValidationError{}
+} = ColumnValidationError{}
+
+// Validate checks the field values on BoardGetAllFilter with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *BoardGetAllFilter) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on BoardGetAllFilter with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// BoardGetAllFilterMultiError, or nil if none found.
+func (m *BoardGetAllFilter) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *BoardGetAllFilter) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if m.OwnerId != nil {
+		if m.GetOwnerId() < 1 {
+			err := BoardGetAllFilterValidationError{
+				field:  "OwnerId",
+				reason: "value must be greater than or equal to 1",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+	}
+
+	if len(errors) > 0 {
+		return BoardGetAllFilterMultiError(errors)
+	}
+
+	return nil
+}
+
+// BoardGetAllFilterMultiError is an error wrapping multiple validation errors
+// returned by BoardGetAllFilter.ValidateAll() if the designated constraints
+// aren't met.
+type BoardGetAllFilterMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m BoardGetAllFilterMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m BoardGetAllFilterMultiError) AllErrors() []error { return m }
+
+// BoardGetAllFilterValidationError is the validation error returned by
+// BoardGetAllFilter.Validate if the designated constraints aren't met.
+type BoardGetAllFilterValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e BoardGetAllFilterValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e BoardGetAllFilterValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e BoardGetAllFilterValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e BoardGetAllFilterValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e BoardGetAllFilterValidationError) ErrorName() string {
+	return "BoardGetAllFilterValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e BoardGetAllFilterValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sBoardGetAllFilter.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = BoardGetAllFilterValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = BoardGetAllFilterValidationError{}
+
+// Validate checks the field values on ColumnGetAllFilter with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *ColumnGetAllFilter) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ColumnGetAllFilter with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// ColumnGetAllFilterMultiError, or nil if none found.
+func (m *ColumnGetAllFilter) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ColumnGetAllFilter) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if m.BoardId != nil {
+		if m.GetBoardId() < 1 {
+			err := ColumnGetAllFilterValidationError{
+				field:  "BoardId",
+				reason: "value must be greater than or equal to 1",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+	}
+
+	if len(errors) > 0 {
+		return ColumnGetAllFilterMultiError(errors)
+	}
+
+	return nil
+}
+
+// ColumnGetAllFilterMultiError is an error wrapping multiple validation errors
+// returned by ColumnGetAllFilter.ValidateAll() if the designated constraints
+// aren't met.
+type ColumnGetAllFilterMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ColumnGetAllFilterMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ColumnGetAllFilterMultiError) AllErrors() []error { return m }
+
+// ColumnGetAllFilterValidationError is the validation error returned by
+// ColumnGetAllFilter.Validate if the designated constraints aren't met.
+type ColumnGetAllFilterValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ColumnGetAllFilterValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ColumnGetAllFilterValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ColumnGetAllFilterValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ColumnGetAllFilterValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ColumnGetAllFilterValidationError) ErrorName() string {
+	return "ColumnGetAllFilterValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ColumnGetAllFilterValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sColumnGetAllFilter.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ColumnGetAllFilterValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ColumnGetAllFilterValidationError{}
+
+// Validate checks the field values on ColumnGetAllSort with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *ColumnGetAllSort) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ColumnGetAllSort with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// ColumnGetAllSortMultiError, or nil if none found.
+func (m *ColumnGetAllSort) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ColumnGetAllSort) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if m.Position != nil {
+		if utf8.RuneCountInString(m.GetPosition()) < 1 {
+			err := ColumnGetAllSortValidationError{
+				field:  "Position",
+				reason: "value length must be at least 1 runes",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+	}
+
+	if len(errors) > 0 {
+		return ColumnGetAllSortMultiError(errors)
+	}
+
+	return nil
+}
+
+// ColumnGetAllSortMultiError is an error wrapping multiple validation errors
+// returned by ColumnGetAllSort.ValidateAll() if the designated constraints
+// aren't met.
+type ColumnGetAllSortMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ColumnGetAllSortMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ColumnGetAllSortMultiError) AllErrors() []error { return m }
+
+// ColumnGetAllSortValidationError is the validation error returned by
+// ColumnGetAllSort.Validate if the designated constraints aren't met.
+type ColumnGetAllSortValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ColumnGetAllSortValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ColumnGetAllSortValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ColumnGetAllSortValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ColumnGetAllSortValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ColumnGetAllSortValidationError) ErrorName() string { return "ColumnGetAllSortValidationError" }
+
+// Error satisfies the builtin error interface
+func (e ColumnGetAllSortValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sColumnGetAllSort.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ColumnGetAllSortValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ColumnGetAllSortValidationError{}

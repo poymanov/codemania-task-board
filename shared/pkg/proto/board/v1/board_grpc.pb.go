@@ -201,6 +201,7 @@ var BoardService_ServiceDesc = grpc.ServiceDesc{
 
 const (
 	ColumnService_Create_FullMethodName = "/board.v1.ColumnService/Create"
+	ColumnService_GetAll_FullMethodName = "/board.v1.ColumnService/GetAll"
 )
 
 // ColumnServiceClient is the client API for ColumnService service.
@@ -208,6 +209,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ColumnServiceClient interface {
 	Create(ctx context.Context, in *ColumnServiceCreateRequest, opts ...grpc.CallOption) (*ColumnServiceCreateResponse, error)
+	GetAll(ctx context.Context, in *ColumnServiceGetAllRequest, opts ...grpc.CallOption) (*ColumnServiceGetAllResponse, error)
 }
 
 type columnServiceClient struct {
@@ -228,11 +230,22 @@ func (c *columnServiceClient) Create(ctx context.Context, in *ColumnServiceCreat
 	return out, nil
 }
 
+func (c *columnServiceClient) GetAll(ctx context.Context, in *ColumnServiceGetAllRequest, opts ...grpc.CallOption) (*ColumnServiceGetAllResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ColumnServiceGetAllResponse)
+	err := c.cc.Invoke(ctx, ColumnService_GetAll_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ColumnServiceServer is the server API for ColumnService service.
 // All implementations must embed UnimplementedColumnServiceServer
 // for forward compatibility.
 type ColumnServiceServer interface {
 	Create(context.Context, *ColumnServiceCreateRequest) (*ColumnServiceCreateResponse, error)
+	GetAll(context.Context, *ColumnServiceGetAllRequest) (*ColumnServiceGetAllResponse, error)
 	mustEmbedUnimplementedColumnServiceServer()
 }
 
@@ -245,6 +258,10 @@ type UnimplementedColumnServiceServer struct{}
 
 func (UnimplementedColumnServiceServer) Create(context.Context, *ColumnServiceCreateRequest) (*ColumnServiceCreateResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method Create not implemented")
+}
+
+func (UnimplementedColumnServiceServer) GetAll(context.Context, *ColumnServiceGetAllRequest) (*ColumnServiceGetAllResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetAll not implemented")
 }
 func (UnimplementedColumnServiceServer) mustEmbedUnimplementedColumnServiceServer() {}
 func (UnimplementedColumnServiceServer) testEmbeddedByValue()                       {}
@@ -285,6 +302,24 @@ func _ColumnService_Create_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ColumnService_GetAll_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ColumnServiceGetAllRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ColumnServiceServer).GetAll(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ColumnService_GetAll_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ColumnServiceServer).GetAll(ctx, req.(*ColumnServiceGetAllRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ColumnService_ServiceDesc is the grpc.ServiceDesc for ColumnService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -295,6 +330,10 @@ var ColumnService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Create",
 			Handler:    _ColumnService_Create_Handler,
+		},
+		{
+			MethodName: "GetAll",
+			Handler:    _ColumnService_GetAll_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
