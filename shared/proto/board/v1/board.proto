@@ -22,6 +22,7 @@ service ColumnService {
 service TaskService {
   rpc Create(TaskServiceCreateRequest) returns (TaskServiceCreateResponse);
   rpc GetAll(TaskServiceGetAllRequest) returns (TaskServiceGetAllResponse);
+  rpc Delete(TaskServiceDeleteRequest) returns (TaskServiceDeleteResponse);
 }
 
 // Запрос на создание доски
@@ -145,6 +146,17 @@ message TaskServiceGetAllRequest {
 // Ответ на получение списка задач
 message TaskServiceGetAllResponse {
   repeated Task tasks = 1;
+}
+
+// Запрос на удаление колонки
+message TaskServiceDeleteRequest {
+  // ID доски
+  int64 id = 1  [(validate.rules).int64.gte = 1];
+}
+
+// Ответ на удаление колонки
+message TaskServiceDeleteResponse {
+
 }
 
 // Доска

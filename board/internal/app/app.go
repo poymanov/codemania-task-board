@@ -27,6 +27,7 @@ import (
 	columnGetAllUseCase "github.com/poymanov/codemania-task-board/board/internal/usecase/column/get_all"
 	columnUpdatePositionUseCase "github.com/poymanov/codemania-task-board/board/internal/usecase/column/update_position"
 	taskCreateUseCase "github.com/poymanov/codemania-task-board/board/internal/usecase/task/create"
+	taskGetDeleteUseCase "github.com/poymanov/codemania-task-board/board/internal/usecase/task/delete"
 	taskGetAllUseCase "github.com/poymanov/codemania-task-board/board/internal/usecase/task/get_all"
 	"github.com/poymanov/codemania-task-board/platform/pkg/grpc/health"
 	"github.com/poymanov/codemania-task-board/platform/pkg/logger"
@@ -228,8 +229,9 @@ func (a *App) runGrpcServer() {
 	tr := taskRepository.NewRepository(a.dbConnectionPool)
 	tcuc := taskCreateUseCase.NewUseCase(cr, tr)
 	tgauc := taskGetAllUseCase.NewUseCase(tr)
+	tduc := taskGetDeleteUseCase.NewUseCase(tr)
 
-	taskService := transportTaskV1.NewService(tcuc, tgauc)
+	taskService := transportTaskV1.NewService(tcuc, tgauc, tduc)
 
 	s := grpc.NewServer()
 
