@@ -698,6 +698,119 @@ var _ interface {
 	ErrorName() string
 } = ColumnServiceGetAllRequestValidationError{}
 
+// Validate checks the field values on ColumnServiceDeleteRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *ColumnServiceDeleteRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ColumnServiceDeleteRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// ColumnServiceDeleteRequestMultiError, or nil if none found.
+func (m *ColumnServiceDeleteRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ColumnServiceDeleteRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if m.GetId() < 1 {
+		err := ColumnServiceDeleteRequestValidationError{
+			field:  "Id",
+			reason: "value must be greater than or equal to 1",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(errors) > 0 {
+		return ColumnServiceDeleteRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// ColumnServiceDeleteRequestMultiError is an error wrapping multiple
+// validation errors returned by ColumnServiceDeleteRequest.ValidateAll() if
+// the designated constraints aren't met.
+type ColumnServiceDeleteRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ColumnServiceDeleteRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ColumnServiceDeleteRequestMultiError) AllErrors() []error { return m }
+
+// ColumnServiceDeleteRequestValidationError is the validation error returned
+// by ColumnServiceDeleteRequest.Validate if the designated constraints aren't met.
+type ColumnServiceDeleteRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ColumnServiceDeleteRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ColumnServiceDeleteRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ColumnServiceDeleteRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ColumnServiceDeleteRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ColumnServiceDeleteRequestValidationError) ErrorName() string {
+	return "ColumnServiceDeleteRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ColumnServiceDeleteRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sColumnServiceDeleteRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ColumnServiceDeleteRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ColumnServiceDeleteRequestValidationError{}
+
 // Validate checks the field values on BoardServiceGetAllResponse with the
 // rules defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
@@ -1281,6 +1394,109 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = ColumnServiceGetAllResponseValidationError{}
+
+// Validate checks the field values on ColumnServiceDeleteResponse with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *ColumnServiceDeleteResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ColumnServiceDeleteResponse with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// ColumnServiceDeleteResponseMultiError, or nil if none found.
+func (m *ColumnServiceDeleteResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ColumnServiceDeleteResponse) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if len(errors) > 0 {
+		return ColumnServiceDeleteResponseMultiError(errors)
+	}
+
+	return nil
+}
+
+// ColumnServiceDeleteResponseMultiError is an error wrapping multiple
+// validation errors returned by ColumnServiceDeleteResponse.ValidateAll() if
+// the designated constraints aren't met.
+type ColumnServiceDeleteResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ColumnServiceDeleteResponseMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ColumnServiceDeleteResponseMultiError) AllErrors() []error { return m }
+
+// ColumnServiceDeleteResponseValidationError is the validation error returned
+// by ColumnServiceDeleteResponse.Validate if the designated constraints
+// aren't met.
+type ColumnServiceDeleteResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ColumnServiceDeleteResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ColumnServiceDeleteResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ColumnServiceDeleteResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ColumnServiceDeleteResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ColumnServiceDeleteResponseValidationError) ErrorName() string {
+	return "ColumnServiceDeleteResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ColumnServiceDeleteResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sColumnServiceDeleteResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ColumnServiceDeleteResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ColumnServiceDeleteResponseValidationError{}
 
 // Validate checks the field values on Board with the rules defined in the
 // proto definition for this message. If any rules are violated, the first

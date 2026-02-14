@@ -202,6 +202,7 @@ var BoardService_ServiceDesc = grpc.ServiceDesc{
 const (
 	ColumnService_Create_FullMethodName = "/board.v1.ColumnService/Create"
 	ColumnService_GetAll_FullMethodName = "/board.v1.ColumnService/GetAll"
+	ColumnService_Delete_FullMethodName = "/board.v1.ColumnService/Delete"
 )
 
 // ColumnServiceClient is the client API for ColumnService service.
@@ -210,6 +211,7 @@ const (
 type ColumnServiceClient interface {
 	Create(ctx context.Context, in *ColumnServiceCreateRequest, opts ...grpc.CallOption) (*ColumnServiceCreateResponse, error)
 	GetAll(ctx context.Context, in *ColumnServiceGetAllRequest, opts ...grpc.CallOption) (*ColumnServiceGetAllResponse, error)
+	Delete(ctx context.Context, in *ColumnServiceDeleteRequest, opts ...grpc.CallOption) (*ColumnServiceDeleteResponse, error)
 }
 
 type columnServiceClient struct {
@@ -240,12 +242,23 @@ func (c *columnServiceClient) GetAll(ctx context.Context, in *ColumnServiceGetAl
 	return out, nil
 }
 
+func (c *columnServiceClient) Delete(ctx context.Context, in *ColumnServiceDeleteRequest, opts ...grpc.CallOption) (*ColumnServiceDeleteResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ColumnServiceDeleteResponse)
+	err := c.cc.Invoke(ctx, ColumnService_Delete_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ColumnServiceServer is the server API for ColumnService service.
 // All implementations must embed UnimplementedColumnServiceServer
 // for forward compatibility.
 type ColumnServiceServer interface {
 	Create(context.Context, *ColumnServiceCreateRequest) (*ColumnServiceCreateResponse, error)
 	GetAll(context.Context, *ColumnServiceGetAllRequest) (*ColumnServiceGetAllResponse, error)
+	Delete(context.Context, *ColumnServiceDeleteRequest) (*ColumnServiceDeleteResponse, error)
 	mustEmbedUnimplementedColumnServiceServer()
 }
 
@@ -262,6 +275,10 @@ func (UnimplementedColumnServiceServer) Create(context.Context, *ColumnServiceCr
 
 func (UnimplementedColumnServiceServer) GetAll(context.Context, *ColumnServiceGetAllRequest) (*ColumnServiceGetAllResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetAll not implemented")
+}
+
+func (UnimplementedColumnServiceServer) Delete(context.Context, *ColumnServiceDeleteRequest) (*ColumnServiceDeleteResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method Delete not implemented")
 }
 func (UnimplementedColumnServiceServer) mustEmbedUnimplementedColumnServiceServer() {}
 func (UnimplementedColumnServiceServer) testEmbeddedByValue()                       {}
@@ -320,6 +337,24 @@ func _ColumnService_GetAll_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ColumnService_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ColumnServiceDeleteRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ColumnServiceServer).Delete(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ColumnService_Delete_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ColumnServiceServer).Delete(ctx, req.(*ColumnServiceDeleteRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ColumnService_ServiceDesc is the grpc.ServiceDesc for ColumnService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -334,6 +369,10 @@ var ColumnService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetAll",
 			Handler:    _ColumnService_GetAll_Handler,
+		},
+		{
+			MethodName: "Delete",
+			Handler:    _ColumnService_Delete_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

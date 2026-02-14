@@ -15,6 +15,7 @@ service BoardService {
 service ColumnService {
   rpc Create(ColumnServiceCreateRequest) returns (ColumnServiceCreateResponse);
   rpc GetAll(ColumnServiceGetAllRequest) returns (ColumnServiceGetAllResponse);
+  rpc Delete(ColumnServiceDeleteRequest) returns (ColumnServiceDeleteResponse);
 }
 
 // Запрос на создание доски
@@ -56,6 +57,12 @@ message ColumnServiceGetAllRequest {
   ColumnGetAllSort sort = 2;
 }
 
+// Запрос на удаление колонки
+message ColumnServiceDeleteRequest {
+  // ID доски
+  int64 id = 1  [(validate.rules).int64.gte = 1];
+}
+
 // Ответ со списком всех досок
 message BoardServiceGetAllResponse {
   // Список досок
@@ -80,6 +87,11 @@ message ColumnServiceCreateResponse {
 // Ответ на получение списка колонок
 message ColumnServiceGetAllResponse {
   repeated Column columns = 1;
+}
+
+// Ответ на удаление колонки
+message ColumnServiceDeleteResponse {
+
 }
 
 // Доска
