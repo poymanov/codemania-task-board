@@ -19,6 +19,10 @@ service ColumnService {
   rpc UpdatePosition(ColumnServiceUpdatePositionRequest) returns (ColumnServiceUpdatePositionResponse);
 }
 
+service TaskService {
+  rpc Create(TaskServiceCreateRequest) returns (TaskServiceCreateResponse);
+}
+
 // Запрос на создание доски
 message BoardServiceCreateRequest {
   // Название доски
@@ -108,6 +112,26 @@ message ColumnServiceUpdatePositionRequest {
 // Ответ на удаление колонки
 message ColumnServiceUpdatePositionResponse {
 
+}
+
+// Запрос на создание задачи
+message TaskServiceCreateRequest {
+  // Название задачи
+  string title = 1 [(validate.rules).string = {min_len: 1}];
+
+  // Описание задачи
+  string description = 2 [(validate.rules).string = {min_len: 1}];
+
+  // Исполнитель задачи
+  string assignee = 3 [(validate.rules).string = {min_len: 1}];
+
+  // Колонка, к которой относится задача
+  int64 column_id = 4 [(validate.rules).int64.gte = 1];
+}
+
+// Ответ на создание задачи
+message TaskServiceCreateResponse {
+  int64 task_id = 1;
 }
 
 // Доска

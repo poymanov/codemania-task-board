@@ -1741,6 +1741,256 @@ var _ interface {
 	ErrorName() string
 } = ColumnServiceUpdatePositionResponseValidationError{}
 
+// Validate checks the field values on TaskServiceCreateRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *TaskServiceCreateRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on TaskServiceCreateRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// TaskServiceCreateRequestMultiError, or nil if none found.
+func (m *TaskServiceCreateRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *TaskServiceCreateRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if utf8.RuneCountInString(m.GetTitle()) < 1 {
+		err := TaskServiceCreateRequestValidationError{
+			field:  "Title",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if utf8.RuneCountInString(m.GetDescription()) < 1 {
+		err := TaskServiceCreateRequestValidationError{
+			field:  "Description",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if utf8.RuneCountInString(m.GetAssignee()) < 1 {
+		err := TaskServiceCreateRequestValidationError{
+			field:  "Assignee",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if m.GetColumnId() < 1 {
+		err := TaskServiceCreateRequestValidationError{
+			field:  "ColumnId",
+			reason: "value must be greater than or equal to 1",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(errors) > 0 {
+		return TaskServiceCreateRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// TaskServiceCreateRequestMultiError is an error wrapping multiple validation
+// errors returned by TaskServiceCreateRequest.ValidateAll() if the designated
+// constraints aren't met.
+type TaskServiceCreateRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m TaskServiceCreateRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m TaskServiceCreateRequestMultiError) AllErrors() []error { return m }
+
+// TaskServiceCreateRequestValidationError is the validation error returned by
+// TaskServiceCreateRequest.Validate if the designated constraints aren't met.
+type TaskServiceCreateRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e TaskServiceCreateRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e TaskServiceCreateRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e TaskServiceCreateRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e TaskServiceCreateRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e TaskServiceCreateRequestValidationError) ErrorName() string {
+	return "TaskServiceCreateRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e TaskServiceCreateRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sTaskServiceCreateRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = TaskServiceCreateRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = TaskServiceCreateRequestValidationError{}
+
+// Validate checks the field values on TaskServiceCreateResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *TaskServiceCreateResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on TaskServiceCreateResponse with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// TaskServiceCreateResponseMultiError, or nil if none found.
+func (m *TaskServiceCreateResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *TaskServiceCreateResponse) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for TaskId
+
+	if len(errors) > 0 {
+		return TaskServiceCreateResponseMultiError(errors)
+	}
+
+	return nil
+}
+
+// TaskServiceCreateResponseMultiError is an error wrapping multiple validation
+// errors returned by TaskServiceCreateResponse.ValidateAll() if the
+// designated constraints aren't met.
+type TaskServiceCreateResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m TaskServiceCreateResponseMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m TaskServiceCreateResponseMultiError) AllErrors() []error { return m }
+
+// TaskServiceCreateResponseValidationError is the validation error returned by
+// TaskServiceCreateResponse.Validate if the designated constraints aren't met.
+type TaskServiceCreateResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e TaskServiceCreateResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e TaskServiceCreateResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e TaskServiceCreateResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e TaskServiceCreateResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e TaskServiceCreateResponseValidationError) ErrorName() string {
+	return "TaskServiceCreateResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e TaskServiceCreateResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sTaskServiceCreateResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = TaskServiceCreateResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = TaskServiceCreateResponseValidationError{}
+
 // Validate checks the field values on Board with the rules defined in the
 // proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.

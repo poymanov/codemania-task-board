@@ -15,8 +15,10 @@ import (
 	"github.com/poymanov/codemania-task-board/board/internal/config"
 	boardRepository "github.com/poymanov/codemania-task-board/board/internal/infrastructure/persistance/repository/board"
 	columnRepository "github.com/poymanov/codemania-task-board/board/internal/infrastructure/persistance/repository/column"
+	taskRepository "github.com/poymanov/codemania-task-board/board/internal/infrastructure/persistance/repository/task"
 	transportBoardV1 "github.com/poymanov/codemania-task-board/board/internal/transport/grpc/board/v1/board"
 	transportColumnV1 "github.com/poymanov/codemania-task-board/board/internal/transport/grpc/board/v1/column"
+	transportTaskV1 "github.com/poymanov/codemania-task-board/board/internal/transport/grpc/board/v1/task"
 	boardCreateUseCase "github.com/poymanov/codemania-task-board/board/internal/usecase/board/create"
 	boardDeleteUseCase "github.com/poymanov/codemania-task-board/board/internal/usecase/board/delete"
 	boardGetAllUseCase "github.com/poymanov/codemania-task-board/board/internal/usecase/board/get_all"
@@ -24,6 +26,7 @@ import (
 	columnDeleteUseCase "github.com/poymanov/codemania-task-board/board/internal/usecase/column/delete"
 	columnGetAllUseCase "github.com/poymanov/codemania-task-board/board/internal/usecase/column/get_all"
 	columnUpdatePositionUseCase "github.com/poymanov/codemania-task-board/board/internal/usecase/column/update_position"
+	taskCreateUseCase "github.com/poymanov/codemania-task-board/board/internal/usecase/task/create"
 	"github.com/poymanov/codemania-task-board/platform/pkg/grpc/health"
 	"github.com/poymanov/codemania-task-board/platform/pkg/logger"
 	"github.com/poymanov/codemania-task-board/platform/pkg/migrator"
@@ -221,10 +224,17 @@ func (a *App) runGrpcServer() {
 
 	columnService := transportColumnV1.NewService(ccuc, cgauc, cduc, cupuc)
 
+	tr := taskRepository.NewRepository(a.dbConnectionPool)
+	tcuc := taskCreateUseCase.NewUseCase(cr, tr)
+
+	taskService := transportTaskV1.NewService(tcuc)
+
 	s := grpc.NewServer()
 
 	boardV1.RegisterBoardServiceServer(s, boardService)
 	boardV1.RegisterColumnServiceServer(s, columnService)
+	boardV1.RegisterTaskServiceServer(s, taskService)
+
 	health.RegisterService(s)
 
 	reflection.Register(s)
