@@ -20,9 +20,10 @@ import (
 	boardCreateUseCase "github.com/poymanov/codemania-task-board/board/internal/usecase/board/create"
 	boardDeleteUseCase "github.com/poymanov/codemania-task-board/board/internal/usecase/board/delete"
 	boardGetAllUseCase "github.com/poymanov/codemania-task-board/board/internal/usecase/board/get_all"
-	columnCreateUsecase "github.com/poymanov/codemania-task-board/board/internal/usecase/column/create"
-	columnDeleteUsecase "github.com/poymanov/codemania-task-board/board/internal/usecase/column/delete"
-	columnGetAllUsecase "github.com/poymanov/codemania-task-board/board/internal/usecase/column/get_all"
+	columnCreateUseCase "github.com/poymanov/codemania-task-board/board/internal/usecase/column/create"
+	columnDeleteUseCase "github.com/poymanov/codemania-task-board/board/internal/usecase/column/delete"
+	columnGetAllUseCase "github.com/poymanov/codemania-task-board/board/internal/usecase/column/get_all"
+	columnUpdatePositionUseCase "github.com/poymanov/codemania-task-board/board/internal/usecase/column/update_position"
 	"github.com/poymanov/codemania-task-board/platform/pkg/grpc/health"
 	"github.com/poymanov/codemania-task-board/platform/pkg/logger"
 	"github.com/poymanov/codemania-task-board/platform/pkg/migrator"
@@ -213,11 +214,12 @@ func (a *App) runGrpcServer() {
 	boardService := transportBoardV1.NewBoardService(bcuc, bgauc, bduc)
 
 	cr := columnRepository.NewRepository(a.dbConnectionPool)
-	ccuc := columnCreateUsecase.NewUseCase(br, cr)
-	cgauc := columnGetAllUsecase.NewUseCase(cr)
-	cduc := columnDeleteUsecase.NewUseCase(cr)
+	ccuc := columnCreateUseCase.NewUseCase(br, cr)
+	cgauc := columnGetAllUseCase.NewUseCase(cr)
+	cduc := columnDeleteUseCase.NewUseCase(cr)
+	cupuc := columnUpdatePositionUseCase.NewUseCase(cr)
 
-	columnService := transportColumnV1.NewColumnService(ccuc, cgauc, cduc)
+	columnService := transportColumnV1.NewService(ccuc, cgauc, cduc, cupuc)
 
 	s := grpc.NewServer()
 

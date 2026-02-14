@@ -10,7 +10,7 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-func (s *ColumnService) GetAll(ctx context.Context, req *boardV1.ColumnServiceGetAllRequest) (*boardV1.ColumnServiceGetAllResponse, error) {
+func (s *Service) GetAll(ctx context.Context, req *boardV1.ColumnServiceGetAllRequest) (*boardV1.ColumnServiceGetAllResponse, error) {
 	borderId := int(req.GetFilter().GetBoardId())
 	positionSort := req.GetSort().GetPosition()
 

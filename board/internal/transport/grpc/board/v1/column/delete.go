@@ -9,7 +9,7 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-func (s *ColumnService) Delete(ctx context.Context, req *boardV1.ColumnServiceDeleteRequest) (*boardV1.ColumnServiceDeleteResponse, error) {
+func (s *Service) Delete(ctx context.Context, req *boardV1.ColumnServiceDeleteRequest) (*boardV1.ColumnServiceDeleteResponse, error) {
 	if err := req.Validate(); err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, "validation error: %v", err)
 	}

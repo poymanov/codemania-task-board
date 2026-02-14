@@ -200,9 +200,10 @@ var BoardService_ServiceDesc = grpc.ServiceDesc{
 }
 
 const (
-	ColumnService_Create_FullMethodName = "/board.v1.ColumnService/Create"
-	ColumnService_GetAll_FullMethodName = "/board.v1.ColumnService/GetAll"
-	ColumnService_Delete_FullMethodName = "/board.v1.ColumnService/Delete"
+	ColumnService_Create_FullMethodName         = "/board.v1.ColumnService/Create"
+	ColumnService_GetAll_FullMethodName         = "/board.v1.ColumnService/GetAll"
+	ColumnService_Delete_FullMethodName         = "/board.v1.ColumnService/Delete"
+	ColumnService_UpdatePosition_FullMethodName = "/board.v1.ColumnService/UpdatePosition"
 )
 
 // ColumnServiceClient is the client API for ColumnService service.
@@ -212,6 +213,7 @@ type ColumnServiceClient interface {
 	Create(ctx context.Context, in *ColumnServiceCreateRequest, opts ...grpc.CallOption) (*ColumnServiceCreateResponse, error)
 	GetAll(ctx context.Context, in *ColumnServiceGetAllRequest, opts ...grpc.CallOption) (*ColumnServiceGetAllResponse, error)
 	Delete(ctx context.Context, in *ColumnServiceDeleteRequest, opts ...grpc.CallOption) (*ColumnServiceDeleteResponse, error)
+	UpdatePosition(ctx context.Context, in *ColumnServiceUpdatePositionRequest, opts ...grpc.CallOption) (*ColumnServiceUpdatePositionResponse, error)
 }
 
 type columnServiceClient struct {
@@ -252,6 +254,16 @@ func (c *columnServiceClient) Delete(ctx context.Context, in *ColumnServiceDelet
 	return out, nil
 }
 
+func (c *columnServiceClient) UpdatePosition(ctx context.Context, in *ColumnServiceUpdatePositionRequest, opts ...grpc.CallOption) (*ColumnServiceUpdatePositionResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ColumnServiceUpdatePositionResponse)
+	err := c.cc.Invoke(ctx, ColumnService_UpdatePosition_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ColumnServiceServer is the server API for ColumnService service.
 // All implementations must embed UnimplementedColumnServiceServer
 // for forward compatibility.
@@ -259,6 +271,7 @@ type ColumnServiceServer interface {
 	Create(context.Context, *ColumnServiceCreateRequest) (*ColumnServiceCreateResponse, error)
 	GetAll(context.Context, *ColumnServiceGetAllRequest) (*ColumnServiceGetAllResponse, error)
 	Delete(context.Context, *ColumnServiceDeleteRequest) (*ColumnServiceDeleteResponse, error)
+	UpdatePosition(context.Context, *ColumnServiceUpdatePositionRequest) (*ColumnServiceUpdatePositionResponse, error)
 	mustEmbedUnimplementedColumnServiceServer()
 }
 
@@ -279,6 +292,10 @@ func (UnimplementedColumnServiceServer) GetAll(context.Context, *ColumnServiceGe
 
 func (UnimplementedColumnServiceServer) Delete(context.Context, *ColumnServiceDeleteRequest) (*ColumnServiceDeleteResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method Delete not implemented")
+}
+
+func (UnimplementedColumnServiceServer) UpdatePosition(context.Context, *ColumnServiceUpdatePositionRequest) (*ColumnServiceUpdatePositionResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method UpdatePosition not implemented")
 }
 func (UnimplementedColumnServiceServer) mustEmbedUnimplementedColumnServiceServer() {}
 func (UnimplementedColumnServiceServer) testEmbeddedByValue()                       {}
@@ -355,6 +372,24 @@ func _ColumnService_Delete_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ColumnService_UpdatePosition_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ColumnServiceUpdatePositionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ColumnServiceServer).UpdatePosition(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ColumnService_UpdatePosition_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ColumnServiceServer).UpdatePosition(ctx, req.(*ColumnServiceUpdatePositionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ColumnService_ServiceDesc is the grpc.ServiceDesc for ColumnService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -373,6 +408,10 @@ var ColumnService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Delete",
 			Handler:    _ColumnService_Delete_Handler,
+		},
+		{
+			MethodName: "UpdatePosition",
+			Handler:    _ColumnService_UpdatePosition_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

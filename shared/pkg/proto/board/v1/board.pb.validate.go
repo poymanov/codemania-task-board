@@ -1498,6 +1498,249 @@ var _ interface {
 	ErrorName() string
 } = ColumnServiceDeleteResponseValidationError{}
 
+// Validate checks the field values on ColumnServiceUpdatePositionRequest with
+// the rules defined in the proto definition for this message. If any rules
+// are violated, the first error encountered is returned, or nil if there are
+// no violations.
+func (m *ColumnServiceUpdatePositionRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ColumnServiceUpdatePositionRequest
+// with the rules defined in the proto definition for this message. If any
+// rules are violated, the result is a list of violation errors wrapped in
+// ColumnServiceUpdatePositionRequestMultiError, or nil if none found.
+func (m *ColumnServiceUpdatePositionRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ColumnServiceUpdatePositionRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if m.GetId() < 1 {
+		err := ColumnServiceUpdatePositionRequestValidationError{
+			field:  "Id",
+			reason: "value must be greater than or equal to 1",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if m.GetLeftPosition() < 1 {
+		err := ColumnServiceUpdatePositionRequestValidationError{
+			field:  "LeftPosition",
+			reason: "value must be greater than or equal to 1",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if m.GetRightPosition() < 1 {
+		err := ColumnServiceUpdatePositionRequestValidationError{
+			field:  "RightPosition",
+			reason: "value must be greater than or equal to 1",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(errors) > 0 {
+		return ColumnServiceUpdatePositionRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// ColumnServiceUpdatePositionRequestMultiError is an error wrapping multiple
+// validation errors returned by
+// ColumnServiceUpdatePositionRequest.ValidateAll() if the designated
+// constraints aren't met.
+type ColumnServiceUpdatePositionRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ColumnServiceUpdatePositionRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ColumnServiceUpdatePositionRequestMultiError) AllErrors() []error { return m }
+
+// ColumnServiceUpdatePositionRequestValidationError is the validation error
+// returned by ColumnServiceUpdatePositionRequest.Validate if the designated
+// constraints aren't met.
+type ColumnServiceUpdatePositionRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ColumnServiceUpdatePositionRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ColumnServiceUpdatePositionRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ColumnServiceUpdatePositionRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ColumnServiceUpdatePositionRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ColumnServiceUpdatePositionRequestValidationError) ErrorName() string {
+	return "ColumnServiceUpdatePositionRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ColumnServiceUpdatePositionRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sColumnServiceUpdatePositionRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ColumnServiceUpdatePositionRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ColumnServiceUpdatePositionRequestValidationError{}
+
+// Validate checks the field values on ColumnServiceUpdatePositionResponse with
+// the rules defined in the proto definition for this message. If any rules
+// are violated, the first error encountered is returned, or nil if there are
+// no violations.
+func (m *ColumnServiceUpdatePositionResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ColumnServiceUpdatePositionResponse
+// with the rules defined in the proto definition for this message. If any
+// rules are violated, the result is a list of violation errors wrapped in
+// ColumnServiceUpdatePositionResponseMultiError, or nil if none found.
+func (m *ColumnServiceUpdatePositionResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ColumnServiceUpdatePositionResponse) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if len(errors) > 0 {
+		return ColumnServiceUpdatePositionResponseMultiError(errors)
+	}
+
+	return nil
+}
+
+// ColumnServiceUpdatePositionResponseMultiError is an error wrapping multiple
+// validation errors returned by
+// ColumnServiceUpdatePositionResponse.ValidateAll() if the designated
+// constraints aren't met.
+type ColumnServiceUpdatePositionResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ColumnServiceUpdatePositionResponseMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ColumnServiceUpdatePositionResponseMultiError) AllErrors() []error { return m }
+
+// ColumnServiceUpdatePositionResponseValidationError is the validation error
+// returned by ColumnServiceUpdatePositionResponse.Validate if the designated
+// constraints aren't met.
+type ColumnServiceUpdatePositionResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ColumnServiceUpdatePositionResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ColumnServiceUpdatePositionResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ColumnServiceUpdatePositionResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ColumnServiceUpdatePositionResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ColumnServiceUpdatePositionResponseValidationError) ErrorName() string {
+	return "ColumnServiceUpdatePositionResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ColumnServiceUpdatePositionResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sColumnServiceUpdatePositionResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ColumnServiceUpdatePositionResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ColumnServiceUpdatePositionResponseValidationError{}
+
 // Validate checks the field values on Board with the rules defined in the
 // proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.

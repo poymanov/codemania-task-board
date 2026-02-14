@@ -12,7 +12,7 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-func (s *ColumnService) Create(ctx context.Context, req *boardV1.ColumnServiceCreateRequest) (*boardV1.ColumnServiceCreateResponse, error) {
+func (s *Service) Create(ctx context.Context, req *boardV1.ColumnServiceCreateRequest) (*boardV1.ColumnServiceCreateResponse, error) {
 	if err := req.Validate(); err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, "validation error: %v", err)
 	}

@@ -16,6 +16,7 @@ service ColumnService {
   rpc Create(ColumnServiceCreateRequest) returns (ColumnServiceCreateResponse);
   rpc GetAll(ColumnServiceGetAllRequest) returns (ColumnServiceGetAllResponse);
   rpc Delete(ColumnServiceDeleteRequest) returns (ColumnServiceDeleteResponse);
+  rpc UpdatePosition(ColumnServiceUpdatePositionRequest) returns (ColumnServiceUpdatePositionResponse);
 }
 
 // Запрос на создание доски
@@ -91,6 +92,21 @@ message ColumnServiceGetAllResponse {
 
 // Ответ на удаление колонки
 message ColumnServiceDeleteResponse {
+
+}
+
+// Запрос на изменение позиции колонки
+message ColumnServiceUpdatePositionRequest {
+  // ID колонки
+  int64 id = 1  [(validate.rules).int64.gte = 1];
+
+  float left_position = 2  [(validate.rules).float.gte = 1];
+
+  float right_position = 3  [(validate.rules).float.gte = 1];
+}
+
+// Ответ на удаление колонки
+message ColumnServiceUpdatePositionResponse {
 
 }
 
