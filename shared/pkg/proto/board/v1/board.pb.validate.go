@@ -2502,6 +2502,249 @@ var _ interface {
 	ErrorName() string
 } = TaskServiceDeleteResponseValidationError{}
 
+// Validate checks the field values on TaskServiceUpdatePositionRequest with
+// the rules defined in the proto definition for this message. If any rules
+// are violated, the first error encountered is returned, or nil if there are
+// no violations.
+func (m *TaskServiceUpdatePositionRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on TaskServiceUpdatePositionRequest with
+// the rules defined in the proto definition for this message. If any rules
+// are violated, the result is a list of violation errors wrapped in
+// TaskServiceUpdatePositionRequestMultiError, or nil if none found.
+func (m *TaskServiceUpdatePositionRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *TaskServiceUpdatePositionRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if m.GetId() < 1 {
+		err := TaskServiceUpdatePositionRequestValidationError{
+			field:  "Id",
+			reason: "value must be greater than or equal to 1",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if m.GetLeftPosition() < 1 {
+		err := TaskServiceUpdatePositionRequestValidationError{
+			field:  "LeftPosition",
+			reason: "value must be greater than or equal to 1",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if m.GetRightPosition() < 1 {
+		err := TaskServiceUpdatePositionRequestValidationError{
+			field:  "RightPosition",
+			reason: "value must be greater than or equal to 1",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(errors) > 0 {
+		return TaskServiceUpdatePositionRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// TaskServiceUpdatePositionRequestMultiError is an error wrapping multiple
+// validation errors returned by
+// TaskServiceUpdatePositionRequest.ValidateAll() if the designated
+// constraints aren't met.
+type TaskServiceUpdatePositionRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m TaskServiceUpdatePositionRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m TaskServiceUpdatePositionRequestMultiError) AllErrors() []error { return m }
+
+// TaskServiceUpdatePositionRequestValidationError is the validation error
+// returned by TaskServiceUpdatePositionRequest.Validate if the designated
+// constraints aren't met.
+type TaskServiceUpdatePositionRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e TaskServiceUpdatePositionRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e TaskServiceUpdatePositionRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e TaskServiceUpdatePositionRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e TaskServiceUpdatePositionRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e TaskServiceUpdatePositionRequestValidationError) ErrorName() string {
+	return "TaskServiceUpdatePositionRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e TaskServiceUpdatePositionRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sTaskServiceUpdatePositionRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = TaskServiceUpdatePositionRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = TaskServiceUpdatePositionRequestValidationError{}
+
+// Validate checks the field values on TaskServiceUpdatePositionResponse with
+// the rules defined in the proto definition for this message. If any rules
+// are violated, the first error encountered is returned, or nil if there are
+// no violations.
+func (m *TaskServiceUpdatePositionResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on TaskServiceUpdatePositionResponse
+// with the rules defined in the proto definition for this message. If any
+// rules are violated, the result is a list of violation errors wrapped in
+// TaskServiceUpdatePositionResponseMultiError, or nil if none found.
+func (m *TaskServiceUpdatePositionResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *TaskServiceUpdatePositionResponse) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if len(errors) > 0 {
+		return TaskServiceUpdatePositionResponseMultiError(errors)
+	}
+
+	return nil
+}
+
+// TaskServiceUpdatePositionResponseMultiError is an error wrapping multiple
+// validation errors returned by
+// TaskServiceUpdatePositionResponse.ValidateAll() if the designated
+// constraints aren't met.
+type TaskServiceUpdatePositionResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m TaskServiceUpdatePositionResponseMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m TaskServiceUpdatePositionResponseMultiError) AllErrors() []error { return m }
+
+// TaskServiceUpdatePositionResponseValidationError is the validation error
+// returned by TaskServiceUpdatePositionResponse.Validate if the designated
+// constraints aren't met.
+type TaskServiceUpdatePositionResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e TaskServiceUpdatePositionResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e TaskServiceUpdatePositionResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e TaskServiceUpdatePositionResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e TaskServiceUpdatePositionResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e TaskServiceUpdatePositionResponseValidationError) ErrorName() string {
+	return "TaskServiceUpdatePositionResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e TaskServiceUpdatePositionResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sTaskServiceUpdatePositionResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = TaskServiceUpdatePositionResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = TaskServiceUpdatePositionResponseValidationError{}
+
 // Validate checks the field values on Board with the rules defined in the
 // proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.

@@ -234,3 +234,132 @@ func (_c *TaskRepository_GetAll_Call) RunAndReturn(run func(ctx context.Context,
 	_c.Call.Return(run)
 	return _c
 }
+
+// IsExistsById provides a mock function for the type TaskRepository
+func (_mock *TaskRepository) IsExistsById(ctx context.Context, id int) (bool, error) {
+	ret := _mock.Called(ctx, id)
+
+	if len(ret) == 0 {
+		panic("no return value specified for IsExistsById")
+	}
+
+	var r0 bool
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, int) (bool, error)); ok {
+		return returnFunc(ctx, id)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, int) bool); ok {
+		r0 = returnFunc(ctx, id)
+	} else {
+		r0 = ret.Get(0).(bool)
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, int) error); ok {
+		r1 = returnFunc(ctx, id)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// TaskRepository_IsExistsById_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'IsExistsById'
+type TaskRepository_IsExistsById_Call struct {
+	*mock.Call
+}
+
+// IsExistsById is a helper method to define mock.On call
+//   - ctx context.Context
+//   - id int
+func (_e *TaskRepository_Expecter) IsExistsById(ctx interface{}, id interface{}) *TaskRepository_IsExistsById_Call {
+	return &TaskRepository_IsExistsById_Call{Call: _e.mock.On("IsExistsById", ctx, id)}
+}
+
+func (_c *TaskRepository_IsExistsById_Call) Run(run func(ctx context.Context, id int)) *TaskRepository_IsExistsById_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 int
+		if args[1] != nil {
+			arg1 = args[1].(int)
+		}
+		run(
+			arg0,
+			arg1,
+		)
+	})
+	return _c
+}
+
+func (_c *TaskRepository_IsExistsById_Call) Return(b bool, err error) *TaskRepository_IsExistsById_Call {
+	_c.Call.Return(b, err)
+	return _c
+}
+
+func (_c *TaskRepository_IsExistsById_Call) RunAndReturn(run func(ctx context.Context, id int) (bool, error)) *TaskRepository_IsExistsById_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// UpdatePosition provides a mock function for the type TaskRepository
+func (_mock *TaskRepository) UpdatePosition(ctx context.Context, id int, position float64) error {
+	ret := _mock.Called(ctx, id, position)
+
+	if len(ret) == 0 {
+		panic("no return value specified for UpdatePosition")
+	}
+
+	var r0 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, int, float64) error); ok {
+		r0 = returnFunc(ctx, id, position)
+	} else {
+		r0 = ret.Error(0)
+	}
+	return r0
+}
+
+// TaskRepository_UpdatePosition_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpdatePosition'
+type TaskRepository_UpdatePosition_Call struct {
+	*mock.Call
+}
+
+// UpdatePosition is a helper method to define mock.On call
+//   - ctx context.Context
+//   - id int
+//   - position float64
+func (_e *TaskRepository_Expecter) UpdatePosition(ctx interface{}, id interface{}, position interface{}) *TaskRepository_UpdatePosition_Call {
+	return &TaskRepository_UpdatePosition_Call{Call: _e.mock.On("UpdatePosition", ctx, id, position)}
+}
+
+func (_c *TaskRepository_UpdatePosition_Call) Run(run func(ctx context.Context, id int, position float64)) *TaskRepository_UpdatePosition_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 int
+		if args[1] != nil {
+			arg1 = args[1].(int)
+		}
+		var arg2 float64
+		if args[2] != nil {
+			arg2 = args[2].(float64)
+		}
+		run(
+			arg0,
+			arg1,
+			arg2,
+		)
+	})
+	return _c
+}
+
+func (_c *TaskRepository_UpdatePosition_Call) Return(err error) *TaskRepository_UpdatePosition_Call {
+	_c.Call.Return(err)
+	return _c
+}
+
+func (_c *TaskRepository_UpdatePosition_Call) RunAndReturn(run func(ctx context.Context, id int, position float64) error) *TaskRepository_UpdatePosition_Call {
+	_c.Call.Return(run)
+	return _c
+}

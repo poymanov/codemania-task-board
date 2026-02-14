@@ -419,9 +419,10 @@ var ColumnService_ServiceDesc = grpc.ServiceDesc{
 }
 
 const (
-	TaskService_Create_FullMethodName = "/board.v1.TaskService/Create"
-	TaskService_GetAll_FullMethodName = "/board.v1.TaskService/GetAll"
-	TaskService_Delete_FullMethodName = "/board.v1.TaskService/Delete"
+	TaskService_Create_FullMethodName         = "/board.v1.TaskService/Create"
+	TaskService_GetAll_FullMethodName         = "/board.v1.TaskService/GetAll"
+	TaskService_Delete_FullMethodName         = "/board.v1.TaskService/Delete"
+	TaskService_UpdatePosition_FullMethodName = "/board.v1.TaskService/UpdatePosition"
 )
 
 // TaskServiceClient is the client API for TaskService service.
@@ -431,6 +432,7 @@ type TaskServiceClient interface {
 	Create(ctx context.Context, in *TaskServiceCreateRequest, opts ...grpc.CallOption) (*TaskServiceCreateResponse, error)
 	GetAll(ctx context.Context, in *TaskServiceGetAllRequest, opts ...grpc.CallOption) (*TaskServiceGetAllResponse, error)
 	Delete(ctx context.Context, in *TaskServiceDeleteRequest, opts ...grpc.CallOption) (*TaskServiceDeleteResponse, error)
+	UpdatePosition(ctx context.Context, in *TaskServiceUpdatePositionRequest, opts ...grpc.CallOption) (*TaskServiceUpdatePositionResponse, error)
 }
 
 type taskServiceClient struct {
@@ -471,6 +473,16 @@ func (c *taskServiceClient) Delete(ctx context.Context, in *TaskServiceDeleteReq
 	return out, nil
 }
 
+func (c *taskServiceClient) UpdatePosition(ctx context.Context, in *TaskServiceUpdatePositionRequest, opts ...grpc.CallOption) (*TaskServiceUpdatePositionResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(TaskServiceUpdatePositionResponse)
+	err := c.cc.Invoke(ctx, TaskService_UpdatePosition_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // TaskServiceServer is the server API for TaskService service.
 // All implementations must embed UnimplementedTaskServiceServer
 // for forward compatibility.
@@ -478,6 +490,7 @@ type TaskServiceServer interface {
 	Create(context.Context, *TaskServiceCreateRequest) (*TaskServiceCreateResponse, error)
 	GetAll(context.Context, *TaskServiceGetAllRequest) (*TaskServiceGetAllResponse, error)
 	Delete(context.Context, *TaskServiceDeleteRequest) (*TaskServiceDeleteResponse, error)
+	UpdatePosition(context.Context, *TaskServiceUpdatePositionRequest) (*TaskServiceUpdatePositionResponse, error)
 	mustEmbedUnimplementedTaskServiceServer()
 }
 
@@ -498,6 +511,10 @@ func (UnimplementedTaskServiceServer) GetAll(context.Context, *TaskServiceGetAll
 
 func (UnimplementedTaskServiceServer) Delete(context.Context, *TaskServiceDeleteRequest) (*TaskServiceDeleteResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method Delete not implemented")
+}
+
+func (UnimplementedTaskServiceServer) UpdatePosition(context.Context, *TaskServiceUpdatePositionRequest) (*TaskServiceUpdatePositionResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method UpdatePosition not implemented")
 }
 func (UnimplementedTaskServiceServer) mustEmbedUnimplementedTaskServiceServer() {}
 func (UnimplementedTaskServiceServer) testEmbeddedByValue()                     {}
@@ -574,6 +591,24 @@ func _TaskService_Delete_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
+func _TaskService_UpdatePosition_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(TaskServiceUpdatePositionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TaskServiceServer).UpdatePosition(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TaskService_UpdatePosition_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TaskServiceServer).UpdatePosition(ctx, req.(*TaskServiceUpdatePositionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // TaskService_ServiceDesc is the grpc.ServiceDesc for TaskService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -592,6 +627,10 @@ var TaskService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Delete",
 			Handler:    _TaskService_Delete_Handler,
+		},
+		{
+			MethodName: "UpdatePosition",
+			Handler:    _TaskService_UpdatePosition_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

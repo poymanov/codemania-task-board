@@ -23,6 +23,7 @@ service TaskService {
   rpc Create(TaskServiceCreateRequest) returns (TaskServiceCreateResponse);
   rpc GetAll(TaskServiceGetAllRequest) returns (TaskServiceGetAllResponse);
   rpc Delete(TaskServiceDeleteRequest) returns (TaskServiceDeleteResponse);
+  rpc UpdatePosition(TaskServiceUpdatePositionRequest) returns (TaskServiceUpdatePositionResponse);
 }
 
 // Запрос на создание доски
@@ -111,7 +112,7 @@ message ColumnServiceUpdatePositionRequest {
   float right_position = 3  [(validate.rules).float.gte = 1];
 }
 
-// Ответ на удаление колонки
+// Ответ на изменение позиции колонки
 message ColumnServiceUpdatePositionResponse {
 
 }
@@ -156,6 +157,21 @@ message TaskServiceDeleteRequest {
 
 // Ответ на удаление колонки
 message TaskServiceDeleteResponse {
+
+}
+
+// Запрос на изменение позиции задачи
+message TaskServiceUpdatePositionRequest {
+  // ID колонки
+  int64 id = 1  [(validate.rules).int64.gte = 1];
+
+  float left_position = 2  [(validate.rules).float.gte = 1];
+
+  float right_position = 3  [(validate.rules).float.gte = 1];
+}
+
+// Ответ на изменение позиции задачи
+message TaskServiceUpdatePositionResponse {
 
 }
 
