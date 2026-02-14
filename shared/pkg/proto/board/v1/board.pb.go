@@ -804,6 +804,104 @@ func (x *TaskServiceCreateResponse) GetTaskId() int64 {
 	return 0
 }
 
+// Запрос на получение списка задач
+type TaskServiceGetAllRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Filter        *TaskGetAllFilter      `protobuf:"bytes,1,opt,name=filter,proto3" json:"filter,omitempty"`
+	Sort          *TaskGetAllSort        `protobuf:"bytes,2,opt,name=sort,proto3" json:"sort,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *TaskServiceGetAllRequest) Reset() {
+	*x = TaskServiceGetAllRequest{}
+	mi := &file_board_v1_board_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *TaskServiceGetAllRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TaskServiceGetAllRequest) ProtoMessage() {}
+
+func (x *TaskServiceGetAllRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_board_v1_board_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TaskServiceGetAllRequest.ProtoReflect.Descriptor instead.
+func (*TaskServiceGetAllRequest) Descriptor() ([]byte, []int) {
+	return file_board_v1_board_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *TaskServiceGetAllRequest) GetFilter() *TaskGetAllFilter {
+	if x != nil {
+		return x.Filter
+	}
+	return nil
+}
+
+func (x *TaskServiceGetAllRequest) GetSort() *TaskGetAllSort {
+	if x != nil {
+		return x.Sort
+	}
+	return nil
+}
+
+// Ответ на получение списка задач
+type TaskServiceGetAllResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Tasks         []*Task                `protobuf:"bytes,1,rep,name=tasks,proto3" json:"tasks,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *TaskServiceGetAllResponse) Reset() {
+	*x = TaskServiceGetAllResponse{}
+	mi := &file_board_v1_board_proto_msgTypes[17]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *TaskServiceGetAllResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TaskServiceGetAllResponse) ProtoMessage() {}
+
+func (x *TaskServiceGetAllResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_board_v1_board_proto_msgTypes[17]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TaskServiceGetAllResponse.ProtoReflect.Descriptor instead.
+func (*TaskServiceGetAllResponse) Descriptor() ([]byte, []int) {
+	return file_board_v1_board_proto_rawDescGZIP(), []int{17}
+}
+
+func (x *TaskServiceGetAllResponse) GetTasks() []*Task {
+	if x != nil {
+		return x.Tasks
+	}
+	return nil
+}
+
 // Доска
 type Board struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
@@ -821,7 +919,7 @@ type Board struct {
 
 func (x *Board) Reset() {
 	*x = Board{}
-	mi := &file_board_v1_board_proto_msgTypes[16]
+	mi := &file_board_v1_board_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -833,7 +931,7 @@ func (x *Board) String() string {
 func (*Board) ProtoMessage() {}
 
 func (x *Board) ProtoReflect() protoreflect.Message {
-	mi := &file_board_v1_board_proto_msgTypes[16]
+	mi := &file_board_v1_board_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -846,7 +944,7 @@ func (x *Board) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Board.ProtoReflect.Descriptor instead.
 func (*Board) Descriptor() ([]byte, []int) {
-	return file_board_v1_board_proto_rawDescGZIP(), []int{16}
+	return file_board_v1_board_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *Board) GetId() int64 {
@@ -894,7 +992,7 @@ type Column struct {
 
 func (x *Column) Reset() {
 	*x = Column{}
-	mi := &file_board_v1_board_proto_msgTypes[17]
+	mi := &file_board_v1_board_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -906,7 +1004,7 @@ func (x *Column) String() string {
 func (*Column) ProtoMessage() {}
 
 func (x *Column) ProtoReflect() protoreflect.Message {
-	mi := &file_board_v1_board_proto_msgTypes[17]
+	mi := &file_board_v1_board_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -919,7 +1017,7 @@ func (x *Column) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Column.ProtoReflect.Descriptor instead.
 func (*Column) Descriptor() ([]byte, []int) {
-	return file_board_v1_board_proto_rawDescGZIP(), []int{17}
+	return file_board_v1_board_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *Column) GetId() int64 {
@@ -950,6 +1048,97 @@ func (x *Column) GetBoardId() int64 {
 	return 0
 }
 
+// Задача
+type Task struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// ID
+	Id int64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	// Название
+	Title string `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
+	// Описание
+	Description string `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
+	// Ответственный
+	Assignee string `protobuf:"bytes,4,opt,name=assignee,proto3" json:"assignee,omitempty"`
+	// Порядок расположения
+	Position float32 `protobuf:"fixed32,5,opt,name=position,proto3" json:"position,omitempty"`
+	// ID колонки, к которой принадлежит задача
+	ColumnId      int64 `protobuf:"varint,6,opt,name=column_id,json=columnId,proto3" json:"column_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Task) Reset() {
+	*x = Task{}
+	mi := &file_board_v1_board_proto_msgTypes[20]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Task) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Task) ProtoMessage() {}
+
+func (x *Task) ProtoReflect() protoreflect.Message {
+	mi := &file_board_v1_board_proto_msgTypes[20]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Task.ProtoReflect.Descriptor instead.
+func (*Task) Descriptor() ([]byte, []int) {
+	return file_board_v1_board_proto_rawDescGZIP(), []int{20}
+}
+
+func (x *Task) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *Task) GetTitle() string {
+	if x != nil {
+		return x.Title
+	}
+	return ""
+}
+
+func (x *Task) GetDescription() string {
+	if x != nil {
+		return x.Description
+	}
+	return ""
+}
+
+func (x *Task) GetAssignee() string {
+	if x != nil {
+		return x.Assignee
+	}
+	return ""
+}
+
+func (x *Task) GetPosition() float32 {
+	if x != nil {
+		return x.Position
+	}
+	return 0
+}
+
+func (x *Task) GetColumnId() int64 {
+	if x != nil {
+		return x.ColumnId
+	}
+	return 0
+}
+
 // Фильтр для запроса по всем доскам
 type BoardGetAllFilter struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
@@ -961,7 +1150,7 @@ type BoardGetAllFilter struct {
 
 func (x *BoardGetAllFilter) Reset() {
 	*x = BoardGetAllFilter{}
-	mi := &file_board_v1_board_proto_msgTypes[18]
+	mi := &file_board_v1_board_proto_msgTypes[21]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -973,7 +1162,7 @@ func (x *BoardGetAllFilter) String() string {
 func (*BoardGetAllFilter) ProtoMessage() {}
 
 func (x *BoardGetAllFilter) ProtoReflect() protoreflect.Message {
-	mi := &file_board_v1_board_proto_msgTypes[18]
+	mi := &file_board_v1_board_proto_msgTypes[21]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -986,7 +1175,7 @@ func (x *BoardGetAllFilter) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BoardGetAllFilter.ProtoReflect.Descriptor instead.
 func (*BoardGetAllFilter) Descriptor() ([]byte, []int) {
-	return file_board_v1_board_proto_rawDescGZIP(), []int{18}
+	return file_board_v1_board_proto_rawDescGZIP(), []int{21}
 }
 
 func (x *BoardGetAllFilter) GetOwnerId() int64 {
@@ -1007,7 +1196,7 @@ type ColumnGetAllFilter struct {
 
 func (x *ColumnGetAllFilter) Reset() {
 	*x = ColumnGetAllFilter{}
-	mi := &file_board_v1_board_proto_msgTypes[19]
+	mi := &file_board_v1_board_proto_msgTypes[22]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1019,7 +1208,7 @@ func (x *ColumnGetAllFilter) String() string {
 func (*ColumnGetAllFilter) ProtoMessage() {}
 
 func (x *ColumnGetAllFilter) ProtoReflect() protoreflect.Message {
-	mi := &file_board_v1_board_proto_msgTypes[19]
+	mi := &file_board_v1_board_proto_msgTypes[22]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1032,7 +1221,7 @@ func (x *ColumnGetAllFilter) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ColumnGetAllFilter.ProtoReflect.Descriptor instead.
 func (*ColumnGetAllFilter) Descriptor() ([]byte, []int) {
-	return file_board_v1_board_proto_rawDescGZIP(), []int{19}
+	return file_board_v1_board_proto_rawDescGZIP(), []int{22}
 }
 
 func (x *ColumnGetAllFilter) GetBoardId() int64 {
@@ -1045,7 +1234,7 @@ func (x *ColumnGetAllFilter) GetBoardId() int64 {
 // Опции сортировки для запроса по всем колонкам
 type ColumnGetAllSort struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// ID доски
+	// Порядок сортировки по позиции
 	Position      *string `protobuf:"bytes,1,opt,name=position,proto3,oneof" json:"position,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -1053,7 +1242,7 @@ type ColumnGetAllSort struct {
 
 func (x *ColumnGetAllSort) Reset() {
 	*x = ColumnGetAllSort{}
-	mi := &file_board_v1_board_proto_msgTypes[20]
+	mi := &file_board_v1_board_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1065,7 +1254,7 @@ func (x *ColumnGetAllSort) String() string {
 func (*ColumnGetAllSort) ProtoMessage() {}
 
 func (x *ColumnGetAllSort) ProtoReflect() protoreflect.Message {
-	mi := &file_board_v1_board_proto_msgTypes[20]
+	mi := &file_board_v1_board_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1078,10 +1267,102 @@ func (x *ColumnGetAllSort) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ColumnGetAllSort.ProtoReflect.Descriptor instead.
 func (*ColumnGetAllSort) Descriptor() ([]byte, []int) {
-	return file_board_v1_board_proto_rawDescGZIP(), []int{20}
+	return file_board_v1_board_proto_rawDescGZIP(), []int{23}
 }
 
 func (x *ColumnGetAllSort) GetPosition() string {
+	if x != nil && x.Position != nil {
+		return *x.Position
+	}
+	return ""
+}
+
+// Фильтр для запроса по всем задачам
+type TaskGetAllFilter struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// ID колонки
+	ColumnId      *int64 `protobuf:"varint,1,opt,name=column_id,json=columnId,proto3,oneof" json:"column_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *TaskGetAllFilter) Reset() {
+	*x = TaskGetAllFilter{}
+	mi := &file_board_v1_board_proto_msgTypes[24]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *TaskGetAllFilter) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TaskGetAllFilter) ProtoMessage() {}
+
+func (x *TaskGetAllFilter) ProtoReflect() protoreflect.Message {
+	mi := &file_board_v1_board_proto_msgTypes[24]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TaskGetAllFilter.ProtoReflect.Descriptor instead.
+func (*TaskGetAllFilter) Descriptor() ([]byte, []int) {
+	return file_board_v1_board_proto_rawDescGZIP(), []int{24}
+}
+
+func (x *TaskGetAllFilter) GetColumnId() int64 {
+	if x != nil && x.ColumnId != nil {
+		return *x.ColumnId
+	}
+	return 0
+}
+
+// Опции сортировки для запроса по всем задачам
+type TaskGetAllSort struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Порядок сортировки по позиции
+	Position      *string `protobuf:"bytes,1,opt,name=position,proto3,oneof" json:"position,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *TaskGetAllSort) Reset() {
+	*x = TaskGetAllSort{}
+	mi := &file_board_v1_board_proto_msgTypes[25]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *TaskGetAllSort) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TaskGetAllSort) ProtoMessage() {}
+
+func (x *TaskGetAllSort) ProtoReflect() protoreflect.Message {
+	mi := &file_board_v1_board_proto_msgTypes[25]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TaskGetAllSort.ProtoReflect.Descriptor instead.
+func (*TaskGetAllSort) Descriptor() ([]byte, []int) {
+	return file_board_v1_board_proto_rawDescGZIP(), []int{25}
+}
+
+func (x *TaskGetAllSort) GetPosition() string {
 	if x != nil && x.Position != nil {
 		return *x.Position
 	}
@@ -1134,7 +1415,12 @@ const file_board_v1_board_proto_rawDesc = "" +
 	"\bassignee\x18\x03 \x01(\tB\a\xfaB\x04r\x02\x10\x01R\bassignee\x12$\n" +
 	"\tcolumn_id\x18\x04 \x01(\x03B\a\xfaB\x04\"\x02(\x01R\bcolumnId\"4\n" +
 	"\x19TaskServiceCreateResponse\x12\x17\n" +
-	"\atask_id\x18\x01 \x01(\x03R\x06taskId\"h\n" +
+	"\atask_id\x18\x01 \x01(\x03R\x06taskId\"|\n" +
+	"\x18TaskServiceGetAllRequest\x122\n" +
+	"\x06filter\x18\x01 \x01(\v2\x1a.board.v1.TaskGetAllFilterR\x06filter\x12,\n" +
+	"\x04sort\x18\x02 \x01(\v2\x18.board.v1.TaskGetAllSortR\x04sort\"A\n" +
+	"\x19TaskServiceGetAllResponse\x12$\n" +
+	"\x05tasks\x18\x01 \x03(\v2\x0e.board.v1.TaskR\x05tasks\"h\n" +
 	"\x05Board\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12 \n" +
@@ -1144,7 +1430,14 @@ const file_board_v1_board_proto_rawDesc = "" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x1a\n" +
 	"\bposition\x18\x03 \x01(\x02R\bposition\x12\x19\n" +
-	"\bboard_id\x18\x04 \x01(\x03R\aboardId\"I\n" +
+	"\bboard_id\x18\x04 \x01(\x03R\aboardId\"\xa3\x01\n" +
+	"\x04Task\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x14\n" +
+	"\x05title\x18\x02 \x01(\tR\x05title\x12 \n" +
+	"\vdescription\x18\x03 \x01(\tR\vdescription\x12\x1a\n" +
+	"\bassignee\x18\x04 \x01(\tR\bassignee\x12\x1a\n" +
+	"\bposition\x18\x05 \x01(\x02R\bposition\x12\x1b\n" +
+	"\tcolumn_id\x18\x06 \x01(\x03R\bcolumnId\"I\n" +
 	"\x11BoardGetAllFilter\x12'\n" +
 	"\bowner_id\x18\x01 \x01(\x03B\a\xfaB\x04\"\x02(\x01H\x00R\aownerId\x88\x01\x01B\v\n" +
 	"\t_owner_id\"J\n" +
@@ -1152,6 +1445,13 @@ const file_board_v1_board_proto_rawDesc = "" +
 	"\bboard_id\x18\x01 \x01(\x03B\a\xfaB\x04\"\x02(\x01H\x00R\aboardId\x88\x01\x01B\v\n" +
 	"\t_board_id\"I\n" +
 	"\x10ColumnGetAllSort\x12(\n" +
+	"\bposition\x18\x01 \x01(\tB\a\xfaB\x04r\x02\x10\x01H\x00R\bposition\x88\x01\x01B\v\n" +
+	"\t_position\"K\n" +
+	"\x10TaskGetAllFilter\x12)\n" +
+	"\tcolumn_id\x18\x01 \x01(\x03B\a\xfaB\x04\"\x02(\x01H\x00R\bcolumnId\x88\x01\x01B\f\n" +
+	"\n" +
+	"_column_id\"G\n" +
+	"\x0eTaskGetAllSort\x12(\n" +
 	"\bposition\x18\x01 \x01(\tB\a\xfaB\x04r\x02\x10\x01H\x00R\bposition\x88\x01\x01B\v\n" +
 	"\t_position2\x8d\x02\n" +
 	"\fBoardService\x12S\n" +
@@ -1162,9 +1462,10 @@ const file_board_v1_board_proto_rawDesc = "" +
 	"\x06Create\x12$.board.v1.ColumnServiceCreateRequest\x1a%.board.v1.ColumnServiceCreateResponse\x12U\n" +
 	"\x06GetAll\x12$.board.v1.ColumnServiceGetAllRequest\x1a%.board.v1.ColumnServiceGetAllResponse\x12U\n" +
 	"\x06Delete\x12$.board.v1.ColumnServiceDeleteRequest\x1a%.board.v1.ColumnServiceDeleteResponse\x12m\n" +
-	"\x0eUpdatePosition\x12,.board.v1.ColumnServiceUpdatePositionRequest\x1a-.board.v1.ColumnServiceUpdatePositionResponse2`\n" +
+	"\x0eUpdatePosition\x12,.board.v1.ColumnServiceUpdatePositionRequest\x1a-.board.v1.ColumnServiceUpdatePositionResponse2\xb3\x01\n" +
 	"\vTaskService\x12Q\n" +
-	"\x06Create\x12\".board.v1.TaskServiceCreateRequest\x1a#.board.v1.TaskServiceCreateResponseBFZDgithub.com/poymanov/codemania-task-board/pkg/proto/board/v1;board_v1b\x06proto3"
+	"\x06Create\x12\".board.v1.TaskServiceCreateRequest\x1a#.board.v1.TaskServiceCreateResponse\x12Q\n" +
+	"\x06GetAll\x12\".board.v1.TaskServiceGetAllRequest\x1a#.board.v1.TaskServiceGetAllResponseBFZDgithub.com/poymanov/codemania-task-board/pkg/proto/board/v1;board_v1b\x06proto3"
 
 var (
 	file_board_v1_board_proto_rawDescOnce sync.Once
@@ -1179,7 +1480,7 @@ func file_board_v1_board_proto_rawDescGZIP() []byte {
 }
 
 var (
-	file_board_v1_board_proto_msgTypes = make([]protoimpl.MessageInfo, 21)
+	file_board_v1_board_proto_msgTypes = make([]protoimpl.MessageInfo, 26)
 	file_board_v1_board_proto_goTypes  = []any{
 		(*BoardServiceCreateRequest)(nil),           // 0: board.v1.BoardServiceCreateRequest
 		(*BoardServiceGetAllRequest)(nil),           // 1: board.v1.BoardServiceGetAllRequest
@@ -1197,40 +1498,50 @@ var (
 		(*ColumnServiceUpdatePositionResponse)(nil), // 13: board.v1.ColumnServiceUpdatePositionResponse
 		(*TaskServiceCreateRequest)(nil),            // 14: board.v1.TaskServiceCreateRequest
 		(*TaskServiceCreateResponse)(nil),           // 15: board.v1.TaskServiceCreateResponse
-		(*Board)(nil),                               // 16: board.v1.Board
-		(*Column)(nil),                              // 17: board.v1.Column
-		(*BoardGetAllFilter)(nil),                   // 18: board.v1.BoardGetAllFilter
-		(*ColumnGetAllFilter)(nil),                  // 19: board.v1.ColumnGetAllFilter
-		(*ColumnGetAllSort)(nil),                    // 20: board.v1.ColumnGetAllSort
+		(*TaskServiceGetAllRequest)(nil),            // 16: board.v1.TaskServiceGetAllRequest
+		(*TaskServiceGetAllResponse)(nil),           // 17: board.v1.TaskServiceGetAllResponse
+		(*Board)(nil),                               // 18: board.v1.Board
+		(*Column)(nil),                              // 19: board.v1.Column
+		(*Task)(nil),                                // 20: board.v1.Task
+		(*BoardGetAllFilter)(nil),                   // 21: board.v1.BoardGetAllFilter
+		(*ColumnGetAllFilter)(nil),                  // 22: board.v1.ColumnGetAllFilter
+		(*ColumnGetAllSort)(nil),                    // 23: board.v1.ColumnGetAllSort
+		(*TaskGetAllFilter)(nil),                    // 24: board.v1.TaskGetAllFilter
+		(*TaskGetAllSort)(nil),                      // 25: board.v1.TaskGetAllSort
 	}
 )
 var file_board_v1_board_proto_depIdxs = []int32{
-	18, // 0: board.v1.BoardServiceGetAllRequest.filter:type_name -> board.v1.BoardGetAllFilter
-	19, // 1: board.v1.ColumnServiceGetAllRequest.filter:type_name -> board.v1.ColumnGetAllFilter
-	20, // 2: board.v1.ColumnServiceGetAllRequest.sort:type_name -> board.v1.ColumnGetAllSort
-	16, // 3: board.v1.BoardServiceGetAllResponse.boards:type_name -> board.v1.Board
-	17, // 4: board.v1.ColumnServiceGetAllResponse.columns:type_name -> board.v1.Column
-	0,  // 5: board.v1.BoardService.Create:input_type -> board.v1.BoardServiceCreateRequest
-	1,  // 6: board.v1.BoardService.GetAll:input_type -> board.v1.BoardServiceGetAllRequest
-	2,  // 7: board.v1.BoardService.Delete:input_type -> board.v1.BoardServiceDeleteRequest
-	3,  // 8: board.v1.ColumnService.Create:input_type -> board.v1.ColumnServiceCreateRequest
-	4,  // 9: board.v1.ColumnService.GetAll:input_type -> board.v1.ColumnServiceGetAllRequest
-	5,  // 10: board.v1.ColumnService.Delete:input_type -> board.v1.ColumnServiceDeleteRequest
-	12, // 11: board.v1.ColumnService.UpdatePosition:input_type -> board.v1.ColumnServiceUpdatePositionRequest
-	14, // 12: board.v1.TaskService.Create:input_type -> board.v1.TaskServiceCreateRequest
-	7,  // 13: board.v1.BoardService.Create:output_type -> board.v1.BoardServiceCreateResponse
-	6,  // 14: board.v1.BoardService.GetAll:output_type -> board.v1.BoardServiceGetAllResponse
-	8,  // 15: board.v1.BoardService.Delete:output_type -> board.v1.BoardServiceDeleteResponse
-	9,  // 16: board.v1.ColumnService.Create:output_type -> board.v1.ColumnServiceCreateResponse
-	10, // 17: board.v1.ColumnService.GetAll:output_type -> board.v1.ColumnServiceGetAllResponse
-	11, // 18: board.v1.ColumnService.Delete:output_type -> board.v1.ColumnServiceDeleteResponse
-	13, // 19: board.v1.ColumnService.UpdatePosition:output_type -> board.v1.ColumnServiceUpdatePositionResponse
-	15, // 20: board.v1.TaskService.Create:output_type -> board.v1.TaskServiceCreateResponse
-	13, // [13:21] is the sub-list for method output_type
-	5,  // [5:13] is the sub-list for method input_type
-	5,  // [5:5] is the sub-list for extension type_name
-	5,  // [5:5] is the sub-list for extension extendee
-	0,  // [0:5] is the sub-list for field type_name
+	21, // 0: board.v1.BoardServiceGetAllRequest.filter:type_name -> board.v1.BoardGetAllFilter
+	22, // 1: board.v1.ColumnServiceGetAllRequest.filter:type_name -> board.v1.ColumnGetAllFilter
+	23, // 2: board.v1.ColumnServiceGetAllRequest.sort:type_name -> board.v1.ColumnGetAllSort
+	18, // 3: board.v1.BoardServiceGetAllResponse.boards:type_name -> board.v1.Board
+	19, // 4: board.v1.ColumnServiceGetAllResponse.columns:type_name -> board.v1.Column
+	24, // 5: board.v1.TaskServiceGetAllRequest.filter:type_name -> board.v1.TaskGetAllFilter
+	25, // 6: board.v1.TaskServiceGetAllRequest.sort:type_name -> board.v1.TaskGetAllSort
+	20, // 7: board.v1.TaskServiceGetAllResponse.tasks:type_name -> board.v1.Task
+	0,  // 8: board.v1.BoardService.Create:input_type -> board.v1.BoardServiceCreateRequest
+	1,  // 9: board.v1.BoardService.GetAll:input_type -> board.v1.BoardServiceGetAllRequest
+	2,  // 10: board.v1.BoardService.Delete:input_type -> board.v1.BoardServiceDeleteRequest
+	3,  // 11: board.v1.ColumnService.Create:input_type -> board.v1.ColumnServiceCreateRequest
+	4,  // 12: board.v1.ColumnService.GetAll:input_type -> board.v1.ColumnServiceGetAllRequest
+	5,  // 13: board.v1.ColumnService.Delete:input_type -> board.v1.ColumnServiceDeleteRequest
+	12, // 14: board.v1.ColumnService.UpdatePosition:input_type -> board.v1.ColumnServiceUpdatePositionRequest
+	14, // 15: board.v1.TaskService.Create:input_type -> board.v1.TaskServiceCreateRequest
+	16, // 16: board.v1.TaskService.GetAll:input_type -> board.v1.TaskServiceGetAllRequest
+	7,  // 17: board.v1.BoardService.Create:output_type -> board.v1.BoardServiceCreateResponse
+	6,  // 18: board.v1.BoardService.GetAll:output_type -> board.v1.BoardServiceGetAllResponse
+	8,  // 19: board.v1.BoardService.Delete:output_type -> board.v1.BoardServiceDeleteResponse
+	9,  // 20: board.v1.ColumnService.Create:output_type -> board.v1.ColumnServiceCreateResponse
+	10, // 21: board.v1.ColumnService.GetAll:output_type -> board.v1.ColumnServiceGetAllResponse
+	11, // 22: board.v1.ColumnService.Delete:output_type -> board.v1.ColumnServiceDeleteResponse
+	13, // 23: board.v1.ColumnService.UpdatePosition:output_type -> board.v1.ColumnServiceUpdatePositionResponse
+	15, // 24: board.v1.TaskService.Create:output_type -> board.v1.TaskServiceCreateResponse
+	17, // 25: board.v1.TaskService.GetAll:output_type -> board.v1.TaskServiceGetAllResponse
+	17, // [17:26] is the sub-list for method output_type
+	8,  // [8:17] is the sub-list for method input_type
+	8,  // [8:8] is the sub-list for extension type_name
+	8,  // [8:8] is the sub-list for extension extendee
+	0,  // [0:8] is the sub-list for field type_name
 }
 
 func init() { file_board_v1_board_proto_init() }
@@ -1238,16 +1549,18 @@ func file_board_v1_board_proto_init() {
 	if File_board_v1_board_proto != nil {
 		return
 	}
-	file_board_v1_board_proto_msgTypes[18].OneofWrappers = []any{}
-	file_board_v1_board_proto_msgTypes[19].OneofWrappers = []any{}
-	file_board_v1_board_proto_msgTypes[20].OneofWrappers = []any{}
+	file_board_v1_board_proto_msgTypes[21].OneofWrappers = []any{}
+	file_board_v1_board_proto_msgTypes[22].OneofWrappers = []any{}
+	file_board_v1_board_proto_msgTypes[23].OneofWrappers = []any{}
+	file_board_v1_board_proto_msgTypes[24].OneofWrappers = []any{}
+	file_board_v1_board_proto_msgTypes[25].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_board_v1_board_proto_rawDesc), len(file_board_v1_board_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   21,
+			NumMessages:   26,
 			NumExtensions: 0,
 			NumServices:   3,
 		},

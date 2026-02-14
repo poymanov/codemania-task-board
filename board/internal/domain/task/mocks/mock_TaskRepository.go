@@ -103,3 +103,77 @@ func (_c *TaskRepository_Create_Call) RunAndReturn(run func(ctx context.Context,
 	_c.Call.Return(run)
 	return _c
 }
+
+// GetAll provides a mock function for the type TaskRepository
+func (_mock *TaskRepository) GetAll(ctx context.Context, filter task.GetAllFilter, sort task.GetAllSort) ([]task.Task, error) {
+	ret := _mock.Called(ctx, filter, sort)
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetAll")
+	}
+
+	var r0 []task.Task
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, task.GetAllFilter, task.GetAllSort) ([]task.Task, error)); ok {
+		return returnFunc(ctx, filter, sort)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, task.GetAllFilter, task.GetAllSort) []task.Task); ok {
+		r0 = returnFunc(ctx, filter, sort)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]task.Task)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, task.GetAllFilter, task.GetAllSort) error); ok {
+		r1 = returnFunc(ctx, filter, sort)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// TaskRepository_GetAll_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetAll'
+type TaskRepository_GetAll_Call struct {
+	*mock.Call
+}
+
+// GetAll is a helper method to define mock.On call
+//   - ctx context.Context
+//   - filter task.GetAllFilter
+//   - sort task.GetAllSort
+func (_e *TaskRepository_Expecter) GetAll(ctx interface{}, filter interface{}, sort interface{}) *TaskRepository_GetAll_Call {
+	return &TaskRepository_GetAll_Call{Call: _e.mock.On("GetAll", ctx, filter, sort)}
+}
+
+func (_c *TaskRepository_GetAll_Call) Run(run func(ctx context.Context, filter task.GetAllFilter, sort task.GetAllSort)) *TaskRepository_GetAll_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 task.GetAllFilter
+		if args[1] != nil {
+			arg1 = args[1].(task.GetAllFilter)
+		}
+		var arg2 task.GetAllSort
+		if args[2] != nil {
+			arg2 = args[2].(task.GetAllSort)
+		}
+		run(
+			arg0,
+			arg1,
+			arg2,
+		)
+	})
+	return _c
+}
+
+func (_c *TaskRepository_GetAll_Call) Return(tasks []task.Task, err error) *TaskRepository_GetAll_Call {
+	_c.Call.Return(tasks, err)
+	return _c
+}
+
+func (_c *TaskRepository_GetAll_Call) RunAndReturn(run func(ctx context.Context, filter task.GetAllFilter, sort task.GetAllSort) ([]task.Task, error)) *TaskRepository_GetAll_Call {
+	_c.Call.Return(run)
+	return _c
+}
