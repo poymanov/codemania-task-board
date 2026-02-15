@@ -2,6 +2,7 @@ package column
 
 import (
 	domainColumn "github.com/poymanov/codemania-task-board/board/internal/domain/column"
+	columnUpdatePositionUseCase "github.com/poymanov/codemania-task-board/board/internal/usecase/column/update_position"
 	boardV1 "github.com/poymanov/codemania-task-board/shared/pkg/proto/board/v1"
 )
 
@@ -22,4 +23,11 @@ func GetAllRequestToDomain(req *boardV1.ColumnServiceGetAllRequest) (domainColum
 	sort := domainColumn.NewGetAllSort(positionSort)
 
 	return filter, sort
+}
+
+func UpdatePositionRequestToUseCaseDTO(req *boardV1.ColumnServiceUpdatePositionRequest) columnUpdatePositionUseCase.UpdatePositionDTO {
+	return columnUpdatePositionUseCase.UpdatePositionDTO{
+		LeftPosition:  float64(req.GetLeftPosition()),
+		RightPosition: float64(req.GetRightPosition()),
+	}
 }

@@ -27,16 +27,7 @@ func (r *Repository) GetAll(ctx context.Context, filter domainTask.GetAllFilter,
 	tasks := make([]domainTask.Task, 0, len(models))
 
 	for _, model := range models {
-		task := domainTask.Task{
-			Id:          model.Id,
-			Title:       model.Title,
-			Description: model.Description,
-			Assignee:    model.Assignee,
-			ColumnId:    model.ColumnId,
-			Position:    model.Position,
-		}
-
-		tasks = append(tasks, task)
+		tasks = append(tasks, ConventModelToDomain(model))
 	}
 
 	return tasks, nil

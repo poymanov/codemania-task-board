@@ -5,7 +5,7 @@ import (
 	"errors"
 
 	domainTask "github.com/poymanov/codemania-task-board/board/internal/domain/task"
-	taskUpdatePositionUseCase "github.com/poymanov/codemania-task-board/board/internal/usecase/task/update_position"
+	taskConverter "github.com/poymanov/codemania-task-board/board/internal/infrastructure/converter/task"
 	boardV1 "github.com/poymanov/codemania-task-board/shared/pkg/proto/board/v1"
 	"github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"
@@ -19,10 +19,7 @@ func (s *Service) UpdatePosition(ctx context.Context, req *boardV1.TaskServiceUp
 
 	id := int(req.GetId())
 
-	dto := taskUpdatePositionUseCase.UpdatePositionDTO{
-		LeftPosition:  float64(req.GetLeftPosition()),
-		RightPosition: float64(req.GetRightPosition()),
-	}
+	dto := taskConverter.UpdatePositionRequestToUseCaseDTO(req)
 
 	err := s.taskUpdatePositionUseCase.UpdatePosition(ctx, id, dto)
 	if err != nil {

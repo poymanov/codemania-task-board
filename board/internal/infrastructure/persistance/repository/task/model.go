@@ -1,6 +1,10 @@
 package task
 
-import "time"
+import (
+	"time"
+
+	domainTask "github.com/poymanov/codemania-task-board/board/internal/domain/task"
+)
 
 type Task struct {
 	Id int `db:"id"`
@@ -18,4 +22,15 @@ type Task struct {
 	CreatedAt time.Time `db:"created_at"`
 
 	UpdatedAt *time.Time `db:"updated_at"`
+}
+
+func ConventModelToDomain(model Task) domainTask.Task {
+	return domainTask.Task{
+		Id:          model.Id,
+		Title:       model.Title,
+		Description: model.Description,
+		Assignee:    model.Assignee,
+		ColumnId:    model.ColumnId,
+		Position:    model.Position,
+	}
 }
