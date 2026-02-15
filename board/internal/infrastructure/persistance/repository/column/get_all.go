@@ -27,14 +27,7 @@ func (r *Repository) GetAll(ctx context.Context, filter domainColumn.GetAllFilte
 	columns := make([]domainColumn.Column, 0, len(models))
 
 	for _, model := range models {
-		column := domainColumn.Column{
-			Id:       model.Id,
-			Name:     model.Name,
-			Position: model.Position,
-			BoardId:  model.BoardId,
-		}
-
-		columns = append(columns, column)
+		columns = append(columns, ConventModelToDomain(model))
 	}
 
 	return columns, nil
