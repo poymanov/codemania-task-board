@@ -160,6 +160,52 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/GenericError"
+  /api/v1/boards/{boardId}/columns/{columnId}/update-position:
+    patch:
+      parameters:
+        - in: path
+          name: boardId
+          required: true
+          schema:
+            type: integer
+          description: ID доски
+        - in: path
+          name: columnId
+          required: true
+          schema:
+            type: integer
+          description: ID колонки
+      summary: "Изменение позиции колонки"
+      operationId: ColumnUpdatePosition
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ColumnUpdatePositionRequestBody"
+      tags:
+        - Column
+      responses:
+        '204':
+          description: "Колонка успешно удалена"
+        '400':
+          description: "Ошибка запроса"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        '500':
+          description: "Ошибка сервера"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+        default:
+          description: "Прочие ошибки"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericError"
 components:
   schemas:
     CreateBoardRequestBody:
@@ -190,6 +236,20 @@ components:
           type: string
           description: "Название колонки"
           example: "TODO"
+    ColumnUpdatePositionRequestBody:
+      type: object
+      required:
+        - left_position
+        - right_position
+      properties:
+        left_position:
+          type: number
+          description: "Номер позиции слева"
+          example: 2000
+        right_position:
+          type: number
+          description: "Номер позиции справа"
+          example: 3000
     CreateBoardResponse:
       type: object
       required:

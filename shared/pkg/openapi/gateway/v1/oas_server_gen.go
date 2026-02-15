@@ -32,6 +32,12 @@ type Handler interface {
 	//
 	// DELETE /api/v1/boards/{boardId}/columns/{columnId}
 	ColumnDelete(ctx context.Context, params ColumnDeleteParams) (ColumnDeleteRes, error)
+	// ColumnUpdatePosition implements ColumnUpdatePosition operation.
+	//
+	// Изменение позиции колонки.
+	//
+	// PATCH /api/v1/boards/{boardId}/columns/{columnId}/update-position
+	ColumnUpdatePosition(ctx context.Context, req *ColumnUpdatePositionRequestBody, params ColumnUpdatePositionParams) (ColumnUpdatePositionRes, error)
 	// NewError creates *GenericErrorStatusCode from error returned by handler.
 	//
 	// Used for common default response.

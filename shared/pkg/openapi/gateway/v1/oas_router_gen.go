@@ -121,16 +121,15 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						}
 
 						// Param: "columnId"
-						// Leaf parameter, slashes are prohibited
+						// Match until "/"
 						idx := strings.IndexByte(elem, '/')
-						if idx >= 0 {
-							break
+						if idx < 0 {
+							idx = len(elem)
 						}
-						args[1] = elem
-						elem = ""
+						args[1] = elem[:idx]
+						elem = elem[idx:]
 
 						if len(elem) == 0 {
-							// Leaf node.
 							switch r.Method {
 							case "DELETE":
 								s.handleColumnDeleteRequest([2]string{
@@ -142,6 +141,30 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							}
 
 							return
+						}
+						switch elem[0] {
+						case '/': // Prefix: "/update-position"
+
+							if l := len("/update-position"); len(elem) >= l && elem[0:l] == "/update-position" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "PATCH":
+									s.handleColumnUpdatePositionRequest([2]string{
+										args[0],
+										args[1],
+									}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "PATCH")
+								}
+
+								return
+							}
 						}
 					}
 				}
@@ -319,16 +342,15 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						}
 
 						// Param: "columnId"
-						// Leaf parameter, slashes are prohibited
+						// Match until "/"
 						idx := strings.IndexByte(elem, '/')
-						if idx >= 0 {
-							break
+						if idx < 0 {
+							idx = len(elem)
 						}
-						args[1] = elem
-						elem = ""
+						args[1] = elem[:idx]
+						elem = elem[idx:]
 
 						if len(elem) == 0 {
-							// Leaf node.
 							switch method {
 							case "DELETE":
 								r.name = ColumnDeleteOperation
@@ -341,6 +363,32 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								return r, true
 							default:
 								return
+							}
+						}
+						switch elem[0] {
+						case '/': // Prefix: "/update-position"
+
+							if l := len("/update-position"); len(elem) >= l && elem[0:l] == "/update-position" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "PATCH":
+									r.name = ColumnUpdatePositionOperation
+									r.summary = "Изменение позиции колонки"
+									r.operationID = "ColumnUpdatePosition"
+									r.operationGroup = ""
+									r.pathPattern = "/api/v1/boards/{boardId}/columns/{columnId}/update-position"
+									r.args = args
+									r.count = 2
+									return r, true
+								default:
+									return
+								}
 							}
 						}
 					}

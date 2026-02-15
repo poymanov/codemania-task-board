@@ -38,15 +38,49 @@ func (s *BadRequestError) SetMessage(val string) {
 	s.Message = val
 }
 
-func (*BadRequestError) boardCreateRes()  {}
-func (*BadRequestError) boardGetAllRes()  {}
-func (*BadRequestError) columnCreateRes() {}
-func (*BadRequestError) columnDeleteRes() {}
+func (*BadRequestError) boardCreateRes()          {}
+func (*BadRequestError) boardGetAllRes()          {}
+func (*BadRequestError) columnCreateRes()         {}
+func (*BadRequestError) columnDeleteRes()         {}
+func (*BadRequestError) columnUpdatePositionRes() {}
 
 // ColumnDeleteNoContent is response for ColumnDelete operation.
 type ColumnDeleteNoContent struct{}
 
 func (*ColumnDeleteNoContent) columnDeleteRes() {}
+
+// ColumnUpdatePositionNoContent is response for ColumnUpdatePosition operation.
+type ColumnUpdatePositionNoContent struct{}
+
+func (*ColumnUpdatePositionNoContent) columnUpdatePositionRes() {}
+
+// Ref: #/components/schemas/ColumnUpdatePositionRequestBody
+type ColumnUpdatePositionRequestBody struct {
+	// Номер позиции слева.
+	LeftPosition float64 `json:"left_position"`
+	// Номер позиции справа.
+	RightPosition float64 `json:"right_position"`
+}
+
+// GetLeftPosition returns the value of LeftPosition.
+func (s *ColumnUpdatePositionRequestBody) GetLeftPosition() float64 {
+	return s.LeftPosition
+}
+
+// GetRightPosition returns the value of RightPosition.
+func (s *ColumnUpdatePositionRequestBody) GetRightPosition() float64 {
+	return s.RightPosition
+}
+
+// SetLeftPosition sets the value of LeftPosition.
+func (s *ColumnUpdatePositionRequestBody) SetLeftPosition(val float64) {
+	s.LeftPosition = val
+}
+
+// SetRightPosition sets the value of RightPosition.
+func (s *ColumnUpdatePositionRequestBody) SetRightPosition(val float64) {
+	s.RightPosition = val
+}
 
 // Ref: #/components/schemas/CreateBoardRequestBody
 type CreateBoardRequestBody struct {
@@ -265,9 +299,10 @@ func (s *InternalServerError) SetMessage(val string) {
 	s.Message = val
 }
 
-func (*InternalServerError) boardCreateRes()  {}
-func (*InternalServerError) columnCreateRes() {}
-func (*InternalServerError) columnDeleteRes() {}
+func (*InternalServerError) boardCreateRes()          {}
+func (*InternalServerError) columnCreateRes()         {}
+func (*InternalServerError) columnDeleteRes()         {}
+func (*InternalServerError) columnUpdatePositionRes() {}
 
 // NewOptInt returns new OptInt with value set to v.
 func NewOptInt(v int) OptInt {

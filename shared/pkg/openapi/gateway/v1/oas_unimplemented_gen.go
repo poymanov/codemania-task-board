@@ -49,6 +49,15 @@ func (UnimplementedHandler) ColumnDelete(ctx context.Context, params ColumnDelet
 	return r, ht.ErrNotImplemented
 }
 
+// ColumnUpdatePosition implements ColumnUpdatePosition operation.
+//
+// Изменение позиции колонки.
+//
+// PATCH /api/v1/boards/{boardId}/columns/{columnId}/update-position
+func (UnimplementedHandler) ColumnUpdatePosition(ctx context.Context, req *ColumnUpdatePositionRequestBody, params ColumnUpdatePositionParams) (r ColumnUpdatePositionRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // NewError creates *GenericErrorStatusCode from error returned by handler.
 //
 // Used for common default response.

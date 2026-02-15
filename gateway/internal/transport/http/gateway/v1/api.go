@@ -8,14 +8,16 @@ import (
 	getAllBoardUseCase "github.com/poymanov/codemania-task-board/gateway/internal/usecase/board/get_all"
 	createColumnUseCase "github.com/poymanov/codemania-task-board/gateway/internal/usecase/column/create"
 	deleteColumnUseCase "github.com/poymanov/codemania-task-board/gateway/internal/usecase/column/delete"
+	columnUpdatePositionUseCase "github.com/poymanov/codemania-task-board/gateway/internal/usecase/column/update_position"
 	gatewayV1 "github.com/poymanov/codemania-task-board/shared/pkg/openapi/gateway/v1"
 )
 
 type Api struct {
-	createBoardUseCase  *createBoardUseCase.UseCase
-	getAllBoardUseCase  *getAllBoardUseCase.UseCase
-	createColumnUseCase *createColumnUseCase.UseCase
-	deleteColumnUseCase *deleteColumnUseCase.UseCase
+	createBoardUseCase          *createBoardUseCase.UseCase
+	getAllBoardUseCase          *getAllBoardUseCase.UseCase
+	createColumnUseCase         *createColumnUseCase.UseCase
+	deleteColumnUseCase         *deleteColumnUseCase.UseCase
+	columnUpdatePositionUseCase *columnUpdatePositionUseCase.UseCase
 }
 
 func NewApi(
@@ -23,12 +25,14 @@ func NewApi(
 	getAllBoardUseCase *getAllBoardUseCase.UseCase,
 	createColumnUseCase *createColumnUseCase.UseCase,
 	deleteColumnUseCase *deleteColumnUseCase.UseCase,
+	columnUpdatePositionUseCase *columnUpdatePositionUseCase.UseCase,
 ) *Api {
 	return &Api{
-		createBoardUseCase:  createBoardUseCase,
-		getAllBoardUseCase:  getAllBoardUseCase,
-		createColumnUseCase: createColumnUseCase,
-		deleteColumnUseCase: deleteColumnUseCase,
+		createBoardUseCase:          createBoardUseCase,
+		getAllBoardUseCase:          getAllBoardUseCase,
+		createColumnUseCase:         createColumnUseCase,
+		deleteColumnUseCase:         deleteColumnUseCase,
+		columnUpdatePositionUseCase: columnUpdatePositionUseCase,
 	}
 }
 
