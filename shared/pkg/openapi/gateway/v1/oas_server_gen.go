@@ -20,6 +20,12 @@ type Handler interface {
 	//
 	// GET /api/v1/boards
 	BoardGetAll(ctx context.Context) (BoardGetAllRes, error)
+	// ColumnCreate implements ColumnCreate operation.
+	//
+	// Создание колонки.
+	//
+	// POST /api/v1/boards/{id}/columns
+	ColumnCreate(ctx context.Context, req *CreateColumnRequestBody, params ColumnCreateParams) (ColumnCreateRes, error)
 	// NewError creates *GenericErrorStatusCode from error returned by handler.
 	//
 	// Used for common default response.

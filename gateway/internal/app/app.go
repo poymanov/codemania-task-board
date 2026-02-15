@@ -13,10 +13,12 @@ import (
 	"github.com/gofiber/fiber/v3/middleware/adaptor"
 	loggerMiddleware "github.com/gofiber/fiber/v3/middleware/logger"
 	"github.com/poymanov/codemania-task-board/gateway/internal/config"
-	boardGrpcClientV1 "github.com/poymanov/codemania-task-board/gateway/internal/transport/grpc/client/board/v1"
+	boardGrpcClientV1 "github.com/poymanov/codemania-task-board/gateway/internal/transport/grpc/client/board/v1/board"
+	columnGrpcClientV1 "github.com/poymanov/codemania-task-board/gateway/internal/transport/grpc/client/board/v1/column"
 	apiV1 "github.com/poymanov/codemania-task-board/gateway/internal/transport/http/gateway/v1"
 	createBoardUseCase "github.com/poymanov/codemania-task-board/gateway/internal/usecase/board/create"
 	getAllBoardUseCase "github.com/poymanov/codemania-task-board/gateway/internal/usecase/board/get_all"
+	createColumnUseCase "github.com/poymanov/codemania-task-board/gateway/internal/usecase/column/create"
 	"github.com/poymanov/codemania-task-board/platform/pkg/logger"
 	gatewayV1 "github.com/poymanov/codemania-task-board/shared/pkg/openapi/gateway/v1"
 	boardV1 "github.com/poymanov/codemania-task-board/shared/pkg/proto/board/v1"
@@ -28,9 +30,10 @@ import (
 const defaultInitializationTimeout = time.Second * 10
 
 type App struct {
-	closer      []func() error
-	config      *config.Config
-	boardClient *boardGrpcClientV1.BoardClient
+	closer       []func() error
+	config       *config.Config
+	boardClient  *boardGrpcClientV1.BoardClient
+	columnClient *columnGrpcClientV1.Client
 }
 
 func newApp(ctx context.Context) (*App, error) {
@@ -111,7 +114,7 @@ func (a *App) initConfig(ctx context.Context) error {
 	return nil
 }
 
-func (a *App) initBoardClient(ctx context.Context) error {
+func (a *App) initGrpcClients(ctx context.Context) error {
 	if _, ok := ctx.Deadline(); !ok {
 		var cancel context.CancelFunc
 		ctx, cancel = context.WithTimeout(ctx, defaultInitializationTimeout)
@@ -128,12 +131,14 @@ func (a *App) initBoardClient(ctx context.Context) error {
 			grpc.WithTransportCredentials(insecure.NewCredentials()),
 		)
 		if err != nil {
-			clientErr = fmt.Errorf("failed to connect board grpc: %w", err)
+			clientErr = fmt.Errorf("failed to connect grpc: %w", err)
 		}
 
 		boardServiceClient := boardV1.NewBoardServiceClient(conn)
+		columnServiceClient := boardV1.NewColumnServiceClient(conn)
 
 		a.boardClient = boardGrpcClientV1.NewClient(boardServiceClient)
+		a.columnClient = columnGrpcClientV1.NewClient(columnServiceClient)
 
 		a.closer = append(a.closer, func() error {
 			if cerr := conn.Close(); cerr != nil {
@@ -148,7 +153,7 @@ func (a *App) initBoardClient(ctx context.Context) error {
 
 	select {
 	case <-ctx.Done():
-		clientErr = fmt.Errorf("board gRPC client initialization timed out")
+		clientErr = fmt.Errorf("gRPC clients initialization timed out")
 	case <-chDone:
 	}
 
@@ -169,7 +174,7 @@ func (a *App) initDeps(ctx context.Context) error {
 	inits := []func(ctx context.Context) error{
 		a.initConfig,
 		a.initLogger,
-		a.initBoardClient,
+		a.initGrpcClients,
 	}
 
 	for _, f := range inits {
@@ -191,8 +196,9 @@ func (a *App) initLogger(_ context.Context) error {
 func (a *App) runHttpServer() error {
 	cbuc := createBoardUseCase.NewUseCase(a.boardClient)
 	galbuc := getAllBoardUseCase.NewUseCase(a.boardClient)
+	ccuc := createColumnUseCase.NewUseCase(a.columnClient)
 
-	api := apiV1.NewApi(cbuc, galbuc)
+	api := apiV1.NewApi(cbuc, galbuc, ccuc)
 
 	gatewayServer, err := gatewayV1.NewServer(api)
 	if err != nil {

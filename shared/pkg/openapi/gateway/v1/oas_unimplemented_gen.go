@@ -31,6 +31,15 @@ func (UnimplementedHandler) BoardGetAll(ctx context.Context) (r BoardGetAllRes, 
 	return r, ht.ErrNotImplemented
 }
 
+// ColumnCreate implements ColumnCreate operation.
+//
+// Создание колонки.
+//
+// POST /api/v1/boards/{id}/columns
+func (UnimplementedHandler) ColumnCreate(ctx context.Context, req *CreateColumnRequestBody, params ColumnCreateParams) (r ColumnCreateRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // NewError creates *GenericErrorStatusCode from error returned by handler.
 //
 // Used for common default response.

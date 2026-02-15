@@ -38,8 +38,9 @@ func (s *BadRequestError) SetMessage(val string) {
 	s.Message = val
 }
 
-func (*BadRequestError) boardCreateRes() {}
-func (*BadRequestError) boardGetAllRes() {}
+func (*BadRequestError) boardCreateRes()  {}
+func (*BadRequestError) boardGetAllRes()  {}
+func (*BadRequestError) columnCreateRes() {}
 
 // Ref: #/components/schemas/CreateBoardRequestBody
 type CreateBoardRequestBody struct {
@@ -98,6 +99,40 @@ func (s *CreateBoardResponse) SetBoardID(val int) {
 }
 
 func (*CreateBoardResponse) boardCreateRes() {}
+
+// Ref: #/components/schemas/CreateColumnRequestBody
+type CreateColumnRequestBody struct {
+	// Название колонки.
+	Name string `json:"name"`
+}
+
+// GetName returns the value of Name.
+func (s *CreateColumnRequestBody) GetName() string {
+	return s.Name
+}
+
+// SetName sets the value of Name.
+func (s *CreateColumnRequestBody) SetName(val string) {
+	s.Name = val
+}
+
+// Ref: #/components/schemas/CreateColumnResponse
+type CreateColumnResponse struct {
+	// ID созданной колонки.
+	ColumnID int `json:"column_id"`
+}
+
+// GetColumnID returns the value of ColumnID.
+func (s *CreateColumnResponse) GetColumnID() int {
+	return s.ColumnID
+}
+
+// SetColumnID sets the value of ColumnID.
+func (s *CreateColumnResponse) SetColumnID(val int) {
+	s.ColumnID = val
+}
+
+func (*CreateColumnResponse) columnCreateRes() {}
 
 // Ref: #/components/schemas/GenericError
 type GenericError struct {
@@ -224,7 +259,8 @@ func (s *InternalServerError) SetMessage(val string) {
 	s.Message = val
 }
 
-func (*InternalServerError) boardCreateRes() {}
+func (*InternalServerError) boardCreateRes()  {}
+func (*InternalServerError) columnCreateRes() {}
 
 // NewOptInt returns new OptInt with value set to v.
 func NewOptInt(v int) OptInt {

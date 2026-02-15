@@ -11,6 +11,8 @@ x-ogen:
 tags:
   - name: Board
     description: "Операции с досками"
+  - name: Column
+    description: "Операции с колонками"
 
 paths:
   /api/v1/boards:
@@ -74,6 +76,50 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/GenericError"
+  /api/v1/boards/{id}/columns:
+    post:
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID доски
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateColumnRequestBody"
+      summary: "Создание колонки"
+      operationId: ColumnCreate
+      tags:
+        - Column
+      responses:
+        '200':
+          description: "Колонка успешно создана"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateColumnResponse"
+        '400':
+          description: "Ошибка запроса"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        '500':
+          description: "Ошибка сервера"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+        default:
+          description: "Прочие ошибки"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericError"
 components:
   schemas:
     CreateBoardRequestBody:
@@ -86,7 +132,7 @@ components:
         name:
           type: string
           description: "Название доски"
-          example: "TODO"
+          example: "Project"
         description:
           type: string
           description: "Описание доски"
@@ -95,6 +141,15 @@ components:
           type: integer
           description: "ID автора доски"
           example: 1
+    CreateColumnRequestBody:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          description: "Название колонки"
+          example: "TODO"
     CreateBoardResponse:
       type: object
       required:
@@ -103,6 +158,15 @@ components:
         board_id:
           type: integer
           description: "ID созданной доски"
+          example: 1
+    CreateColumnResponse:
+      type: object
+      required:
+        - column_id
+      properties:
+        column_id:
+          type: integer
+          description: "ID созданной колонки"
           example: 1
     GetAllBoardResponse:
       type: array

@@ -40,6 +40,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		s.notFound(w, r)
 		return
 	}
+	args := [1]string{}
 
 	// Static code generated router with unwrapped path search.
 	switch {
@@ -57,7 +58,6 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			}
 
 			if len(elem) == 0 {
-				// Leaf node.
 				switch r.Method {
 				case "GET":
 					s.handleBoardGetAllRequest([0]string{}, elemIsEscaped, w, r)
@@ -68,6 +68,51 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				}
 
 				return
+			}
+			switch elem[0] {
+			case '/': // Prefix: "/"
+
+				if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				// Param: "id"
+				// Match until "/"
+				idx := strings.IndexByte(elem, '/')
+				if idx < 0 {
+					idx = len(elem)
+				}
+				args[0] = elem[:idx]
+				elem = elem[idx:]
+
+				if len(elem) == 0 {
+					break
+				}
+				switch elem[0] {
+				case '/': // Prefix: "/columns"
+
+					if l := len("/columns"); len(elem) >= l && elem[0:l] == "/columns" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "POST":
+							s.handleColumnCreateRequest([1]string{
+								args[0],
+							}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "POST")
+						}
+
+						return
+					}
+				}
 			}
 		}
 	}
@@ -82,7 +127,7 @@ type Route struct {
 	operationGroup string
 	pathPattern    string
 	count          int
-	args           [0]string
+	args           [1]string
 }
 
 // Name returns ogen operation name.
@@ -164,7 +209,6 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 			}
 
 			if len(elem) == 0 {
-				// Leaf node.
 				switch method {
 				case "GET":
 					r.name = BoardGetAllOperation
@@ -186,6 +230,54 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					return r, true
 				default:
 					return
+				}
+			}
+			switch elem[0] {
+			case '/': // Prefix: "/"
+
+				if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				// Param: "id"
+				// Match until "/"
+				idx := strings.IndexByte(elem, '/')
+				if idx < 0 {
+					idx = len(elem)
+				}
+				args[0] = elem[:idx]
+				elem = elem[idx:]
+
+				if len(elem) == 0 {
+					break
+				}
+				switch elem[0] {
+				case '/': // Prefix: "/columns"
+
+					if l := len("/columns"); len(elem) >= l && elem[0:l] == "/columns" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "POST":
+							r.name = ColumnCreateOperation
+							r.summary = "Создание колонки"
+							r.operationID = "ColumnCreate"
+							r.operationGroup = ""
+							r.pathPattern = "/api/v1/boards/{id}/columns"
+							r.args = args
+							r.count = 1
+							return r, true
+						default:
+							return
+						}
+					}
 				}
 			}
 		}

@@ -3,7 +3,7 @@ package get_all
 import (
 	"context"
 
-	boardGrpcClientV1 "github.com/poymanov/codemania-task-board/gateway/internal/transport/grpc/client/board/v1"
+	boardGrpcClientV1 "github.com/poymanov/codemania-task-board/gateway/internal/transport/grpc/client/board/v1/board"
 )
 
 type UseCase struct {

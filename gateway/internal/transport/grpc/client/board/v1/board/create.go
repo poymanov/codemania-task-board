@@ -1,4 +1,4 @@
-package v1
+package board
 
 import (
 	"context"
@@ -19,23 +19,4 @@ func (c *BoardClient) CreateBoard(ctx context.Context, req CreateBoardRequest) (
 	}
 
 	return int(res.GetBoardId()), nil
-}
-
-func (c *BoardClient) GetAllBoard(ctx context.Context) ([]GetAllBoardDTO, error) {
-	grpcReq := &boardV1.BoardServiceGetAllRequest{}
-
-	res, err := c.generatedClient.GetAll(ctx, grpcReq)
-	if err != nil {
-		return []GetAllBoardDTO{}, err
-	}
-
-	responseBoards := res.GetBoards()
-
-	dtos := make([]GetAllBoardDTO, 0, len(responseBoards))
-
-	for _, board := range responseBoards {
-		dtos = append(dtos, ConvertTransportToDTO(board))
-	}
-
-	return dtos, nil
 }

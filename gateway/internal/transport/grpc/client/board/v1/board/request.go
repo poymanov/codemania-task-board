@@ -1,4 +1,4 @@
-package v1
+package board
 
 type CreateBoardRequest struct {
 	Name string

@@ -8,3 +8,7 @@ type BoardCreateRes interface {
 type BoardGetAllRes interface {
 	boardGetAllRes()
 }
+
+type ColumnCreateRes interface {
+	columnCreateRes()
+}

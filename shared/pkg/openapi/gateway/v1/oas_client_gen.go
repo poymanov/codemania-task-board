@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/go-faster/errors"
+	"github.com/ogen-go/ogen/conv"
 	ht "github.com/ogen-go/ogen/http"
 	"github.com/ogen-go/ogen/otelogen"
 	"github.com/ogen-go/ogen/uri"
@@ -38,6 +39,12 @@ type Invoker interface {
 	//
 	// GET /api/v1/boards
 	BoardGetAll(ctx context.Context) (BoardGetAllRes, error)
+	// ColumnCreate invokes ColumnCreate operation.
+	//
+	// Создание колонки.
+	//
+	// POST /api/v1/boards/{id}/columns
+	ColumnCreate(ctx context.Context, request *CreateColumnRequestBody, params ColumnCreateParams) (ColumnCreateRes, error)
 }
 
 // Client implements OAS client.
@@ -229,6 +236,101 @@ func (c *Client) sendBoardGetAll(ctx context.Context) (res BoardGetAllRes, err e
 
 	stage = "DecodeResponse"
 	result, err := decodeBoardGetAllResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// ColumnCreate invokes ColumnCreate operation.
+//
+// Создание колонки.
+//
+// POST /api/v1/boards/{id}/columns
+func (c *Client) ColumnCreate(ctx context.Context, request *CreateColumnRequestBody, params ColumnCreateParams) (ColumnCreateRes, error) {
+	res, err := c.sendColumnCreate(ctx, request, params)
+	return res, err
+}
+
+func (c *Client) sendColumnCreate(ctx context.Context, request *CreateColumnRequestBody, params ColumnCreateParams) (res ColumnCreateRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("ColumnCreate"),
+		semconv.HTTPRequestMethodKey.String("POST"),
+		semconv.URLTemplateKey.String("/api/v1/boards/{id}/columns"),
+	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, ColumnCreateOperation,
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [3]string
+	pathParts[0] = "/api/v1/boards/"
+	{
+		// Encode "id" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "id",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.IntToString(params.ID))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
+	}
+	pathParts[2] = "/columns"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "POST", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeColumnCreateRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeColumnCreateResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}
