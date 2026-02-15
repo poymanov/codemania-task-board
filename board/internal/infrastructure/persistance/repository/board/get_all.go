@@ -27,14 +27,7 @@ func (r *Repository) GetAll(ctx context.Context, filter domainBoard.GetAllFilter
 	boards := make([]domainBoard.Board, 0, len(boardModels))
 
 	for _, model := range boardModels {
-		board := domainBoard.Board{
-			Id:          model.Id,
-			Name:        model.Name,
-			Description: model.Description,
-			OwnerId:     model.OwnerId,
-		}
-
-		boards = append(boards, board)
+		boards = append(boards, ConvertModelToDomain(model))
 	}
 
 	return boards, nil

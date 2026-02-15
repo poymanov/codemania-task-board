@@ -1710,6 +1710,7 @@ var (
 		(*TaskGetAllSort)(nil),     // 29: board.v1.TaskGetAllSort
 	}
 )
+
 var file_board_v1_board_proto_depIdxs = []int32{
 	25, // 0: board.v1.BoardServiceGetAllRequest.filter:type_name -> board.v1.BoardGetAllFilter
 	26, // 1: board.v1.ColumnServiceGetAllRequest.filter:type_name -> board.v1.ColumnGetAllFilter

@@ -4,6 +4,7 @@ import (
 	"context"
 
 	domainBoard "github.com/poymanov/codemania-task-board/board/internal/domain/board"
+	boardConverter "github.com/poymanov/codemania-task-board/board/internal/infrastructure/converter/board"
 	boardV1 "github.com/poymanov/codemania-task-board/shared/pkg/proto/board/v1"
 	"github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"
@@ -24,12 +25,7 @@ func (s *BoardService) GetAll(ctx context.Context, req *boardV1.BoardServiceGetA
 	responseBoards := make([]*boardV1.Board, 0, len(boards))
 
 	for _, board := range boards {
-		responseBoards = append(responseBoards, &boardV1.Board{
-			Id:          int64(board.Id),
-			Name:        board.Name,
-			Description: board.Description,
-			OwnerId:     int64(board.OwnerId),
-		})
+		responseBoards = append(responseBoards, boardConverter.DomainToTransport(board))
 	}
 
 	return &boardV1.BoardServiceGetAllResponse{
