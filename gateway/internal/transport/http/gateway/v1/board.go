@@ -18,14 +18,33 @@ func (a *Api) BoardCreate(ctx context.Context, req *gatewayV1.CreateBoardRequest
 
 	boardId, err := a.createBoardUseCase.Create(ctx, createBoardDTO)
 	if err != nil {
-		log.Warn().Err(err).Msg("create board failed")
+		log.Error().Err(err).Msg("create board failed")
 		return &gatewayV1.BadRequestError{
 			Code:    http.StatusBadRequest,
-			Message: err.Error(),
+			Message: "Create board failed",
 		}, nil
 	}
 
 	return &gatewayV1.CreateBoardResponse{
 		BoardID: boardId,
 	}, nil
+}
+
+func (a *Api) BoardGetAll(ctx context.Context) (gatewayV1.BoardGetAllRes, error) {
+	boards, err := a.getAllBoardUseCase.GetAll(ctx)
+	if err != nil {
+		log.Error().Err(err).Msg("get all board failed")
+		return &gatewayV1.BadRequestError{
+			Code:    http.StatusBadRequest,
+			Message: "Create board failed",
+		}, nil
+	}
+
+	apiBoards := make(gatewayV1.GetAllBoardResponse, 0, len(boards))
+
+	for _, board := range boards {
+		apiBoards = append(apiBoards, GetAllBoardDTOToTransport(board))
+	}
+
+	return &apiBoards, nil
 }

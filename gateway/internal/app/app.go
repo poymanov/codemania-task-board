@@ -16,6 +16,7 @@ import (
 	boardGrpcClientV1 "github.com/poymanov/codemania-task-board/gateway/internal/transport/grpc/client/board/v1"
 	apiV1 "github.com/poymanov/codemania-task-board/gateway/internal/transport/http/gateway/v1"
 	createBoardUseCase "github.com/poymanov/codemania-task-board/gateway/internal/usecase/board/create"
+	getAllBoardUseCase "github.com/poymanov/codemania-task-board/gateway/internal/usecase/board/get_all"
 	"github.com/poymanov/codemania-task-board/platform/pkg/logger"
 	gatewayV1 "github.com/poymanov/codemania-task-board/shared/pkg/openapi/gateway/v1"
 	boardV1 "github.com/poymanov/codemania-task-board/shared/pkg/proto/board/v1"
@@ -188,8 +189,10 @@ func (a *App) initLogger(_ context.Context) error {
 }
 
 func (a *App) runHttpServer() error {
-	cbUseCase := createBoardUseCase.NewUseCase(a.boardClient)
-	api := apiV1.NewApi(cbUseCase)
+	cbuc := createBoardUseCase.NewUseCase(a.boardClient)
+	galbuc := getAllBoardUseCase.NewUseCase(a.boardClient)
+
+	api := apiV1.NewApi(cbuc, galbuc)
 
 	gatewayServer, err := gatewayV1.NewServer(api)
 	if err != nil {

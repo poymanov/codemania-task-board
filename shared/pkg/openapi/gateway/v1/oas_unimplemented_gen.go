@@ -22,6 +22,15 @@ func (UnimplementedHandler) BoardCreate(ctx context.Context, req *CreateBoardReq
 	return r, ht.ErrNotImplemented
 }
 
+// BoardGetAll implements BoardGetAll operation.
+//
+// Получение досок.
+//
+// GET /api/v1/boards
+func (UnimplementedHandler) BoardGetAll(ctx context.Context) (r BoardGetAllRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // NewError creates *GenericErrorStatusCode from error returned by handler.
 //
 // Used for common default response.

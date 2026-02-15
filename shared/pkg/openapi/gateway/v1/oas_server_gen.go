@@ -14,6 +14,12 @@ type Handler interface {
 	//
 	// POST /api/v1/boards
 	BoardCreate(ctx context.Context, req *CreateBoardRequestBody) (BoardCreateRes, error)
+	// BoardGetAll implements BoardGetAll operation.
+	//
+	// Получение досок.
+	//
+	// GET /api/v1/boards
+	BoardGetAll(ctx context.Context) (BoardGetAllRes, error)
 	// NewError creates *GenericErrorStatusCode from error returned by handler.
 	//
 	// Used for common default response.

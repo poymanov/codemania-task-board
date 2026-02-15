@@ -50,6 +50,30 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/GenericError"
+    get:
+      summary: "Получение досок"
+      operationId: BoardGetAll
+      tags:
+        - Board
+      responses:
+        '200':
+          description: "Успешное получение досок"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetAllBoardResponse"
+        '400':
+          description: "Ошибка запроса"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        default:
+          description: "Прочие ошибки"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericError"
 components:
   schemas:
     CreateBoardRequestBody:
@@ -80,6 +104,27 @@ components:
           type: integer
           description: "ID созданной доски"
           example: 1
+    GetAllBoardResponse:
+      type: array
+      items:
+        type: object
+        required:
+          - id
+          - name
+          - description
+        properties:
+          id:
+            type: integer
+            description: "ID доски"
+            example: 1
+          name:
+            type: string
+            description: "Название доски"
+            example: "Test name"
+          description:
+            type: string
+            description: "Описание доски"
+            example: "Test description"
     BadRequestError:
       type: object
       required:

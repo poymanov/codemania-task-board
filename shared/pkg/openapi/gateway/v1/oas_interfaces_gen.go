@@ -4,3 +4,7 @@ package gateway_v1
 type BoardCreateRes interface {
 	boardCreateRes()
 }
+
+type BoardGetAllRes interface {
+	boardGetAllRes()
+}

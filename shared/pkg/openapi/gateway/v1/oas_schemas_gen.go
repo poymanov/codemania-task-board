@@ -39,6 +39,7 @@ func (s *BadRequestError) SetMessage(val string) {
 }
 
 func (*BadRequestError) boardCreateRes() {}
+func (*BadRequestError) boardGetAllRes() {}
 
 // Ref: #/components/schemas/CreateBoardRequestBody
 type CreateBoardRequestBody struct {
@@ -150,6 +151,49 @@ func (s *GenericErrorStatusCode) SetStatusCode(val int) {
 // SetResponse sets the value of Response.
 func (s *GenericErrorStatusCode) SetResponse(val GenericError) {
 	s.Response = val
+}
+
+type GetAllBoardResponse []GetAllBoardResponseItem
+
+func (*GetAllBoardResponse) boardGetAllRes() {}
+
+type GetAllBoardResponseItem struct {
+	// ID доски.
+	ID int `json:"id"`
+	// Название доски.
+	Name string `json:"name"`
+	// Описание доски.
+	Description string `json:"description"`
+}
+
+// GetID returns the value of ID.
+func (s *GetAllBoardResponseItem) GetID() int {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s *GetAllBoardResponseItem) GetName() string {
+	return s.Name
+}
+
+// GetDescription returns the value of Description.
+func (s *GetAllBoardResponseItem) GetDescription() string {
+	return s.Description
+}
+
+// SetID sets the value of ID.
+func (s *GetAllBoardResponseItem) SetID(val int) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *GetAllBoardResponseItem) SetName(val string) {
+	s.Name = val
+}
+
+// SetDescription sets the value of Description.
+func (s *GetAllBoardResponseItem) SetDescription(val string) {
+	s.Description = val
 }
 
 // Ref: #/components/schemas/InternalServerError
