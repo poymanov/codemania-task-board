@@ -40,6 +40,15 @@ func (UnimplementedHandler) ColumnCreate(ctx context.Context, req *CreateColumnR
 	return r, ht.ErrNotImplemented
 }
 
+// ColumnDelete implements ColumnDelete operation.
+//
+// Удаление колонки.
+//
+// DELETE /api/v1/boards/{boardId}/columns/{columnId}
+func (UnimplementedHandler) ColumnDelete(ctx context.Context, params ColumnDeleteParams) (r ColumnDeleteRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // NewError creates *GenericErrorStatusCode from error returned by handler.
 //
 // Used for common default response.

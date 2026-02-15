@@ -19,6 +19,7 @@ import (
 	createBoardUseCase "github.com/poymanov/codemania-task-board/gateway/internal/usecase/board/create"
 	getAllBoardUseCase "github.com/poymanov/codemania-task-board/gateway/internal/usecase/board/get_all"
 	createColumnUseCase "github.com/poymanov/codemania-task-board/gateway/internal/usecase/column/create"
+	deleteColumnUseCase "github.com/poymanov/codemania-task-board/gateway/internal/usecase/column/delete"
 	"github.com/poymanov/codemania-task-board/platform/pkg/logger"
 	gatewayV1 "github.com/poymanov/codemania-task-board/shared/pkg/openapi/gateway/v1"
 	boardV1 "github.com/poymanov/codemania-task-board/shared/pkg/proto/board/v1"
@@ -197,8 +198,9 @@ func (a *App) runHttpServer() error {
 	cbuc := createBoardUseCase.NewUseCase(a.boardClient)
 	galbuc := getAllBoardUseCase.NewUseCase(a.boardClient)
 	ccuc := createColumnUseCase.NewUseCase(a.columnClient)
+	dcuc := deleteColumnUseCase.NewUseCase(a.columnClient)
 
-	api := apiV1.NewApi(cbuc, galbuc, ccuc)
+	api := apiV1.NewApi(cbuc, galbuc, ccuc, dcuc)
 
 	gatewayServer, err := gatewayV1.NewServer(api)
 	if err != nil {

@@ -26,6 +26,12 @@ type Handler interface {
 	//
 	// POST /api/v1/boards/{id}/columns
 	ColumnCreate(ctx context.Context, req *CreateColumnRequestBody, params ColumnCreateParams) (ColumnCreateRes, error)
+	// ColumnDelete implements ColumnDelete operation.
+	//
+	// Удаление колонки.
+	//
+	// DELETE /api/v1/boards/{boardId}/columns/{columnId}
+	ColumnDelete(ctx context.Context, params ColumnDeleteParams) (ColumnDeleteRes, error)
 	// NewError creates *GenericErrorStatusCode from error returned by handler.
 	//
 	// Used for common default response.

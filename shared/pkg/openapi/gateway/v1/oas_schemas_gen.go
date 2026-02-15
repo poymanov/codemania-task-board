@@ -41,6 +41,12 @@ func (s *BadRequestError) SetMessage(val string) {
 func (*BadRequestError) boardCreateRes()  {}
 func (*BadRequestError) boardGetAllRes()  {}
 func (*BadRequestError) columnCreateRes() {}
+func (*BadRequestError) columnDeleteRes() {}
+
+// ColumnDeleteNoContent is response for ColumnDelete operation.
+type ColumnDeleteNoContent struct{}
+
+func (*ColumnDeleteNoContent) columnDeleteRes() {}
 
 // Ref: #/components/schemas/CreateBoardRequestBody
 type CreateBoardRequestBody struct {
@@ -261,6 +267,7 @@ func (s *InternalServerError) SetMessage(val string) {
 
 func (*InternalServerError) boardCreateRes()  {}
 func (*InternalServerError) columnCreateRes() {}
+func (*InternalServerError) columnDeleteRes() {}
 
 // NewOptInt returns new OptInt with value set to v.
 func NewOptInt(v int) OptInt {

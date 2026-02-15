@@ -9,4 +9,5 @@ const (
 	BoardCreateOperation  OperationName = "BoardCreate"
 	BoardGetAllOperation  OperationName = "BoardGetAll"
 	ColumnCreateOperation OperationName = "ColumnCreate"
+	ColumnDeleteOperation OperationName = "ColumnDelete"
 )

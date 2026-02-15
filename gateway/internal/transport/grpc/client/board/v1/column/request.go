@@ -5,3 +5,7 @@ type CreateColumnRequest struct {
 
 	BoardId int
 }
+
+type DeleteColumnRequest struct {
+	Id int
+}

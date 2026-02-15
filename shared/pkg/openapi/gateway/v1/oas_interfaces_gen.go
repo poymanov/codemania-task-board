@@ -12,3 +12,7 @@ type BoardGetAllRes interface {
 type ColumnCreateRes interface {
 	columnCreateRes()
 }
+
+type ColumnDeleteRes interface {
+	columnDeleteRes()
+}

@@ -120,6 +120,46 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/GenericError"
+  /api/v1/boards/{boardId}/columns/{columnId}:
+    delete:
+      parameters:
+        - in: path
+          name: boardId
+          required: true
+          schema:
+            type: integer
+          description: ID доски
+        - in: path
+          name: columnId
+          required: true
+          schema:
+            type: integer
+          description: ID колонки
+      summary: "Удаление колонки"
+      operationId: ColumnDelete
+      tags:
+        - Column
+      responses:
+        '204':
+          description: "Колонка успешно удалена"
+        '400':
+          description: "Ошибка запроса"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        '500':
+          description: "Ошибка сервера"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+        default:
+          description: "Прочие ошибки"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericError"
 components:
   schemas:
     CreateBoardRequestBody:
