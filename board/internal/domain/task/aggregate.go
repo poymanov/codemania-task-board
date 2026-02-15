@@ -20,21 +20,24 @@ func NewNewTask(title, description, assignee string, columnId int) NewTask {
 }
 
 type GetAllFilter struct {
-	ColumnId int
+	ColumnIds []int
 }
 
 type GetAllSort struct {
+	SortByColumnId string
+
 	SortByPosition string
 }
 
-func NewGetAllFilter(boardId int) GetAllFilter {
+func NewGetAllFilter(columnIds []int) GetAllFilter {
 	return GetAllFilter{
-		ColumnId: boardId,
+		ColumnIds: columnIds,
 	}
 }
 
-func NewGetAllSort(sortByPosition string) GetAllSort {
+func NewGetAllSort(sortByColumnId, sortByPosition string) GetAllSort {
 	return GetAllSort{
+		SortByColumnId: sortByColumnId,
 		SortByPosition: sortByPosition,
 	}
 }

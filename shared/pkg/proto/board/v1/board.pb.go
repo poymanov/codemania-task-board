@@ -1789,7 +1789,7 @@ func (x *ColumnGetAllSort) GetPosition() string {
 type TaskGetAllFilter struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// ID колонки
-	ColumnId      *int64 `protobuf:"varint,1,opt,name=column_id,json=columnId,proto3,oneof" json:"column_id,omitempty"`
+	ColumnIds     []int64 `protobuf:"varint,1,rep,packed,name=column_ids,json=columnIds,proto3" json:"column_ids,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1824,18 +1824,18 @@ func (*TaskGetAllFilter) Descriptor() ([]byte, []int) {
 	return file_board_v1_board_proto_rawDescGZIP(), []int{33}
 }
 
-func (x *TaskGetAllFilter) GetColumnId() int64 {
-	if x != nil && x.ColumnId != nil {
-		return *x.ColumnId
+func (x *TaskGetAllFilter) GetColumnIds() []int64 {
+	if x != nil {
+		return x.ColumnIds
 	}
-	return 0
+	return nil
 }
 
 // Опции сортировки для запроса по всем задачам
 type TaskGetAllSort struct {
-	state protoimpl.MessageState `protogen:"open.v1"`
-	// Порядок сортировки по позиции
-	Position      *string `protobuf:"bytes,1,opt,name=position,proto3,oneof" json:"position,omitempty"`
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ColumnId      *string                `protobuf:"bytes,1,opt,name=column_id,json=columnId,proto3,oneof" json:"column_id,omitempty"`
+	Position      *string                `protobuf:"bytes,2,opt,name=position,proto3,oneof" json:"position,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1868,6 +1868,13 @@ func (x *TaskGetAllSort) ProtoReflect() protoreflect.Message {
 // Deprecated: Use TaskGetAllSort.ProtoReflect.Descriptor instead.
 func (*TaskGetAllSort) Descriptor() ([]byte, []int) {
 	return file_board_v1_board_proto_rawDescGZIP(), []int{34}
+}
+
+func (x *TaskGetAllSort) GetColumnId() string {
+	if x != nil && x.ColumnId != nil {
+		return *x.ColumnId
+	}
+	return ""
 }
 
 func (x *TaskGetAllSort) GetPosition() string {
@@ -1987,13 +1994,15 @@ const file_board_v1_board_proto_rawDesc = "" +
 	"\t_board_id\"I\n" +
 	"\x10ColumnGetAllSort\x12(\n" +
 	"\bposition\x18\x01 \x01(\tB\a\xfaB\x04r\x02\x10\x01H\x00R\bposition\x88\x01\x01B\v\n" +
-	"\t_position\"K\n" +
-	"\x10TaskGetAllFilter\x12)\n" +
-	"\tcolumn_id\x18\x01 \x01(\x03B\a\xfaB\x04\"\x02(\x01H\x00R\bcolumnId\x88\x01\x01B\f\n" +
+	"\t_position\"?\n" +
+	"\x10TaskGetAllFilter\x12+\n" +
 	"\n" +
-	"_column_id\"G\n" +
-	"\x0eTaskGetAllSort\x12(\n" +
-	"\bposition\x18\x01 \x01(\tB\a\xfaB\x04r\x02\x10\x01H\x00R\bposition\x88\x01\x01B\v\n" +
+	"column_ids\x18\x01 \x03(\x03B\f\xfaB\t\x92\x01\x06\"\x04\"\x02(\x01R\tcolumnIds\"\x80\x01\n" +
+	"\x0eTaskGetAllSort\x12)\n" +
+	"\tcolumn_id\x18\x01 \x01(\tB\a\xfaB\x04r\x02\x10\x01H\x00R\bcolumnId\x88\x01\x01\x12(\n" +
+	"\bposition\x18\x02 \x01(\tB\a\xfaB\x04r\x02\x10\x01H\x01R\bposition\x88\x01\x01B\f\n" +
+	"\n" +
+	"_column_idB\v\n" +
 	"\t_position2\xe8\x02\n" +
 	"\fBoardService\x12S\n" +
 	"\x06Create\x12#.board.v1.BoardServiceCreateRequest\x1a$.board.v1.BoardServiceCreateResponse\x12S\n" +
@@ -2115,7 +2124,6 @@ func file_board_v1_board_proto_init() {
 	file_board_v1_board_proto_msgTypes[30].OneofWrappers = []any{}
 	file_board_v1_board_proto_msgTypes[31].OneofWrappers = []any{}
 	file_board_v1_board_proto_msgTypes[32].OneofWrappers = []any{}
-	file_board_v1_board_proto_msgTypes[33].OneofWrappers = []any{}
 	file_board_v1_board_proto_msgTypes[34].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{

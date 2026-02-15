@@ -18,11 +18,18 @@ func DomainToTransport(task domainTask.Task) *boardV1.Task {
 }
 
 func GetAllRequestToDomain(req *boardV1.TaskServiceGetAllRequest) (domainTask.GetAllFilter, domainTask.GetAllSort) {
-	columnId := int(req.GetFilter().GetColumnId())
+	columnIdsReq := req.GetFilter().GetColumnIds()
+	columnIdSort := req.GetSort().GetColumnId()
 	positionSort := req.GetSort().GetPosition()
 
-	filter := domainTask.NewGetAllFilter(columnId)
-	sort := domainTask.NewGetAllSort(positionSort)
+	columnIds := make([]int, 0, len(columnIdsReq))
+
+	for _, columnId := range columnIdsReq {
+		columnIds = append(columnIds, int(columnId))
+	}
+
+	filter := domainTask.NewGetAllFilter(columnIds)
+	sort := domainTask.NewGetAllSort(columnIdSort, positionSort)
 
 	return filter, sort
 }

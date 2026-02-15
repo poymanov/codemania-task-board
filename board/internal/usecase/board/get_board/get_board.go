@@ -33,29 +33,26 @@ func (u *UseCase) GetBoard(ctx context.Context, id int) (domainCommon.Board, err
 		return domainCommon.Board{}, err
 	}
 
-	boardFilter := domainColumn.NewGetAllFilter(board.Id)
-	boardSort := domainColumn.NewGetAllSort("asc")
-
-	columns, err := u.columnRepository.GetAll(ctx, boardFilter, boardSort)
+	columns, err := u.getColumns(ctx, board.Id)
 	if err != nil {
-		return domainCommon.Board{}, nil
+		return domainCommon.Board{}, err
+	}
+
+	tasks, err := u.getTasks(ctx, columns)
+	if err != nil {
+		return domainCommon.Board{}, err
 	}
 
 	commonColumns := make([]domainCommon.Column, 0, len(columns))
 
 	for _, column := range columns {
-		taskFilter := domainTask.NewGetAllFilter(column.Id)
-		taskSort := domainTask.NewGetAllSort("asc")
-
-		tasks, errTasks := u.taskRepository.GetAll(ctx, taskFilter, taskSort)
-
-		if errTasks != nil {
-			return domainCommon.Board{}, errTasks
-		}
-
-		commonTasks := make([]domainCommon.Task, 0, len(tasks))
+		var commonTasks []domainCommon.Task
 
 		for _, task := range tasks {
+			if task.ColumnId != column.Id {
+				continue
+			}
+
 			commonTasks = append(commonTasks, domainCommon.Task{
 				Id:          task.Id,
 				Description: task.Description,
@@ -81,4 +78,24 @@ func (u *UseCase) GetBoard(ctx context.Context, id int) (domainCommon.Board, err
 	}
 
 	return commonBoard, err
+}
+
+func (u *UseCase) getColumns(ctx context.Context, boardId int) ([]domainColumn.Column, error) {
+	columnFilter := domainColumn.NewGetAllFilter(boardId)
+	columnSort := domainColumn.NewGetAllSort("asc")
+
+	return u.columnRepository.GetAll(ctx, columnFilter, columnSort)
+}
+
+func (u *UseCase) getTasks(ctx context.Context, columns []domainColumn.Column) ([]domainTask.Task, error) {
+	columnIds := make([]int, 0, len(columns))
+
+	for _, column := range columns {
+		columnIds = append(columnIds, column.Id)
+	}
+
+	taskFilter := domainTask.NewGetAllFilter(columnIds)
+	taskSort := domainTask.NewGetAllSort("asc", "asc")
+
+	return u.taskRepository.GetAll(ctx, taskFilter, taskSort)
 }

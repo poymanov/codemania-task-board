@@ -4069,10 +4069,12 @@ func (m *TaskGetAllFilter) validate(all bool) error {
 
 	var errors []error
 
-	if m.ColumnId != nil {
-		if m.GetColumnId() < 1 {
+	for idx, item := range m.GetColumnIds() {
+		_, _ = idx, item
+
+		if item < 1 {
 			err := TaskGetAllFilterValidationError{
-				field:  "ColumnId",
+				field:  fmt.Sprintf("ColumnIds[%v]", idx),
 				reason: "value must be greater than or equal to 1",
 			}
 			if !all {
@@ -4080,6 +4082,7 @@ func (m *TaskGetAllFilter) validate(all bool) error {
 			}
 			errors = append(errors, err)
 		}
+
 	}
 
 	if len(errors) > 0 {
@@ -4181,6 +4184,19 @@ func (m *TaskGetAllSort) validate(all bool) error {
 	}
 
 	var errors []error
+
+	if m.ColumnId != nil {
+		if utf8.RuneCountInString(m.GetColumnId()) < 1 {
+			err := TaskGetAllSortValidationError{
+				field:  "ColumnId",
+				reason: "value length must be at least 1 runes",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+	}
 
 	if m.Position != nil {
 		if utf8.RuneCountInString(m.GetPosition()) < 1 {

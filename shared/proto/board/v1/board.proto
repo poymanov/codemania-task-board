@@ -308,11 +308,14 @@ message ColumnGetAllSort {
 // Фильтр для запроса по всем задачам
 message TaskGetAllFilter {
   // ID колонки
-  optional int64 column_id = 1 [(validate.rules).int64.gte = 1];
+  repeated int64 column_ids = 1 [(validate.rules).repeated = {items: {
+    int64: {gte: 1}
+  }}];
 }
 
 // Опции сортировки для запроса по всем задачам
 message TaskGetAllSort {
-  // Порядок сортировки по позиции
-  optional string position = 1 [(validate.rules).string = {min_len: 1}];
+  optional string column_id = 1 [(validate.rules).string = {min_len: 1}];
+
+  optional string position = 2 [(validate.rules).string = {min_len: 1}];
 }

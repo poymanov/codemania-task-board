@@ -41,9 +41,13 @@ func getQuery(filter domainTask.GetAllFilter, sort domainTask.GetAllSort) (strin
 
 	query := "SELECT * FROM tasks"
 
-	if filter.ColumnId != 0 {
-		conditions = append(conditions, fmt.Sprintf("column_id = $%d", argsPos))
-		args = append(args, filter.ColumnId)
+	if len(filter.ColumnIds) > 0 {
+		conditions = append(conditions, fmt.Sprintf("column_id = ANY($%d)", argsPos))
+		args = append(args, filter.ColumnIds)
+	}
+
+	if sort.SortByColumnId != "" && (strings.ToLower(sort.SortByColumnId) == "asc" || strings.ToLower(sort.SortByColumnId) == "desc") {
+		sorts = append(sorts, fmt.Sprintf("column_id %s", sort.SortByColumnId))
 	}
 
 	if sort.SortByPosition != "" && (strings.ToLower(sort.SortByPosition) == "asc" || strings.ToLower(sort.SortByPosition) == "desc") {
