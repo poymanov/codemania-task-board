@@ -22,6 +22,7 @@ import (
 	boardCreateUseCase "github.com/poymanov/codemania-task-board/board/internal/usecase/board/create"
 	boardDeleteUseCase "github.com/poymanov/codemania-task-board/board/internal/usecase/board/delete"
 	boardGetAllUseCase "github.com/poymanov/codemania-task-board/board/internal/usecase/board/get_all"
+	boardGetBoardUseCase "github.com/poymanov/codemania-task-board/board/internal/usecase/board/get_board"
 	columnCreateUseCase "github.com/poymanov/codemania-task-board/board/internal/usecase/column/create"
 	columnDeleteUseCase "github.com/poymanov/codemania-task-board/board/internal/usecase/column/delete"
 	columnGetAllUseCase "github.com/poymanov/codemania-task-board/board/internal/usecase/column/get_all"
@@ -213,13 +214,16 @@ func (a *App) runMigrator() error {
 
 func (a *App) runGrpcServer() {
 	br := boardRepository.NewRepository(a.dbConnectionPool)
+	cr := columnRepository.NewRepository(a.dbConnectionPool)
+	tr := taskRepository.NewRepository(a.dbConnectionPool)
+
 	bcuc := boardCreateUseCase.NewUseCase(br)
 	bgauc := boardGetAllUseCase.NewUseCase(br)
 	bduc := boardDeleteUseCase.NewUseCase(br)
+	bgbuc := boardGetBoardUseCase.NewUseCase(br, cr, tr)
 
-	boardService := transportBoardV1.NewBoardService(bcuc, bgauc, bduc)
+	boardService := transportBoardV1.NewBoardService(bcuc, bgauc, bduc, bgbuc)
 
-	cr := columnRepository.NewRepository(a.dbConnectionPool)
 	ccuc := columnCreateUseCase.NewUseCase(br, cr)
 	cgauc := columnGetAllUseCase.NewUseCase(cr)
 	cduc := columnDeleteUseCase.NewUseCase(cr)
@@ -227,7 +231,6 @@ func (a *App) runGrpcServer() {
 
 	columnService := transportColumnV1.NewService(ccuc, cgauc, cduc, cupuc)
 
-	tr := taskRepository.NewRepository(a.dbConnectionPool)
 	tcuc := taskCreateUseCase.NewUseCase(cr, tr)
 	tgauc := taskGetAllUseCase.NewUseCase(tr)
 	tduc := taskGetDeleteUseCase.NewUseCase(tr)

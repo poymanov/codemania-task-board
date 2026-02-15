@@ -229,6 +229,72 @@ func (_c *BoardRepository_GetAll_Call) RunAndReturn(run func(ctx context.Context
 	return _c
 }
 
+// GetById provides a mock function for the type BoardRepository
+func (_mock *BoardRepository) GetById(ctx context.Context, id int) (board.Board, error) {
+	ret := _mock.Called(ctx, id)
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetById")
+	}
+
+	var r0 board.Board
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, int) (board.Board, error)); ok {
+		return returnFunc(ctx, id)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, int) board.Board); ok {
+		r0 = returnFunc(ctx, id)
+	} else {
+		r0 = ret.Get(0).(board.Board)
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, int) error); ok {
+		r1 = returnFunc(ctx, id)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// BoardRepository_GetById_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetById'
+type BoardRepository_GetById_Call struct {
+	*mock.Call
+}
+
+// GetById is a helper method to define mock.On call
+//   - ctx context.Context
+//   - id int
+func (_e *BoardRepository_Expecter) GetById(ctx interface{}, id interface{}) *BoardRepository_GetById_Call {
+	return &BoardRepository_GetById_Call{Call: _e.mock.On("GetById", ctx, id)}
+}
+
+func (_c *BoardRepository_GetById_Call) Run(run func(ctx context.Context, id int)) *BoardRepository_GetById_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 int
+		if args[1] != nil {
+			arg1 = args[1].(int)
+		}
+		run(
+			arg0,
+			arg1,
+		)
+	})
+	return _c
+}
+
+func (_c *BoardRepository_GetById_Call) Return(board1 board.Board, err error) *BoardRepository_GetById_Call {
+	_c.Call.Return(board1, err)
+	return _c
+}
+
+func (_c *BoardRepository_GetById_Call) RunAndReturn(run func(ctx context.Context, id int) (board.Board, error)) *BoardRepository_GetById_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // IsExistsById provides a mock function for the type BoardRepository
 func (_mock *BoardRepository) IsExistsById(ctx context.Context, ID int) (bool, error) {
 	ret := _mock.Called(ctx, ID)

@@ -10,6 +10,7 @@ service BoardService {
   rpc Create(BoardServiceCreateRequest) returns (BoardServiceCreateResponse);
   rpc GetAll(BoardServiceGetAllRequest) returns (BoardServiceGetAllResponse);
   rpc Delete(BoardServiceDeleteRequest) returns (BoardServiceDeleteResponse);
+  rpc GetBoard(BoardServiceGetBoardRequest) returns (BoardServiceGetBoardResponse);
 }
 
 service ColumnService {
@@ -175,6 +176,66 @@ message TaskServiceUpdatePositionResponse {
 
 }
 
+// Запрос на получение доски
+message BoardServiceGetBoardRequest {
+  // ID доски
+  int64 id = 1  [(validate.rules).int64.gte = 1];
+}
+
+// Ответ на получение доски
+message BoardServiceGetBoardResponse {
+  BoardGetBoard board = 1;
+}
+
+// Доска со списком связанных колонок
+message BoardGetBoard {
+  // ID доски
+  int64 id = 1;
+
+  // Название доски
+  string name = 2;
+
+  // Описание доски
+  string description = 3;
+
+  // ID владельца доски
+  int64 owner_id = 4;
+
+  repeated ColumnGetBoard columns = 5;
+}
+
+// Колонки со списком связанных задач
+message ColumnGetBoard {
+  // ID колонки
+  int64 id = 1;
+
+  // Название колонки
+  string name = 2;
+
+  // Порядок расположения доски
+  float position = 3;
+
+  repeated TaskGetBoard tasks = 4;
+}
+
+// Задача
+message TaskGetBoard {
+  // ID
+  int64 id = 1;
+
+  // Название
+  string title = 2;
+
+  // Описание
+  string description = 3;
+
+  // Ответственный
+  string assignee = 4;
+
+  // Порядок расположения
+  float position = 5;
+}
+
 // Доска
 message Board {
   // ID доски
@@ -225,7 +286,6 @@ message Task {
   // ID колонки, к которой принадлежит задача
   int64 column_id = 6;
 }
-
 
 // Фильтр для запроса по всем доскам
 message BoardGetAllFilter {
