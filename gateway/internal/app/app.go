@@ -16,10 +16,10 @@ import (
 	boardGrpcClientV1 "github.com/poymanov/codemania-task-board/gateway/internal/transport/grpc/client/board/v1/board"
 	columnGrpcClientV1 "github.com/poymanov/codemania-task-board/gateway/internal/transport/grpc/client/board/v1/column"
 	apiV1 "github.com/poymanov/codemania-task-board/gateway/internal/transport/http/gateway/v1"
-	createBoardUseCase "github.com/poymanov/codemania-task-board/gateway/internal/usecase/board/create"
-	getAllBoardUseCase "github.com/poymanov/codemania-task-board/gateway/internal/usecase/board/get_all"
-	createColumnUseCase "github.com/poymanov/codemania-task-board/gateway/internal/usecase/column/create"
-	deleteColumnUseCase "github.com/poymanov/codemania-task-board/gateway/internal/usecase/column/delete"
+	boardCreateUseCase "github.com/poymanov/codemania-task-board/gateway/internal/usecase/board/create"
+	boardGetAllUseCase "github.com/poymanov/codemania-task-board/gateway/internal/usecase/board/get_all"
+	columnCreateUseCase "github.com/poymanov/codemania-task-board/gateway/internal/usecase/column/create"
+	columnDeleteUseCase "github.com/poymanov/codemania-task-board/gateway/internal/usecase/column/delete"
 	columnUpdatePositionUseCase "github.com/poymanov/codemania-task-board/gateway/internal/usecase/column/update_position"
 	"github.com/poymanov/codemania-task-board/platform/pkg/logger"
 	gatewayV1 "github.com/poymanov/codemania-task-board/shared/pkg/openapi/gateway/v1"
@@ -196,13 +196,13 @@ func (a *App) initLogger(_ context.Context) error {
 }
 
 func (a *App) runHttpServer() error {
-	cbuc := createBoardUseCase.NewUseCase(a.boardClient)
-	galbuc := getAllBoardUseCase.NewUseCase(a.boardClient)
-	ccuc := createColumnUseCase.NewUseCase(a.columnClient)
-	dcuc := deleteColumnUseCase.NewUseCase(a.columnClient)
+	bcuc := boardCreateUseCase.NewUseCase(a.boardClient)
+	bgauc := boardGetAllUseCase.NewUseCase(a.boardClient)
+	ccuc := columnCreateUseCase.NewUseCase(a.columnClient)
+	cduc := columnDeleteUseCase.NewUseCase(a.columnClient)
 	cupuc := columnUpdatePositionUseCase.NewUseCase(a.columnClient)
 
-	api := apiV1.NewApi(cbuc, galbuc, ccuc, dcuc, cupuc)
+	api := apiV1.NewApi(bcuc, bgauc, ccuc, cduc, cupuc)
 
 	gatewayServer, err := gatewayV1.NewServer(api)
 	if err != nil {

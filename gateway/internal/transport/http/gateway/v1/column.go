@@ -4,19 +4,19 @@ import (
 	"context"
 	"net/http"
 
-	createColumnUseCase "github.com/poymanov/codemania-task-board/gateway/internal/usecase/column/create"
+	columnCreateUseCase "github.com/poymanov/codemania-task-board/gateway/internal/usecase/column/create"
 	columnUpdatePositionUseCase "github.com/poymanov/codemania-task-board/gateway/internal/usecase/column/update_position"
 	gatewayV1 "github.com/poymanov/codemania-task-board/shared/pkg/openapi/gateway/v1"
 	"github.com/rs/zerolog/log"
 )
 
 func (a *Api) ColumnCreate(ctx context.Context, req *gatewayV1.CreateColumnRequestBody, params gatewayV1.ColumnCreateParams) (gatewayV1.ColumnCreateRes, error) {
-	createColumnDTO := createColumnUseCase.CreateColumnDTO{
+	createColumnDTO := columnCreateUseCase.CreateColumnDTO{
 		Name:    req.GetName(),
 		BoardId: params.ID,
 	}
 
-	columnId, err := a.createColumnUseCase.Create(ctx, createColumnDTO)
+	columnId, err := a.columnCreateUseCase.Create(ctx, createColumnDTO)
 	if err != nil {
 		log.Error().Err(err).Msg("create column failed")
 		return &gatewayV1.BadRequestError{
@@ -31,7 +31,7 @@ func (a *Api) ColumnCreate(ctx context.Context, req *gatewayV1.CreateColumnReque
 }
 
 func (a *Api) ColumnDelete(ctx context.Context, params gatewayV1.ColumnDeleteParams) (gatewayV1.ColumnDeleteRes, error) {
-	err := a.deleteColumnUseCase.Delete(ctx, params.ColumnId)
+	err := a.columnDeleteUseCase.Delete(ctx, params.ColumnId)
 	if err != nil {
 		log.Error().Err(err).Msg("create column failed")
 		return &gatewayV1.BadRequestError{

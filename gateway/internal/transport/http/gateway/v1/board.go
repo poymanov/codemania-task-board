@@ -16,7 +16,7 @@ func (a *Api) BoardCreate(ctx context.Context, req *gatewayV1.CreateBoardRequest
 		OwnerId:     req.GetOwnerID(),
 	}
 
-	boardId, err := a.createBoardUseCase.Create(ctx, createBoardDTO)
+	boardId, err := a.boardCreateUseCase.Create(ctx, createBoardDTO)
 	if err != nil {
 		log.Error().Err(err).Msg("create board failed")
 		return &gatewayV1.BadRequestError{
@@ -31,7 +31,7 @@ func (a *Api) BoardCreate(ctx context.Context, req *gatewayV1.CreateBoardRequest
 }
 
 func (a *Api) BoardGetAll(ctx context.Context) (gatewayV1.BoardGetAllRes, error) {
-	boards, err := a.getAllBoardUseCase.GetAll(ctx)
+	boards, err := a.boardGetAllUseCase.GetAll(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("get all board failed")
 		return &gatewayV1.BadRequestError{
