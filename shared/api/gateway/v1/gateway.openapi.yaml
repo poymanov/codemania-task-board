@@ -13,6 +13,8 @@ tags:
     description: "Операции с досками"
   - name: Column
     description: "Операции с колонками"
+  - name: Task
+    description: "Операции с задачами"
 
 paths:
   /api/v1/boards:
@@ -230,7 +232,7 @@ paths:
             schema:
               $ref: "#/components/schemas/TaskCreateRequestBody"
       tags:
-        - Column
+        - Task
       responses:
         '200':
           description: "Задача успешно создана"
@@ -238,6 +240,52 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/TaskCreateResponse"
+        '400':
+          description: "Ошибка запроса"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        '500':
+          description: "Ошибка сервера"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+        default:
+          description: "Прочие ошибки"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericError"
+  /api/v1/boards/{boardId}/columns/{columnId}/tasks/{taskId}:
+    post:
+      parameters:
+        - in: path
+          name: boardId
+          required: true
+          schema:
+            type: integer
+          description: ID доски
+        - in: path
+          name: columnId
+          required: true
+          schema:
+            type: integer
+          description: ID колонки
+        - in: path
+          name: taskId
+          required: true
+          schema:
+            type: integer
+          description: ID задачи
+      summary: "Удаление задачи"
+      operationId: TaskDelete
+      tags:
+        - Task
+      responses:
+        '204':
+          description: "Задача успешно удалена"
         '400':
           description: "Ошибка запроса"
           content:

@@ -67,6 +67,15 @@ func (UnimplementedHandler) TaskCreate(ctx context.Context, req *TaskCreateReque
 	return r, ht.ErrNotImplemented
 }
 
+// TaskDelete implements TaskDelete operation.
+//
+// Удаление задачи.
+//
+// POST /api/v1/boards/{boardId}/columns/{columnId}/tasks/{taskId}
+func (UnimplementedHandler) TaskDelete(ctx context.Context, params TaskDeleteParams) (r TaskDeleteRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // NewError creates *GenericErrorStatusCode from error returned by handler.
 //
 // Used for common default response.

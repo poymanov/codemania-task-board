@@ -30,3 +30,16 @@ func (a *Api) TaskCreate(ctx context.Context, req *gatewayV1.TaskCreateRequestBo
 		TaskID: taskId,
 	}, nil
 }
+
+func (a *Api) TaskDelete(ctx context.Context, params gatewayV1.TaskDeleteParams) (gatewayV1.TaskDeleteRes, error) {
+	err := a.taskDeleteUseCase.Delete(ctx, params.TaskId)
+	if err != nil {
+		log.Error().Err(err).Msg("delete task failed")
+		return &gatewayV1.BadRequestError{
+			Code:    http.StatusBadRequest,
+			Message: "Delete task failed",
+		}, nil
+	}
+
+	return &gatewayV1.TaskDeleteNoContent{}, nil
+}

@@ -44,6 +44,7 @@ func (*BadRequestError) columnCreateRes()         {}
 func (*BadRequestError) columnDeleteRes()         {}
 func (*BadRequestError) columnUpdatePositionRes() {}
 func (*BadRequestError) taskCreateRes()           {}
+func (*BadRequestError) taskDeleteRes()           {}
 
 // ColumnDeleteNoContent is response for ColumnDelete operation.
 type ColumnDeleteNoContent struct{}
@@ -305,6 +306,7 @@ func (*InternalServerError) columnCreateRes()         {}
 func (*InternalServerError) columnDeleteRes()         {}
 func (*InternalServerError) columnUpdatePositionRes() {}
 func (*InternalServerError) taskCreateRes()           {}
+func (*InternalServerError) taskDeleteRes()           {}
 
 // NewOptInt returns new OptInt with value set to v.
 func NewOptInt(v int) OptInt {
@@ -455,3 +457,8 @@ func (s *TaskCreateResponse) SetTaskID(val int) {
 }
 
 func (*TaskCreateResponse) taskCreateRes() {}
+
+// TaskDeleteNoContent is response for TaskDelete operation.
+type TaskDeleteNoContent struct{}
+
+func (*TaskDeleteNoContent) taskDeleteRes() {}

@@ -24,3 +24,7 @@ type ColumnUpdatePositionRes interface {
 type TaskCreateRes interface {
 	taskCreateRes()
 }
+
+type TaskDeleteRes interface {
+	taskDeleteRes()
+}

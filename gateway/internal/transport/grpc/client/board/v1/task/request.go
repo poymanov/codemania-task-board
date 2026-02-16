@@ -9,3 +9,7 @@ type CreateTaskRequest struct {
 
 	ColumnId int
 }
+
+type DeleteTaskRequest struct {
+	Id int
+}

@@ -23,6 +23,7 @@ import (
 	columnDeleteUseCase "github.com/poymanov/codemania-task-board/gateway/internal/usecase/column/delete"
 	columnUpdatePositionUseCase "github.com/poymanov/codemania-task-board/gateway/internal/usecase/column/update_position"
 	taskCreateUseCase "github.com/poymanov/codemania-task-board/gateway/internal/usecase/task/create"
+	taskDeleteUseCase "github.com/poymanov/codemania-task-board/gateway/internal/usecase/task/delete"
 	"github.com/poymanov/codemania-task-board/platform/pkg/logger"
 	gatewayV1 "github.com/poymanov/codemania-task-board/shared/pkg/openapi/gateway/v1"
 	boardV1 "github.com/poymanov/codemania-task-board/shared/pkg/proto/board/v1"
@@ -207,8 +208,9 @@ func (a *App) runHttpServer() error {
 	cduc := columnDeleteUseCase.NewUseCase(a.columnClient)
 	cupuc := columnUpdatePositionUseCase.NewUseCase(a.columnClient)
 	tcuc := taskCreateUseCase.NewUseCase(a.taskClient)
+	tduc := taskDeleteUseCase.NewUseCase(a.taskClient)
 
-	api := apiV1.NewApi(bcuc, bgauc, ccuc, cduc, cupuc, tcuc)
+	api := apiV1.NewApi(bcuc, bgauc, ccuc, cduc, cupuc, tcuc, tduc)
 
 	gatewayServer, err := gatewayV1.NewServer(api)
 	if err != nil {

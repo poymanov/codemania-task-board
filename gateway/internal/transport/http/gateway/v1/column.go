@@ -36,7 +36,7 @@ func (a *Api) ColumnDelete(ctx context.Context, params gatewayV1.ColumnDeletePar
 		log.Error().Err(err).Msg("create column failed")
 		return &gatewayV1.BadRequestError{
 			Code:    http.StatusBadRequest,
-			Message: "Create column failed",
+			Message: "Delete column failed",
 		}, nil
 	}
 
@@ -55,7 +55,7 @@ func (a *Api) ColumnUpdatePosition(ctx context.Context, req *gatewayV1.ColumnUpd
 		log.Error().Err(err).Any("request", req).Any("params", params).Msg("update position column failed")
 		return &gatewayV1.BadRequestError{
 			Code:    http.StatusBadRequest,
-			Message: "Create column failed",
+			Message: "Change column position failed",
 		}, nil
 	}
 

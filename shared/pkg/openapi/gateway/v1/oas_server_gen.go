@@ -44,6 +44,12 @@ type Handler interface {
 	//
 	// POST /api/v1/boards/{boardId}/columns/{columnId}/tasks
 	TaskCreate(ctx context.Context, req *TaskCreateRequestBody, params TaskCreateParams) (TaskCreateRes, error)
+	// TaskDelete implements TaskDelete operation.
+	//
+	// Удаление задачи.
+	//
+	// POST /api/v1/boards/{boardId}/columns/{columnId}/tasks/{taskId}
+	TaskDelete(ctx context.Context, params TaskDeleteParams) (TaskDeleteRes, error)
 	// NewError creates *GenericErrorStatusCode from error returned by handler.
 	//
 	// Used for common default response.
