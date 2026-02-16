@@ -69,6 +69,12 @@ type Invoker interface {
 	//
 	// POST /api/v1/boards/{boardId}/columns/{columnId}/tasks/{taskId}
 	TaskDelete(ctx context.Context, params TaskDeleteParams) (TaskDeleteRes, error)
+	// TaskUpdatePosition invokes TaskUpdatePosition operation.
+	//
+	// Изменение позиции задачи.
+	//
+	// PATCH /api/v1/boards/{boardId}/columns/{columnId}/tasks/{taskId}/update-position
+	TaskUpdatePosition(ctx context.Context, request *TaskUpdatePositionRequestBody, params TaskUpdatePositionParams) (TaskUpdatePositionRes, error)
 }
 
 // Client implements OAS client.
@@ -822,6 +828,139 @@ func (c *Client) sendTaskDelete(ctx context.Context, params TaskDeleteParams) (r
 
 	stage = "DecodeResponse"
 	result, err := decodeTaskDeleteResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// TaskUpdatePosition invokes TaskUpdatePosition operation.
+//
+// Изменение позиции задачи.
+//
+// PATCH /api/v1/boards/{boardId}/columns/{columnId}/tasks/{taskId}/update-position
+func (c *Client) TaskUpdatePosition(ctx context.Context, request *TaskUpdatePositionRequestBody, params TaskUpdatePositionParams) (TaskUpdatePositionRes, error) {
+	res, err := c.sendTaskUpdatePosition(ctx, request, params)
+	return res, err
+}
+
+func (c *Client) sendTaskUpdatePosition(ctx context.Context, request *TaskUpdatePositionRequestBody, params TaskUpdatePositionParams) (res TaskUpdatePositionRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("TaskUpdatePosition"),
+		semconv.HTTPRequestMethodKey.String("PATCH"),
+		semconv.URLTemplateKey.String("/api/v1/boards/{boardId}/columns/{columnId}/tasks/{taskId}/update-position"),
+	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, TaskUpdatePositionOperation,
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [7]string
+	pathParts[0] = "/api/v1/boards/"
+	{
+		// Encode "boardId" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "boardId",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.IntToString(params.BoardId))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
+	}
+	pathParts[2] = "/columns/"
+	{
+		// Encode "columnId" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "columnId",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.IntToString(params.ColumnId))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[3] = encoded
+	}
+	pathParts[4] = "/tasks/"
+	{
+		// Encode "taskId" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "taskId",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.IntToString(params.TaskId))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[5] = encoded
+	}
+	pathParts[6] = "/update-position"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "PATCH", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeTaskUpdatePositionRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeTaskUpdatePositionResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}

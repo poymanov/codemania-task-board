@@ -76,6 +76,15 @@ func (UnimplementedHandler) TaskDelete(ctx context.Context, params TaskDeletePar
 	return r, ht.ErrNotImplemented
 }
 
+// TaskUpdatePosition implements TaskUpdatePosition operation.
+//
+// Изменение позиции задачи.
+//
+// PATCH /api/v1/boards/{boardId}/columns/{columnId}/tasks/{taskId}/update-position
+func (UnimplementedHandler) TaskUpdatePosition(ctx context.Context, req *TaskUpdatePositionRequestBody, params TaskUpdatePositionParams) (r TaskUpdatePositionRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // NewError creates *GenericErrorStatusCode from error returned by handler.
 //
 // Used for common default response.

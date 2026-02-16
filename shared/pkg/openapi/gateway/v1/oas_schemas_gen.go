@@ -45,6 +45,7 @@ func (*BadRequestError) columnDeleteRes()         {}
 func (*BadRequestError) columnUpdatePositionRes() {}
 func (*BadRequestError) taskCreateRes()           {}
 func (*BadRequestError) taskDeleteRes()           {}
+func (*BadRequestError) taskUpdatePositionRes()   {}
 
 // ColumnDeleteNoContent is response for ColumnDelete operation.
 type ColumnDeleteNoContent struct{}
@@ -307,6 +308,7 @@ func (*InternalServerError) columnDeleteRes()         {}
 func (*InternalServerError) columnUpdatePositionRes() {}
 func (*InternalServerError) taskCreateRes()           {}
 func (*InternalServerError) taskDeleteRes()           {}
+func (*InternalServerError) taskUpdatePositionRes()   {}
 
 // NewOptInt returns new OptInt with value set to v.
 func NewOptInt(v int) OptInt {
@@ -462,3 +464,36 @@ func (*TaskCreateResponse) taskCreateRes() {}
 type TaskDeleteNoContent struct{}
 
 func (*TaskDeleteNoContent) taskDeleteRes() {}
+
+// TaskUpdatePositionNoContent is response for TaskUpdatePosition operation.
+type TaskUpdatePositionNoContent struct{}
+
+func (*TaskUpdatePositionNoContent) taskUpdatePositionRes() {}
+
+// Ref: #/components/schemas/TaskUpdatePositionRequestBody
+type TaskUpdatePositionRequestBody struct {
+	// Номер позиции слева.
+	LeftPosition float64 `json:"left_position"`
+	// Номер позиции справа.
+	RightPosition float64 `json:"right_position"`
+}
+
+// GetLeftPosition returns the value of LeftPosition.
+func (s *TaskUpdatePositionRequestBody) GetLeftPosition() float64 {
+	return s.LeftPosition
+}
+
+// GetRightPosition returns the value of RightPosition.
+func (s *TaskUpdatePositionRequestBody) GetRightPosition() float64 {
+	return s.RightPosition
+}
+
+// SetLeftPosition sets the value of LeftPosition.
+func (s *TaskUpdatePositionRequestBody) SetLeftPosition(val float64) {
+	s.LeftPosition = val
+}
+
+// SetRightPosition sets the value of RightPosition.
+func (s *TaskUpdatePositionRequestBody) SetRightPosition(val float64) {
+	s.RightPosition = val
+}

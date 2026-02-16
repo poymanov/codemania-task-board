@@ -28,3 +28,7 @@ type TaskCreateRes interface {
 type TaskDeleteRes interface {
 	taskDeleteRes()
 }
+
+type TaskUpdatePositionRes interface {
+	taskUpdatePositionRes()
+}

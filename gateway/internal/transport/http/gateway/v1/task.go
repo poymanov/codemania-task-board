@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	taskCreateUseCase "github.com/poymanov/codemania-task-board/gateway/internal/usecase/task/create"
+	taskUpdatePositionUseCase "github.com/poymanov/codemania-task-board/gateway/internal/usecase/task/update_position"
 	gatewayV1 "github.com/poymanov/codemania-task-board/shared/pkg/openapi/gateway/v1"
 	"github.com/rs/zerolog/log"
 )
@@ -42,4 +43,23 @@ func (a *Api) TaskDelete(ctx context.Context, params gatewayV1.TaskDeleteParams)
 	}
 
 	return &gatewayV1.TaskDeleteNoContent{}, nil
+}
+
+func (a *Api) TaskUpdatePosition(ctx context.Context, req *gatewayV1.TaskUpdatePositionRequestBody, params gatewayV1.TaskUpdatePositionParams) (gatewayV1.TaskUpdatePositionRes, error) {
+	updatePositionTaskDTO := taskUpdatePositionUseCase.UpdatePositionColumnDTO{
+		Id:            params.TaskId,
+		LeftPosition:  req.LeftPosition,
+		RightPosition: req.RightPosition,
+	}
+
+	err := a.taskUpdatePositionUseCase.UpdatePosition(ctx, updatePositionTaskDTO)
+	if err != nil {
+		log.Error().Err(err).Any("request", req).Any("params", params).Msg("update position task failed")
+		return &gatewayV1.BadRequestError{
+			Code:    http.StatusBadRequest,
+			Message: "Update task position failed",
+		}, nil
+	}
+
+	return &gatewayV1.TaskUpdatePositionNoContent{}, nil
 }

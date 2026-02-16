@@ -13,3 +13,11 @@ type CreateTaskRequest struct {
 type DeleteTaskRequest struct {
 	Id int
 }
+
+type UpdatePositionTaskRequest struct {
+	Id int
+
+	LeftPosition float64
+
+	RightPosition float64
+}

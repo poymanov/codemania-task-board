@@ -50,6 +50,12 @@ type Handler interface {
 	//
 	// POST /api/v1/boards/{boardId}/columns/{columnId}/tasks/{taskId}
 	TaskDelete(ctx context.Context, params TaskDeleteParams) (TaskDeleteRes, error)
+	// TaskUpdatePosition implements TaskUpdatePosition operation.
+	//
+	// Изменение позиции задачи.
+	//
+	// PATCH /api/v1/boards/{boardId}/columns/{columnId}/tasks/{taskId}/update-position
+	TaskUpdatePosition(ctx context.Context, req *TaskUpdatePositionRequestBody, params TaskUpdatePositionParams) (TaskUpdatePositionRes, error)
 	// NewError creates *GenericErrorStatusCode from error returned by handler.
 	//
 	// Used for common default response.

@@ -24,6 +24,7 @@ import (
 	columnUpdatePositionUseCase "github.com/poymanov/codemania-task-board/gateway/internal/usecase/column/update_position"
 	taskCreateUseCase "github.com/poymanov/codemania-task-board/gateway/internal/usecase/task/create"
 	taskDeleteUseCase "github.com/poymanov/codemania-task-board/gateway/internal/usecase/task/delete"
+	taskUpdatePositionUseCase "github.com/poymanov/codemania-task-board/gateway/internal/usecase/task/update_position"
 	"github.com/poymanov/codemania-task-board/platform/pkg/logger"
 	gatewayV1 "github.com/poymanov/codemania-task-board/shared/pkg/openapi/gateway/v1"
 	boardV1 "github.com/poymanov/codemania-task-board/shared/pkg/proto/board/v1"
@@ -209,8 +210,9 @@ func (a *App) runHttpServer() error {
 	cupuc := columnUpdatePositionUseCase.NewUseCase(a.columnClient)
 	tcuc := taskCreateUseCase.NewUseCase(a.taskClient)
 	tduc := taskDeleteUseCase.NewUseCase(a.taskClient)
+	tupuc := taskUpdatePositionUseCase.NewUseCase(a.taskClient)
 
-	api := apiV1.NewApi(bcuc, bgauc, ccuc, cduc, cupuc, tcuc, tduc)
+	api := apiV1.NewApi(bcuc, bgauc, ccuc, cduc, cupuc, tcuc, tduc, tupuc)
 
 	gatewayServer, err := gatewayV1.NewServer(api)
 	if err != nil {

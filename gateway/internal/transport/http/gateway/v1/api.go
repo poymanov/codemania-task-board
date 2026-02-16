@@ -11,6 +11,7 @@ import (
 	columnUpdatePositionUseCase "github.com/poymanov/codemania-task-board/gateway/internal/usecase/column/update_position"
 	taskCreateUseCase "github.com/poymanov/codemania-task-board/gateway/internal/usecase/task/create"
 	taskDeleteUseCase "github.com/poymanov/codemania-task-board/gateway/internal/usecase/task/delete"
+	taskUpdatePositionUseCase "github.com/poymanov/codemania-task-board/gateway/internal/usecase/task/update_position"
 	gatewayV1 "github.com/poymanov/codemania-task-board/shared/pkg/openapi/gateway/v1"
 )
 
@@ -22,6 +23,7 @@ type Api struct {
 	columnUpdatePositionUseCase *columnUpdatePositionUseCase.UseCase
 	taskCreateUseCase           *taskCreateUseCase.UseCase
 	taskDeleteUseCase           *taskDeleteUseCase.UseCase
+	taskUpdatePositionUseCase   *taskUpdatePositionUseCase.UseCase
 }
 
 func NewApi(
@@ -32,6 +34,7 @@ func NewApi(
 	columnUpdatePositionUseCase *columnUpdatePositionUseCase.UseCase,
 	taskCreateUseCase *taskCreateUseCase.UseCase,
 	taskDeleteUseCase *taskDeleteUseCase.UseCase,
+	taskUpdatePositionUseCase *taskUpdatePositionUseCase.UseCase,
 ) *Api {
 	return &Api{
 		boardCreateUseCase:          boardCreateUseCase,
@@ -41,6 +44,7 @@ func NewApi(
 		columnUpdatePositionUseCase: columnUpdatePositionUseCase,
 		taskCreateUseCase:           taskCreateUseCase,
 		taskDeleteUseCase:           taskDeleteUseCase,
+		taskUpdatePositionUseCase:   taskUpdatePositionUseCase,
 	}
 }
 
