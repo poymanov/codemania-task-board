@@ -78,6 +78,44 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/GenericError"
+  /api/v1/boards/{id}:
+    get:
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID доски
+      summary: "Получение доски"
+      operationId: BoardGet
+      tags:
+        - Board
+      responses:
+        '200':
+          description: "Успешное получение доски"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetBoardResponse"
+        '400':
+          description: "Ошибка запроса"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        '500':
+          description: "Ошибка сервера"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+        default:
+          description: "Прочие ошибки"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericError"
   /api/v1/boards/{id}/columns:
     post:
       parameters:
@@ -442,6 +480,87 @@ components:
           type: integer
           description: "ID созданной доски"
           example: 1
+    GetBoardResponse:
+      type: object
+      required:
+        - id
+        - name
+        - description
+        - owner_id
+        - columns
+      properties:
+        id:
+          type: integer
+          description: "ID доски"
+          example: 1
+        name:
+          type: string
+          description: "Название доски"
+          example: "Board name"
+        description:
+          type: string
+          description: "Описание доски"
+          example: "Board description"
+        owner_id:
+          type: integer
+          description: "Владелец доски"
+          example: 1
+        columns:
+          type: array
+          description: "Список колонок"
+          items:
+            type: object
+            required:
+              - id
+              - name
+              - position
+              - tasks
+            description: "Колонка"
+            properties:
+              id:
+                type: integer
+                description: "ID колонки"
+                example: 1
+              name:
+                type: string
+                description: "Название колонки"
+                example: "Column"
+              position:
+                type: number
+                description: "Порядок колонки"
+                example: 1000
+              tasks:
+                type: array
+                description: "Список задач"
+                items:
+                  type: object
+                  required:
+                    - id
+                    - title
+                    - description
+                    - assignee
+                    - position
+                  properties:
+                    id:
+                      type: integer
+                      description: "ID задачи"
+                      example: 1
+                    title:
+                      type: string
+                      description: "Заголовок задачи"
+                      example: "Task"
+                    description:
+                      type: string
+                      description: "Описание задачи"
+                      example: "Task description"
+                    assignee:
+                      type: string
+                      description: "Ответственный по задаче"
+                      example: "Task assignee"
+                    position:
+                      type: number
+                      description: "Порядок задача"
+                      example: 1000
     CreateColumnResponse:
       type: object
       required:

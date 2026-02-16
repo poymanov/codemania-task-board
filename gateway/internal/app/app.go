@@ -19,6 +19,7 @@ import (
 	apiV1 "github.com/poymanov/codemania-task-board/gateway/internal/transport/http/gateway/v1"
 	boardCreateUseCase "github.com/poymanov/codemania-task-board/gateway/internal/usecase/board/create"
 	boardGetAllUseCase "github.com/poymanov/codemania-task-board/gateway/internal/usecase/board/get_all"
+	boardGetBoardUseCase "github.com/poymanov/codemania-task-board/gateway/internal/usecase/board/get_board"
 	columnCreateUseCase "github.com/poymanov/codemania-task-board/gateway/internal/usecase/column/create"
 	columnDeleteUseCase "github.com/poymanov/codemania-task-board/gateway/internal/usecase/column/delete"
 	columnUpdatePositionUseCase "github.com/poymanov/codemania-task-board/gateway/internal/usecase/column/update_position"
@@ -205,6 +206,7 @@ func (a *App) initLogger(_ context.Context) error {
 func (a *App) runHttpServer() error {
 	bcuc := boardCreateUseCase.NewUseCase(a.boardClient)
 	bgauc := boardGetAllUseCase.NewUseCase(a.boardClient)
+	bgbuc := boardGetBoardUseCase.NewUseCase(a.boardClient)
 	ccuc := columnCreateUseCase.NewUseCase(a.columnClient)
 	cduc := columnDeleteUseCase.NewUseCase(a.columnClient)
 	cupuc := columnUpdatePositionUseCase.NewUseCase(a.columnClient)
@@ -212,7 +214,7 @@ func (a *App) runHttpServer() error {
 	tduc := taskDeleteUseCase.NewUseCase(a.taskClient)
 	tupuc := taskUpdatePositionUseCase.NewUseCase(a.taskClient)
 
-	api := apiV1.NewApi(bcuc, bgauc, ccuc, cduc, cupuc, tcuc, tduc, tupuc)
+	api := apiV1.NewApi(bcuc, bgauc, ccuc, cduc, cupuc, tcuc, tduc, tupuc, bgbuc)
 
 	gatewayServer, err := gatewayV1.NewServer(api)
 	if err != nil {

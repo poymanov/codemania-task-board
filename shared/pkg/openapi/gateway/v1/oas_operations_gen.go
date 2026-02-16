@@ -7,6 +7,7 @@ type OperationName = string
 
 const (
 	BoardCreateOperation          OperationName = "BoardCreate"
+	BoardGetOperation             OperationName = "BoardGet"
 	BoardGetAllOperation          OperationName = "BoardGetAll"
 	ColumnCreateOperation         OperationName = "ColumnCreate"
 	ColumnDeleteOperation         OperationName = "ColumnDelete"

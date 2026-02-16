@@ -36,7 +36,7 @@ func (a *Api) BoardGetAll(ctx context.Context) (gatewayV1.BoardGetAllRes, error)
 		log.Error().Err(err).Msg("get all board failed")
 		return &gatewayV1.BadRequestError{
 			Code:    http.StatusBadRequest,
-			Message: "Create board failed",
+			Message: "Get all boards failed",
 		}, nil
 	}
 
@@ -47,4 +47,17 @@ func (a *Api) BoardGetAll(ctx context.Context) (gatewayV1.BoardGetAllRes, error)
 	}
 
 	return &apiBoards, nil
+}
+
+func (a *Api) BoardGet(ctx context.Context, params gatewayV1.BoardGetParams) (gatewayV1.BoardGetRes, error) {
+	board, err := a.boardGetBoardUseCase.Get(ctx, params.ID)
+	if err != nil {
+		log.Error().Err(err).Msg("get board failed")
+		return &gatewayV1.BadRequestError{
+			Code:    http.StatusBadRequest,
+			Message: "Get board failed",
+		}, nil
+	}
+
+	return GetBoardDTOToTransport(board), nil
 }

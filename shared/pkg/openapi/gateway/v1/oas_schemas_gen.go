@@ -40,6 +40,7 @@ func (s *BadRequestError) SetMessage(val string) {
 
 func (*BadRequestError) boardCreateRes()          {}
 func (*BadRequestError) boardGetAllRes()          {}
+func (*BadRequestError) boardGetRes()             {}
 func (*BadRequestError) columnCreateRes()         {}
 func (*BadRequestError) columnDeleteRes()         {}
 func (*BadRequestError) columnUpdatePositionRes() {}
@@ -274,6 +275,187 @@ func (s *GetAllBoardResponseItem) SetDescription(val string) {
 	s.Description = val
 }
 
+// Ref: #/components/schemas/GetBoardResponse
+type GetBoardResponse struct {
+	// ID доски.
+	ID int `json:"id"`
+	// Название доски.
+	Name string `json:"name"`
+	// Описание доски.
+	Description string `json:"description"`
+	// Владелец доски.
+	OwnerID int `json:"owner_id"`
+	// Список колонок.
+	Columns []GetBoardResponseColumnsItem `json:"columns"`
+}
+
+// GetID returns the value of ID.
+func (s *GetBoardResponse) GetID() int {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s *GetBoardResponse) GetName() string {
+	return s.Name
+}
+
+// GetDescription returns the value of Description.
+func (s *GetBoardResponse) GetDescription() string {
+	return s.Description
+}
+
+// GetOwnerID returns the value of OwnerID.
+func (s *GetBoardResponse) GetOwnerID() int {
+	return s.OwnerID
+}
+
+// GetColumns returns the value of Columns.
+func (s *GetBoardResponse) GetColumns() []GetBoardResponseColumnsItem {
+	return s.Columns
+}
+
+// SetID sets the value of ID.
+func (s *GetBoardResponse) SetID(val int) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *GetBoardResponse) SetName(val string) {
+	s.Name = val
+}
+
+// SetDescription sets the value of Description.
+func (s *GetBoardResponse) SetDescription(val string) {
+	s.Description = val
+}
+
+// SetOwnerID sets the value of OwnerID.
+func (s *GetBoardResponse) SetOwnerID(val int) {
+	s.OwnerID = val
+}
+
+// SetColumns sets the value of Columns.
+func (s *GetBoardResponse) SetColumns(val []GetBoardResponseColumnsItem) {
+	s.Columns = val
+}
+
+func (*GetBoardResponse) boardGetRes() {}
+
+// Колонка.
+type GetBoardResponseColumnsItem struct {
+	// ID колонки.
+	ID int `json:"id"`
+	// Название колонки.
+	Name string `json:"name"`
+	// Порядок колонки.
+	Position float64 `json:"position"`
+	// Список задач.
+	Tasks []GetBoardResponseColumnsItemTasksItem `json:"tasks"`
+}
+
+// GetID returns the value of ID.
+func (s *GetBoardResponseColumnsItem) GetID() int {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s *GetBoardResponseColumnsItem) GetName() string {
+	return s.Name
+}
+
+// GetPosition returns the value of Position.
+func (s *GetBoardResponseColumnsItem) GetPosition() float64 {
+	return s.Position
+}
+
+// GetTasks returns the value of Tasks.
+func (s *GetBoardResponseColumnsItem) GetTasks() []GetBoardResponseColumnsItemTasksItem {
+	return s.Tasks
+}
+
+// SetID sets the value of ID.
+func (s *GetBoardResponseColumnsItem) SetID(val int) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *GetBoardResponseColumnsItem) SetName(val string) {
+	s.Name = val
+}
+
+// SetPosition sets the value of Position.
+func (s *GetBoardResponseColumnsItem) SetPosition(val float64) {
+	s.Position = val
+}
+
+// SetTasks sets the value of Tasks.
+func (s *GetBoardResponseColumnsItem) SetTasks(val []GetBoardResponseColumnsItemTasksItem) {
+	s.Tasks = val
+}
+
+type GetBoardResponseColumnsItemTasksItem struct {
+	// ID задачи.
+	ID int `json:"id"`
+	// Заголовок задачи.
+	Title string `json:"title"`
+	// Описание задачи.
+	Description string `json:"description"`
+	// Ответственный по задаче.
+	Assignee string `json:"assignee"`
+	// Порядок задача.
+	Position float64 `json:"position"`
+}
+
+// GetID returns the value of ID.
+func (s *GetBoardResponseColumnsItemTasksItem) GetID() int {
+	return s.ID
+}
+
+// GetTitle returns the value of Title.
+func (s *GetBoardResponseColumnsItemTasksItem) GetTitle() string {
+	return s.Title
+}
+
+// GetDescription returns the value of Description.
+func (s *GetBoardResponseColumnsItemTasksItem) GetDescription() string {
+	return s.Description
+}
+
+// GetAssignee returns the value of Assignee.
+func (s *GetBoardResponseColumnsItemTasksItem) GetAssignee() string {
+	return s.Assignee
+}
+
+// GetPosition returns the value of Position.
+func (s *GetBoardResponseColumnsItemTasksItem) GetPosition() float64 {
+	return s.Position
+}
+
+// SetID sets the value of ID.
+func (s *GetBoardResponseColumnsItemTasksItem) SetID(val int) {
+	s.ID = val
+}
+
+// SetTitle sets the value of Title.
+func (s *GetBoardResponseColumnsItemTasksItem) SetTitle(val string) {
+	s.Title = val
+}
+
+// SetDescription sets the value of Description.
+func (s *GetBoardResponseColumnsItemTasksItem) SetDescription(val string) {
+	s.Description = val
+}
+
+// SetAssignee sets the value of Assignee.
+func (s *GetBoardResponseColumnsItemTasksItem) SetAssignee(val string) {
+	s.Assignee = val
+}
+
+// SetPosition sets the value of Position.
+func (s *GetBoardResponseColumnsItemTasksItem) SetPosition(val float64) {
+	s.Position = val
+}
+
 // Ref: #/components/schemas/InternalServerError
 type InternalServerError struct {
 	// HTTP-код ошибки.
@@ -303,6 +485,7 @@ func (s *InternalServerError) SetMessage(val string) {
 }
 
 func (*InternalServerError) boardCreateRes()          {}
+func (*InternalServerError) boardGetRes()             {}
 func (*InternalServerError) columnCreateRes()         {}
 func (*InternalServerError) columnDeleteRes()         {}
 func (*InternalServerError) columnUpdatePositionRes() {}

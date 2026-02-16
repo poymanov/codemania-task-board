@@ -22,6 +22,15 @@ func (UnimplementedHandler) BoardCreate(ctx context.Context, req *CreateBoardReq
 	return r, ht.ErrNotImplemented
 }
 
+// BoardGet implements BoardGet operation.
+//
+// Получение доски.
+//
+// GET /api/v1/boards/{id}
+func (UnimplementedHandler) BoardGet(ctx context.Context, params BoardGetParams) (r BoardGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // BoardGetAll implements BoardGetAll operation.
 //
 // Получение досок.

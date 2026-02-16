@@ -14,6 +14,12 @@ type Handler interface {
 	//
 	// POST /api/v1/boards
 	BoardCreate(ctx context.Context, req *CreateBoardRequestBody) (BoardCreateRes, error)
+	// BoardGet implements BoardGet operation.
+	//
+	// Получение доски.
+	//
+	// GET /api/v1/boards/{id}
+	BoardGet(ctx context.Context, params BoardGetParams) (BoardGetRes, error)
 	// BoardGetAll implements BoardGetAll operation.
 	//
 	// Получение досок.

@@ -7,3 +7,7 @@ type CreateBoardRequest struct {
 
 	OwnerId int
 }
+
+type GetBoardRequest struct {
+	Id int
+}

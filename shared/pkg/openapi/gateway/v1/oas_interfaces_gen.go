@@ -9,6 +9,10 @@ type BoardGetAllRes interface {
 	boardGetAllRes()
 }
 
+type BoardGetRes interface {
+	boardGetRes()
+}
+
 type ColumnCreateRes interface {
 	columnCreateRes()
 }

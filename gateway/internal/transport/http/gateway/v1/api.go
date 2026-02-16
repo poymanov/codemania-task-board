@@ -6,6 +6,7 @@ import (
 
 	boardCreateUseCase "github.com/poymanov/codemania-task-board/gateway/internal/usecase/board/create"
 	boardGetAllUseCase "github.com/poymanov/codemania-task-board/gateway/internal/usecase/board/get_all"
+	boardGetBoardUseCase "github.com/poymanov/codemania-task-board/gateway/internal/usecase/board/get_board"
 	columnCreateUseCase "github.com/poymanov/codemania-task-board/gateway/internal/usecase/column/create"
 	columnDeleteUseCase "github.com/poymanov/codemania-task-board/gateway/internal/usecase/column/delete"
 	columnUpdatePositionUseCase "github.com/poymanov/codemania-task-board/gateway/internal/usecase/column/update_position"
@@ -24,6 +25,7 @@ type Api struct {
 	taskCreateUseCase           *taskCreateUseCase.UseCase
 	taskDeleteUseCase           *taskDeleteUseCase.UseCase
 	taskUpdatePositionUseCase   *taskUpdatePositionUseCase.UseCase
+	boardGetBoardUseCase        *boardGetBoardUseCase.UseCase
 }
 
 func NewApi(
@@ -35,6 +37,7 @@ func NewApi(
 	taskCreateUseCase *taskCreateUseCase.UseCase,
 	taskDeleteUseCase *taskDeleteUseCase.UseCase,
 	taskUpdatePositionUseCase *taskUpdatePositionUseCase.UseCase,
+	boardGetBoardUseCase *boardGetBoardUseCase.UseCase,
 ) *Api {
 	return &Api{
 		boardCreateUseCase:          boardCreateUseCase,
@@ -45,6 +48,7 @@ func NewApi(
 		taskCreateUseCase:           taskCreateUseCase,
 		taskDeleteUseCase:           taskDeleteUseCase,
 		taskUpdatePositionUseCase:   taskUpdatePositionUseCase,
+		boardGetBoardUseCase:        boardGetBoardUseCase,
 	}
 }
 

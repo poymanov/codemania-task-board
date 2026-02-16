@@ -1,14 +1,6 @@
-package board
+package get_board
 
-import boardV1 "github.com/poymanov/codemania-task-board/shared/pkg/proto/board/v1"
-
-type GetAllBoardDTO struct {
-	Id int
-
-	Name string
-
-	Description string
-}
+import boardGrpcClientV1 "github.com/poymanov/codemania-task-board/gateway/internal/transport/grpc/client/board/v1/board"
 
 type BoardGetBoardDTO struct {
 	Id int
@@ -44,15 +36,7 @@ type TaskGetBoardDTO struct {
 	Position float64
 }
 
-func ConvertTransportGetAllBoardToDTO(board *boardV1.Board) GetAllBoardDTO {
-	return GetAllBoardDTO{
-		Id:          int(board.Id),
-		Name:        board.Name,
-		Description: board.Description,
-	}
-}
-
-func ConvertTransportGetBoardToDTO(board *boardV1.BoardGetBoard) BoardGetBoardDTO {
+func ConvertGRPCClientDTOToDTO(board boardGrpcClientV1.BoardGetBoardDTO) BoardGetBoardDTO {
 	columns := make([]ColumnGetBoardDTO, 0, len(board.Columns))
 
 	for _, column := range board.Columns {
@@ -60,27 +44,27 @@ func ConvertTransportGetBoardToDTO(board *boardV1.BoardGetBoard) BoardGetBoardDT
 
 		for _, task := range column.Tasks {
 			tasks = append(tasks, TaskGetBoardDTO{
-				Id:          int(task.Id),
+				Id:          task.Id,
 				Title:       task.Title,
 				Description: task.Description,
 				Assignee:    task.Assignee,
-				Position:    float64(task.Position),
+				Position:    task.Position,
 			})
 		}
 
 		columns = append(columns, ColumnGetBoardDTO{
-			Id:       int(column.Id),
+			Id:       column.Id,
 			Name:     column.Name,
-			Position: float64(column.Position),
+			Position: column.Position,
 			Tasks:    tasks,
 		})
 	}
 
 	return BoardGetBoardDTO{
-		Id:          int(board.Id),
+		Id:          board.Id,
 		Name:        board.Name,
 		Description: board.Description,
-		OwnerId:     int(board.OwnerId),
+		OwnerId:     board.OwnerId,
 		Columns:     columns,
 	}
 }
