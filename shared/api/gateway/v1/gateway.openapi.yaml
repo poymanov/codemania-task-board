@@ -206,6 +206,56 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/GenericError"
+  /api/v1/boards/{boardId}/columns/{columnId}/tasks:
+    post:
+      parameters:
+        - in: path
+          name: boardId
+          required: true
+          schema:
+            type: integer
+          description: ID доски
+        - in: path
+          name: columnId
+          required: true
+          schema:
+            type: integer
+          description: ID колонки
+      summary: "Создание задачи"
+      operationId: TaskCreate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TaskCreateRequestBody"
+      tags:
+        - Column
+      responses:
+        '200':
+          description: "Задача успешно создана"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaskCreateResponse"
+        '400':
+          description: "Ошибка запроса"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        '500':
+          description: "Ошибка сервера"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+        default:
+          description: "Прочие ошибки"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericError"
 components:
   schemas:
     CreateBoardRequestBody:
@@ -250,6 +300,25 @@ components:
           type: number
           description: "Номер позиции справа"
           example: 3000
+    TaskCreateRequestBody:
+      type: object
+      required:
+        - title
+        - description
+        - assignee
+      properties:
+        title:
+          type: string
+          description: "Название задачи"
+          example: "Task"
+        description:
+          type: string
+          description: "Описание задачи"
+          example: "Description"
+        assignee:
+          type: string
+          description: "Ответственный по задаче"
+          example: "Assignee"
     CreateBoardResponse:
       type: object
       required:
@@ -267,6 +336,15 @@ components:
         column_id:
           type: integer
           description: "ID созданной колонки"
+          example: 1
+    TaskCreateResponse:
+      type: object
+      required:
+        - task_id
+      properties:
+        task_id:
+          type: integer
+          description: "ID созданной задачи"
           example: 1
     GetAllBoardResponse:
       type: array

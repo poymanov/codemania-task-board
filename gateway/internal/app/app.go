@@ -15,12 +15,14 @@ import (
 	"github.com/poymanov/codemania-task-board/gateway/internal/config"
 	boardGrpcClientV1 "github.com/poymanov/codemania-task-board/gateway/internal/transport/grpc/client/board/v1/board"
 	columnGrpcClientV1 "github.com/poymanov/codemania-task-board/gateway/internal/transport/grpc/client/board/v1/column"
+	taskGrpcClientV1 "github.com/poymanov/codemania-task-board/gateway/internal/transport/grpc/client/board/v1/task"
 	apiV1 "github.com/poymanov/codemania-task-board/gateway/internal/transport/http/gateway/v1"
 	boardCreateUseCase "github.com/poymanov/codemania-task-board/gateway/internal/usecase/board/create"
 	boardGetAllUseCase "github.com/poymanov/codemania-task-board/gateway/internal/usecase/board/get_all"
 	columnCreateUseCase "github.com/poymanov/codemania-task-board/gateway/internal/usecase/column/create"
 	columnDeleteUseCase "github.com/poymanov/codemania-task-board/gateway/internal/usecase/column/delete"
 	columnUpdatePositionUseCase "github.com/poymanov/codemania-task-board/gateway/internal/usecase/column/update_position"
+	taskCreateUseCase "github.com/poymanov/codemania-task-board/gateway/internal/usecase/task/create"
 	"github.com/poymanov/codemania-task-board/platform/pkg/logger"
 	gatewayV1 "github.com/poymanov/codemania-task-board/shared/pkg/openapi/gateway/v1"
 	boardV1 "github.com/poymanov/codemania-task-board/shared/pkg/proto/board/v1"
@@ -36,6 +38,7 @@ type App struct {
 	config       *config.Config
 	boardClient  *boardGrpcClientV1.BoardClient
 	columnClient *columnGrpcClientV1.Client
+	taskClient   *taskGrpcClientV1.Client
 }
 
 func newApp(ctx context.Context) (*App, error) {
@@ -138,9 +141,11 @@ func (a *App) initGrpcClients(ctx context.Context) error {
 
 		boardServiceClient := boardV1.NewBoardServiceClient(conn)
 		columnServiceClient := boardV1.NewColumnServiceClient(conn)
+		taskServiceClient := boardV1.NewTaskServiceClient(conn)
 
 		a.boardClient = boardGrpcClientV1.NewClient(boardServiceClient)
 		a.columnClient = columnGrpcClientV1.NewClient(columnServiceClient)
+		a.taskClient = taskGrpcClientV1.NewClient(taskServiceClient)
 
 		a.closer = append(a.closer, func() error {
 			if cerr := conn.Close(); cerr != nil {
@@ -201,8 +206,9 @@ func (a *App) runHttpServer() error {
 	ccuc := columnCreateUseCase.NewUseCase(a.columnClient)
 	cduc := columnDeleteUseCase.NewUseCase(a.columnClient)
 	cupuc := columnUpdatePositionUseCase.NewUseCase(a.columnClient)
+	tcuc := taskCreateUseCase.NewUseCase(a.taskClient)
 
-	api := apiV1.NewApi(bcuc, bgauc, ccuc, cduc, cupuc)
+	api := apiV1.NewApi(bcuc, bgauc, ccuc, cduc, cupuc, tcuc)
 
 	gatewayServer, err := gatewayV1.NewServer(api)
 	if err != nil {

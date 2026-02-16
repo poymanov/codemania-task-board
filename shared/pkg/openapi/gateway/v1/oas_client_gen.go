@@ -57,6 +57,12 @@ type Invoker interface {
 	//
 	// PATCH /api/v1/boards/{boardId}/columns/{columnId}/update-position
 	ColumnUpdatePosition(ctx context.Context, request *ColumnUpdatePositionRequestBody, params ColumnUpdatePositionParams) (ColumnUpdatePositionRes, error)
+	// TaskCreate invokes TaskCreate operation.
+	//
+	// Создание задачи.
+	//
+	// POST /api/v1/boards/{boardId}/columns/{columnId}/tasks
+	TaskCreate(ctx context.Context, request *TaskCreateRequestBody, params TaskCreateParams) (TaskCreateRes, error)
 }
 
 // Client implements OAS client.
@@ -567,6 +573,120 @@ func (c *Client) sendColumnUpdatePosition(ctx context.Context, request *ColumnUp
 
 	stage = "DecodeResponse"
 	result, err := decodeColumnUpdatePositionResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// TaskCreate invokes TaskCreate operation.
+//
+// Создание задачи.
+//
+// POST /api/v1/boards/{boardId}/columns/{columnId}/tasks
+func (c *Client) TaskCreate(ctx context.Context, request *TaskCreateRequestBody, params TaskCreateParams) (TaskCreateRes, error) {
+	res, err := c.sendTaskCreate(ctx, request, params)
+	return res, err
+}
+
+func (c *Client) sendTaskCreate(ctx context.Context, request *TaskCreateRequestBody, params TaskCreateParams) (res TaskCreateRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("TaskCreate"),
+		semconv.HTTPRequestMethodKey.String("POST"),
+		semconv.URLTemplateKey.String("/api/v1/boards/{boardId}/columns/{columnId}/tasks"),
+	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, TaskCreateOperation,
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [5]string
+	pathParts[0] = "/api/v1/boards/"
+	{
+		// Encode "boardId" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "boardId",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.IntToString(params.BoardId))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
+	}
+	pathParts[2] = "/columns/"
+	{
+		// Encode "columnId" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "columnId",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.IntToString(params.ColumnId))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[3] = encoded
+	}
+	pathParts[4] = "/tasks"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "POST", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeTaskCreateRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeTaskCreateResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}

@@ -38,6 +38,12 @@ type Handler interface {
 	//
 	// PATCH /api/v1/boards/{boardId}/columns/{columnId}/update-position
 	ColumnUpdatePosition(ctx context.Context, req *ColumnUpdatePositionRequestBody, params ColumnUpdatePositionParams) (ColumnUpdatePositionRes, error)
+	// TaskCreate implements TaskCreate operation.
+	//
+	// Создание задачи.
+	//
+	// POST /api/v1/boards/{boardId}/columns/{columnId}/tasks
+	TaskCreate(ctx context.Context, req *TaskCreateRequestBody, params TaskCreateParams) (TaskCreateRes, error)
 	// NewError creates *GenericErrorStatusCode from error returned by handler.
 	//
 	// Used for common default response.

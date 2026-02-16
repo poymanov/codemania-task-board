@@ -43,6 +43,7 @@ func (*BadRequestError) boardGetAllRes()          {}
 func (*BadRequestError) columnCreateRes()         {}
 func (*BadRequestError) columnDeleteRes()         {}
 func (*BadRequestError) columnUpdatePositionRes() {}
+func (*BadRequestError) taskCreateRes()           {}
 
 // ColumnDeleteNoContent is response for ColumnDelete operation.
 type ColumnDeleteNoContent struct{}
@@ -303,6 +304,7 @@ func (*InternalServerError) boardCreateRes()          {}
 func (*InternalServerError) columnCreateRes()         {}
 func (*InternalServerError) columnDeleteRes()         {}
 func (*InternalServerError) columnUpdatePositionRes() {}
+func (*InternalServerError) taskCreateRes()           {}
 
 // NewOptInt returns new OptInt with value set to v.
 func NewOptInt(v int) OptInt {
@@ -395,3 +397,61 @@ func (o OptString) Or(d string) string {
 	}
 	return d
 }
+
+// Ref: #/components/schemas/TaskCreateRequestBody
+type TaskCreateRequestBody struct {
+	// Название задачи.
+	Title string `json:"title"`
+	// Описание задачи.
+	Description string `json:"description"`
+	// Ответственный по задаче.
+	Assignee string `json:"assignee"`
+}
+
+// GetTitle returns the value of Title.
+func (s *TaskCreateRequestBody) GetTitle() string {
+	return s.Title
+}
+
+// GetDescription returns the value of Description.
+func (s *TaskCreateRequestBody) GetDescription() string {
+	return s.Description
+}
+
+// GetAssignee returns the value of Assignee.
+func (s *TaskCreateRequestBody) GetAssignee() string {
+	return s.Assignee
+}
+
+// SetTitle sets the value of Title.
+func (s *TaskCreateRequestBody) SetTitle(val string) {
+	s.Title = val
+}
+
+// SetDescription sets the value of Description.
+func (s *TaskCreateRequestBody) SetDescription(val string) {
+	s.Description = val
+}
+
+// SetAssignee sets the value of Assignee.
+func (s *TaskCreateRequestBody) SetAssignee(val string) {
+	s.Assignee = val
+}
+
+// Ref: #/components/schemas/TaskCreateResponse
+type TaskCreateResponse struct {
+	// ID созданной задачи.
+	TaskID int `json:"task_id"`
+}
+
+// GetTaskID returns the value of TaskID.
+func (s *TaskCreateResponse) GetTaskID() int {
+	return s.TaskID
+}
+
+// SetTaskID sets the value of TaskID.
+func (s *TaskCreateResponse) SetTaskID(val int) {
+	s.TaskID = val
+}
+
+func (*TaskCreateResponse) taskCreateRes() {}

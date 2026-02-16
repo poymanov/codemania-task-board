@@ -58,6 +58,15 @@ func (UnimplementedHandler) ColumnUpdatePosition(ctx context.Context, req *Colum
 	return r, ht.ErrNotImplemented
 }
 
+// TaskCreate implements TaskCreate operation.
+//
+// Создание задачи.
+//
+// POST /api/v1/boards/{boardId}/columns/{columnId}/tasks
+func (UnimplementedHandler) TaskCreate(ctx context.Context, req *TaskCreateRequestBody, params TaskCreateParams) (r TaskCreateRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // NewError creates *GenericErrorStatusCode from error returned by handler.
 //
 // Used for common default response.

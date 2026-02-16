@@ -11,4 +11,5 @@ const (
 	ColumnCreateOperation         OperationName = "ColumnCreate"
 	ColumnDeleteOperation         OperationName = "ColumnDelete"
 	ColumnUpdatePositionOperation OperationName = "ColumnUpdatePosition"
+	TaskCreateOperation           OperationName = "TaskCreate"
 )
